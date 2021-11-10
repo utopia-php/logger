@@ -33,7 +33,7 @@ class AppSignal extends Adapter
         $params = [];
 
         foreach($issue->getExtra() as $paramKey => $paramValue) {
-            $params[$paramKey] = (string) $paramValue;
+            $params[$paramKey] = var_export($paramValue, true);
         }
 
         $breadcrumbsObject = $issue->getBreadcrumbs();
@@ -101,8 +101,7 @@ class AppSignal extends Adapter
             CURLOPT_POST => true,
             CURLOPT_POSTFIELDS => \json_encode($requestBody),
             CURLOPT_HEADEROPT => CURLHEADER_UNIFIED,
-            CURLOPT_HTTPHEADER => array('Content-Type: application/json', 'X-Sentry-Auth: Sentry sentry_version=7, sentry_key=' . $this->sentryKey . ', sentry_client=utopia-logging/1.0')
-            // TODO: ^ Automatically figure out version (1.0)
+            CURLOPT_HTTPHEADER => array('Content-Type: application/json')
         );
 
         // apply those options
