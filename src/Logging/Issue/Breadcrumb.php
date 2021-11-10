@@ -2,9 +2,7 @@
 
 namespace Utopia\Logging;
 
-use Exception;
-
-class IssueBreadcrumb
+class Breadcrumb
 {
     /**
      * @var string (required, can be one of 'debug', 'error', 'info')
@@ -27,7 +25,7 @@ class IssueBreadcrumb
     protected float $timestamp;
 
     /**
-     * IssueBreadcrumb constructor.
+     * Breadcrumb constructor.
      *
      * @param string $type
      * @param string $category

@@ -2,9 +2,7 @@
 
 namespace Utopia\Logging;
 
-use Exception;
-
-class IssueUser
+class User
 {
     /**
      * @var string|null (optional, for example 'abcd1234')
@@ -22,7 +20,7 @@ class IssueUser
     protected ?string $userName;
 
     /**
-     * IssueUser constructor.
+     * User constructor.
      *
      * @param string|null $userId
      * @param string|null $userEmail

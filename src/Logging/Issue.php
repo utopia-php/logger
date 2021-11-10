@@ -52,12 +52,12 @@ class Issue
     protected string $server;
 
     /**
-     * @var IssueUser (optional)
+     * @var User (optional)
      */
-    protected IssueUser $user;
+    protected User $user;
 
     /**
-     * @var IssueBreadcrumb[] (optional)
+     * @var Breadcrumb[] (optional)
      */
     protected array $breadcrumbs;
 
@@ -244,7 +244,7 @@ class Issue
     /**
      * Set user who caused the issue
      *
-     * @param IssueUser $user
+     * @param User $user
      * @return void
      */
     public function setUser($user): void {
@@ -254,9 +254,9 @@ class Issue
     /**
      * Get user who caused the issue
      *
-     * @return IssueUser
+     * @return User
      */
-    public function getUser(): IssueUser {
+    public function getUser(): User {
         return $this->user;
     }
 
@@ -273,7 +273,7 @@ class Issue
     /**
      * Get reproduction steps
      *
-     * @return IssueBreadcrumb[]
+     * @return Breadcrumb[]
      */
     public function getBreadcrumbs() {
         return $this->breadcrumbs;

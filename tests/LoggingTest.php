@@ -15,8 +15,8 @@ use PHPUnit\Framework\TestCase;
 
 use Utopia\Logging\Adapter\Sentry;
 use Utopia\Logging\Issue;
-use Utopia\Logging\IssueBreadcrumb;
-use Utopia\Logging\IssueUser;
+use Utopia\Logging\Breadcrumb;
+use Utopia\Logging\User;
 use Utopia\Logging\Logging;
 
 class LoggingTest extends TestCase
@@ -34,14 +34,14 @@ class LoggingTest extends TestCase
         $issue->setType("warning");
         $issue->setVersion("0.11.5");
         $issue->setMessage("Document efgh5678 not found");
-        $issue->setUser(new IssueUser("efgh5678"));
+        $issue->setUser(new User("efgh5678"));
         $issue->setBreadcrumbs([
-            new IssueBreadcrumb("debug", "http", "DELETE /api/v1/database/abcd1234/efgh5678", \microtime(true) - 500),
-            new IssueBreadcrumb("debug", "auth", "Using API key", \microtime(true) - 400),
-            new IssueBreadcrumb("info", "auth", "Authenticated with * Using API Key", \microtime(true) - 350),
-            new IssueBreadcrumb("info", "database", "Found collection abcd1234", \microtime(true) - 300),
-            new IssueBreadcrumb("debug", "database", "Permission for collection abcd1234 met", \microtime(true) - 200),
-            new IssueBreadcrumb("error", "database", "Missing document when searching by ID!", \microtime(true)),
+            new Breadcrumb("debug", "http", "DELETE /api/v1/database/abcd1234/efgh5678", \microtime(true) - 500),
+            new Breadcrumb("debug", "auth", "Using API key", \microtime(true) - 400),
+            new Breadcrumb("info", "auth", "Authenticated with * Using API Key", \microtime(true) - 350),
+            new Breadcrumb("info", "database", "Found collection abcd1234", \microtime(true) - 300),
+            new Breadcrumb("debug", "database", "Permission for collection abcd1234 met", \microtime(true) - 200),
+            new Breadcrumb("error", "database", "Missing document when searching by ID!", \microtime(true)),
         ]);
         $issue->setTags([
             'sdk' => 'Flutter',

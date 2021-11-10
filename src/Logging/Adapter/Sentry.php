@@ -17,11 +17,22 @@ class Sentry extends Adapter
      */
     protected string $projectId;
 
+    /**
+     * Return unique adapter name
+     *
+     * @return string
+     */
     public function getAdapterName(): string
     {
         return "sentry";
     }
 
+    /**
+     * Push issue to external server
+     *
+     * @param Issue $issue
+     * @return int
+     */
     public function pushIssue(Issue $issue): int
     {
         $breadcrumbsObject = $issue->getBreadcrumbs();
@@ -89,7 +100,7 @@ class Sentry extends Adapter
     }
 
     /**
-     * IssueBreadcrumb constructor.
+     * Breadcrumb constructor.
      *
      * @param string $sentryKey
      * @param string $projectId

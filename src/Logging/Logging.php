@@ -25,7 +25,7 @@ class Logging
      * Store new issue. Currently, it is instantly pushed to Adapter, but in future it could pool to increase performance.
      *
      * @param Issue $issue
-     * @return void
+     * @return int
      */
     public function addIssue(Issue $issue): int {
         // Validate issue

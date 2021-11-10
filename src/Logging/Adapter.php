@@ -16,7 +16,7 @@ abstract class Adapter
      * Push issue to external server
      *
      * @param Issue $issue
-     * @return void
+     * @return int
      */
     abstract public function pushIssue(Issue $issue): int;
 }
