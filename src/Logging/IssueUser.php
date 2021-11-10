@@ -9,17 +9,17 @@ class IssueUser
     /**
      * @var string|null (optional, for example 'abcd1234')
      */
-    protected string $userId;
+    protected ?string $userId;
 
     /**
      * @var string|null (optional, for example 'matej@appwrite.io')
      */
-    protected string $userEmail;
+    protected ?string $userEmail;
 
     /**
      * @var string|null (optional, for example 'Matej Bačo')
      */
-    protected string $userName;
+    protected ?string $userName;
 
     /**
      * IssueUser constructor.

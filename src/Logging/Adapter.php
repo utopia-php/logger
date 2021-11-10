@@ -18,5 +18,5 @@ abstract class Adapter
      * @param Issue $issue
      * @return void
      */
-    abstract public function pushIssue(Issue $issue): void;
+    abstract public function pushIssue(Issue $issue): int;
 }

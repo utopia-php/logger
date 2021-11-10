@@ -57,9 +57,9 @@ class Issue
     protected IssueUser $user;
 
     /**
-     * @var IssueBreadcrumb (optional)
+     * @var IssueBreadcrumb[] (optional)
      */
-    protected IssueBreadcrumb $breadcrumbs;
+    protected array $breadcrumbs;
 
     /**
      * Set a type
@@ -263,10 +263,10 @@ class Issue
     /**
      * Set reproduction steps
      *
-     * @param IssueBreadcrumb[] $breadcrumbs
+     * @param array $breadcrumbs
      * @return void
      */
-    public function setBreadcrumbs(array $breadcrumbs): void {
+    public function setBreadcrumbs($breadcrumbs): void {
         $this->breadcrumbs = $breadcrumbs;
     }
 
@@ -275,7 +275,7 @@ class Issue
      *
      * @return IssueBreadcrumb[]
      */
-    public function getBreadcrumbs(): array {
+    public function getBreadcrumbs() {
         return $this->breadcrumbs;
     }
 }

@@ -27,7 +27,7 @@ class Logging
      * @param Issue $issue
      * @return void
      */
-    public function addIssue(Issue $issue): void {
+    public function addIssue(Issue $issue): int {
         // Validate issue
         if(
             empty($issue->getAction()) ||
@@ -40,6 +40,6 @@ class Logging
         }
 
         // Push issue
-        $this->adapter->pushIssue($issue);
+        return $this->adapter->pushIssue($issue);
     }
 }

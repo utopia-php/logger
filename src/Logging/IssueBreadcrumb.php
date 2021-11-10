@@ -42,4 +42,41 @@ class IssueBreadcrumb
         $this->message = $message;
         $this->timestamp = $timestamp;
     }
+
+    /**
+     * Get breadcrumb type
+     *
+     * @return string
+     */
+    public function getType(): string {
+        return $this->type;
+    }
+
+    /**
+     * Get breadcrumb category
+     *
+     * @return string
+     */
+    public function getCategory(): string {
+        return $this->category;
+    }
+
+    /**
+     * Get breadcrumb message
+     *
+     * @return string
+     */
+    public function getMessage(): string {
+        return $this->message;
+    }
+
+    /**
+     * Get breadcrumb timestamp
+     *
+     * @return float
+     */
+    public function getTimestamp(): float {
+        return $this->timestamp;
+    }
+
 }

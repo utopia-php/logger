@@ -22,8 +22,21 @@ class Sentry extends Adapter
         return "sentry";
     }
 
-    public function pushIssue(Issue $issue): void
+    public function pushIssue(Issue $issue): int
     {
+        $breadcrumbsObject = $issue->getBreadcrumbs();
+        $breadcrumbsArray = [];
+
+        foreach ($breadcrumbsObject as $breadcrumb) {
+            \array_push($breadcrumbsArray, [
+                'type' => $breadcrumb->getType(),
+                'level' => $breadcrumb->getType(),
+                'category' => $breadcrumb->getCategory(),
+                'message' => $breadcrumb->getMessage(),
+                'timestamp' => $breadcrumb->getTimestamp()
+            ]);
+        }
+
         // prepare issue (request body)
         $requestBody = [
             'platform' => 'php',
@@ -38,15 +51,13 @@ class Sentry extends Adapter
             ],
             'tags'=> $issue->getTags(),
             'extra'=> $issue->getExtra(),
-            'breadcrumbs'=> $issue->getBreadcrumbs(),
+            'breadcrumbs'=> $breadcrumbsArray,
             'user'=> [
                 'id' => $issue->getUser()->getId(),
                 'email' => $issue->getUser()->getEmail(),
                 'username' => $issue->getUser()->getUsername(),
             ]
         ];
-
-        var_dump(\json_encode($requestBody));
 
         // init curl object
         $ch = curl_init();
@@ -58,7 +69,7 @@ class Sentry extends Adapter
             CURLOPT_POST => true,
             CURLOPT_POSTFIELDS => \json_encode($requestBody),
             CURLOPT_HEADEROPT => CURLHEADER_UNIFIED,
-            CURLOPT_HTTPHEADER => array('Content-Type: application/json', 'X-Sentry-Auth', 'Sentry sentry_version=7, sentry_key=' . $this->sentryKey . ', sentry_client=utopia-logging/1.0')
+            CURLOPT_HTTPHEADER => array('Content-Type: application/json', 'X-Sentry-Auth: Sentry sentry_version=7, sentry_key=' . $this->sentryKey . ', sentry_client=utopia-logging/1.0')
             // TODO: ^ Automatically figure out version (1.0)
         );
 
@@ -74,8 +85,7 @@ class Sentry extends Adapter
 
         curl_close($ch);
 
-        var_dump($errors);
-        var_dump($response);
+        return $response;
     }
 
     /**

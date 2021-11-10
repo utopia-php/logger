@@ -49,7 +49,7 @@ Below is a list of supported adapters, and thier compatibly tested versions alon
 To run all unit tests, use the following Docker command:
 
 ```bash
-docker run --rm -v $(pwd):$(pwd):rw -w $(pwd) php:7.4-cli-alpine sh -c "vendor/bin/phpunit --configuration phpunit.xml tests"
+docker run --rm -e TEST_SENTRY_KEY=YYYY -e TEST_SENTRY_PROJECT_ID=ZZZZ -v $(pwd):$(pwd):rw -w $(pwd) php:7.4-cli-alpine sh -c "vendor/bin/phpunit --configuration phpunit.xml tests"
 ```
 
 To run static code analysis, use the following Psalm command:
