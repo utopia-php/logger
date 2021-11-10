@@ -50,6 +50,7 @@ class Sentry extends Adapter
 
         // prepare issue (request body)
         $requestBody = [
+            'timestamp' => $issue->getTimestamp(),
             'platform' => 'php',
             'level' => 'error',
             'logger' => $issue->getLogger(),

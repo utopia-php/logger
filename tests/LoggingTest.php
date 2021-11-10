@@ -13,6 +13,7 @@
 
 use PHPUnit\Framework\TestCase;
 
+use Utopia\Logging\Adapter\AppSignal;
 use Utopia\Logging\Adapter\Sentry;
 use Utopia\Logging\Issue;
 use Utopia\Logging\Issue\Breadcrumb;
@@ -21,11 +22,9 @@ use Utopia\Logging\Logging;
 
 class LoggingTest extends TestCase
 {
-    public function testSentry()
+    public function testIssue()
     {
-        $adapter = new Sentry(\getenv("TEST_SENTRY_KEY"), \getenv("TEST_SENTRY_PROJECT_ID"));
-        $logging = new Logging($adapter);
-
+        // Prepare issue
         $issue = new Issue();
         $issue->setAction("controller.database.deleteDocument");
         $issue->setEnvironment("production");
@@ -55,8 +54,22 @@ class LoggingTest extends TestCase
             'isExpected' => true
         ]);
 
+        // Test Sentry
+        $adapter = new Sentry(\getenv("TEST_SENTRY_KEY"), \getenv("TEST_SENTRY_PROJECT_ID"));
+        $logging = new Logging($adapter);
         $response = $logging->addIssue($issue);
-
         self::assertEquals(200, $response);
+
+        // Test AppSignal
+        $adapter = new AppSignal(\getenv("TEST_APPSIGNAL_KEY"));
+        $logging = new Logging($adapter);
+        $response = $logging->addIssue($issue);
+        self::assertEquals(200, $response);
+
+        // Test Raygun
+        // $adapter = new Sentry(\getenv("TEST_SENTRY_KEY"), \getenv("TEST_SENTRY_PROJECT_ID"));
+        // $logging = new Logging($adapter);
+        // $response = $logging->addIssue($issue);
+        // self::assertEquals(200, $response);
     }
 }

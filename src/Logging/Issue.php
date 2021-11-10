@@ -9,6 +9,11 @@ use Utopia\Logging\Issue\User;
 class Issue
 {
     /**
+     * @var float (required, set by default to microtime())
+     */
+    protected float $timestamp;
+
+    /**
      * @var string (required can be 'log', 'error' or 'warning')
      */
     protected string $type;
@@ -64,6 +69,14 @@ class Issue
     protected array $breadcrumbs;
 
     /**
+     * Issue constructor.
+     */
+    public function __construct()
+    {
+        $this->timestamp = \microtime(true);
+    }
+
+    /**
      * Set a type
      *
      * @param string $type (required, can be 'log', 'error' or 'warning')
@@ -85,6 +98,25 @@ class Issue
      */
     public function getType(): string {
         return $this->type;
+    }
+
+    /**
+     * Set timestamp in seconds when issue occurred
+     *
+     * @param float $timestamp (required)
+     * @return void
+     */
+    public function setTimestamp(float $timestamp): void {
+        $this->timestamp = $timestamp;
+    }
+
+    /**
+     * Get timestamp in seconds when issue occurred
+     *
+     * @return float (can be 'log', 'error' or 'warning')
+     */
+    public function getTimestamp(): float {
+        return $this->timestamp;
     }
 
     /**
