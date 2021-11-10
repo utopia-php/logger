@@ -3,6 +3,8 @@
 namespace Utopia\Logging;
 
 use Exception;
+use Utopia\Logging\Issue\Breadcrumb;
+use Utopia\Logging\Issue\User;
 
 class Issue
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Utopia\Logging;
+namespace Utopia\Logging\Issue;
 
 class Breadcrumb
 {

@@ -15,8 +15,8 @@ use PHPUnit\Framework\TestCase;
 
 use Utopia\Logging\Adapter\Sentry;
 use Utopia\Logging\Issue;
-use Utopia\Logging\Breadcrumb;
-use Utopia\Logging\User;
+use Utopia\Logging\Issue\Breadcrumb;
+use Utopia\Logging\Issue\User;
 use Utopia\Logging\Logging;
 
 class LoggingTest extends TestCase
