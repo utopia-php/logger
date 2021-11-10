@@ -1,6 +1,6 @@
 # Utopia Logging
 
-[![Build Status](https://travis-ci.org/utopia-php/logging.svg?branch=master)](https://travis-ci.com/utopia-php/logging)
+[![Build Status](https://travis-ci.org/utopia-php/logging.svg?branch=main)](https://travis-ci.com/utopia-php/logging)
 ![Total Downloads](https://img.shields.io/packagist/dt/utopia-php/logging.svg)
 [![Discord](https://img.shields.io/discord/564160730845151244)](https://appwrite.io/discord)
 
@@ -51,6 +51,8 @@ To run all unit tests, use the following Docker command:
 ```bash
 docker run --rm -e TEST_SENTRY_KEY=YYYY -e TEST_SENTRY_PROJECT_ID=ZZZZ -v $(pwd):$(pwd):rw -w $(pwd) php:7.4-cli-alpine sh -c "vendor/bin/phpunit --configuration phpunit.xml tests"
 ```
+
+> Make sure to replace `TEST_SENTRY_KEY` and `TEST_SENTRY_PROJECT_ID` environment variables value with actual keys from Sentry. If your Sentry DSN is `https://something@otherthing.ingest.sentry.io/anything`, then `TEST_SENTRY_KEY=something` and `TEST_SENTRY_PROJECT_ID=anything`
 
 To run static code analysis, use the following Psalm command:
 
