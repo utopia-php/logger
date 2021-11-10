@@ -101,7 +101,7 @@ class Sentry extends Adapter
     }
 
     /**
-     * Breadcrumb constructor.
+     * Sentry constructor.
      *
      * @param string $sentryKey
      * @param string $projectId

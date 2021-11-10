@@ -89,8 +89,6 @@ class AppSignal extends Adapter
             'breadcrumbs' => $breadcrumbsArray
         ];
 
-        var_dump(\json_encode($requestBody));
-
         // init curl object
         $ch = curl_init();
 
@@ -120,7 +118,7 @@ class AppSignal extends Adapter
     }
 
     /**
-     * Breadcrumb constructor.
+     * AppSignal constructor.
      *
      * @param string $apiKey
      */

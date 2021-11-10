@@ -14,6 +14,7 @@
 use PHPUnit\Framework\TestCase;
 
 use Utopia\Logging\Adapter\AppSignal;
+use Utopia\Logging\Adapter\Raygun;
 use Utopia\Logging\Adapter\Sentry;
 use Utopia\Logging\Issue;
 use Utopia\Logging\Issue\Breadcrumb;
@@ -67,9 +68,9 @@ class LoggingTest extends TestCase
         self::assertEquals(200, $response);
 
         // Test Raygun
-        // $adapter = new Sentry(\getenv("TEST_SENTRY_KEY"), \getenv("TEST_SENTRY_PROJECT_ID"));
-        // $logging = new Logging($adapter);
-        // $response = $logging->addIssue($issue);
-        // self::assertEquals(200, $response);
+        $adapter = new Raygun(\getenv("TEST_RAYGUN_KEY"));
+        $logging = new Logging($adapter);
+        $response = $logging->addIssue($issue);
+        self::assertEquals(202, $response);
     }
 }
