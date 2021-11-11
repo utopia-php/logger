@@ -3,10 +3,10 @@
 namespace Utopia\Logging;
 
 use Exception;
-use Utopia\Logging\Issue\Breadcrumb;
-use Utopia\Logging\Issue\User;
+use Utopia\Logging\Log\Breadcrumb;
+use Utopia\Logging\Log\User;
 
-class Issue
+class Log
 {
     /**
      * @var float (required, set by default to microtime())
@@ -69,7 +69,7 @@ class Issue
     protected array $breadcrumbs;
 
     /**
-     * Issue constructor.
+     * Log constructor.
      */
     public function __construct()
     {
@@ -88,14 +88,14 @@ class Issue
               case "log":
               case "error":
               case "warning": break;
-              default: throw new Exception("Unsupported issue type. Must be one of 'log', 'warning' or 'error'");
+              default: throw new Exception("Unsupported log type. Must be one of 'log', 'warning' or 'error'");
         }
 
         $this->type = $type;
     }
 
     /**
-     * Get the type of this Issue
+     * Get the type of this log
      *
      * @return string (can be 'log', 'error' or 'warning')
      */
@@ -104,7 +104,7 @@ class Issue
     }
 
     /**
-     * Set timestamp in seconds when issue occurred
+     * Set timestamp in seconds when log occurred
      *
      * @param float $timestamp (required)
      * @return void
@@ -114,7 +114,7 @@ class Issue
     }
 
     /**
-     * Get timestamp in seconds when issue occurred
+     * Get timestamp in seconds when log occurred
      *
      * @return float
      */
@@ -180,7 +180,7 @@ class Issue
     }
 
     /**
-     * Set identificator of server where issue happened
+     * Set identificator of server where log happened
      *
      * @param string $server (required, for example 'digitalocean-us-005')
      * @return void
@@ -190,7 +190,7 @@ class Issue
     }
 
     /**
-     * Get identificator of server where issue happened
+     * Get identificator of server where log happened
      *
      * @return string
      */
@@ -225,7 +225,7 @@ class Issue
      */
     public function setEnvironment(string $environment): void {
         if($environment !== "production" && $environment !== "staging") {
-            throw new Exception('Unsupported environment of issue');
+            throw new Exception('Unsupported environment of log');
         }
 
         $this->environment = $environment;
@@ -260,7 +260,7 @@ class Issue
     }
 
     /**
-     * Set extra metadata of issue
+     * Set extra metadata of log
      *
      * @param array $extra (required, for example ['theme' => 'dark', 'sdk' => 'javascript'])
      * @return void
@@ -279,7 +279,7 @@ class Issue
     }
 
     /**
-     * Set user who caused the issue
+     * Set user who caused the log
      *
      * @param User $user
      * @return void
@@ -289,7 +289,7 @@ class Issue
     }
 
     /**
-     * Get user who caused the issue
+     * Get user who caused the log
      *
      * @return User
      */

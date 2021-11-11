@@ -3,7 +3,7 @@
 namespace Utopia\Logging\Adapter;
 
 use Utopia\Logging\Adapter;
-use Utopia\Logging\Issue;
+use Utopia\Logging\Log;
 
 class Raygun extends Adapter
 {
@@ -23,14 +23,14 @@ class Raygun extends Adapter
     }
 
     /**
-     * Push issue to external provider
+     * Push log to external provider
      *
-     * @param Issue $issue
+     * @param Log $log
      * @return int
      */
-    public function pushIssue(Issue $issue): int
+    public function pushLog(Log $log): int
     {
-        $breadcrumbsObject = $issue->getBreadcrumbs();
+        $breadcrumbsObject = $log->getBreadcrumbs();
         $breadcrumbsArray = [];
 
         foreach ($breadcrumbsObject as $breadcrumb) {
@@ -45,31 +45,31 @@ class Raygun extends Adapter
 
         $tagsArray = [];
 
-        foreach($issue->getTags() as $tagKey => $tagValue) {
+        foreach($log->getTags() as $tagKey => $tagValue) {
             \array_push($tagsArray, $tagKey . ': ' . $tagValue);
         }
 
-        \array_push($tagsArray, 'type: ' . $issue->getType());
-        \array_push($tagsArray, 'environment: ' . $issue->getEnvironment());
+        \array_push($tagsArray, 'type: ' . $log->getType());
+        \array_push($tagsArray, 'environment: ' . $log->getEnvironment());
 
-        // prepare issue (request body)
+        // prepare log (request body)
         $requestBody = [
-            'occurredOn' =>  \intval($issue->getTimestamp()),
+            'occurredOn' =>  \intval($log->getTimestamp()),
             'details' => [
-                'machineName' => $issue->getServer(),
-                'groupingKey' => $issue->getLogger(),
-                'version' => $issue->getVersion(),
+                'machineName' => $log->getServer(),
+                'groupingKey' => $log->getLogger(),
+                'version' => $log->getVersion(),
                 'error' => [
-                    'className' => $issue->getAction(),
-                    'message' => $issue->getMessage()
+                    'className' => $log->getAction(),
+                    'message' => $log->getMessage()
                 ],
                 'tags' => $tagsArray,
-                'userCustomData' => $issue->getExtra(),
+                'userCustomData' => $log->getExtra(),
                 'user' => [
-                    'isAnonymous' => empty($issue->getUser()),
-                    'identifier' => $issue->getUser()->getId(),
-                    'email' => $issue->getUser()->getEmail(),
-                    'fullName' => $issue->getUser()->getUsername(),
+                    'isAnonymous' => empty($log->getUser()),
+                    'identifier' => $log->getUser()->getId(),
+                    'email' => $log->getUser()->getEmail(),
+                    'fullName' => $log->getUser()->getUsername(),
                 ],
                 'breadcrumbs' => $breadcrumbsArray
             ]

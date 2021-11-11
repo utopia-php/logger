@@ -3,7 +3,7 @@
 namespace Utopia\Logging\Adapter;
 
 use Utopia\Logging\Adapter;
-use Utopia\Logging\Issue;
+use Utopia\Logging\Log;
 
 class Sentry extends Adapter
 {
@@ -28,14 +28,14 @@ class Sentry extends Adapter
     }
 
     /**
-     * Push issue to external provider
+     * Push log to external provider
      *
-     * @param Issue $issue
+     * @param Log $log
      * @return int
      */
-    public function pushIssue(Issue $issue): int
+    public function pushLog(Log $log): int
     {
-        $breadcrumbsObject = $issue->getBreadcrumbs();
+        $breadcrumbsObject = $log->getBreadcrumbs();
         $breadcrumbsArray = [];
 
         foreach ($breadcrumbsObject as $breadcrumb) {
@@ -48,26 +48,26 @@ class Sentry extends Adapter
             ]);
         }
 
-        // prepare issue (request body)
+        // prepare log (request body)
         $requestBody = [
-            'timestamp' => $issue->getTimestamp(),
+            'timestamp' => $log->getTimestamp(),
             'platform' => 'php',
             'level' => 'error',
-            'logger' => $issue->getLogger(),
-            'transaction' =>  $issue->getAction(),
-            'server_name' =>  $issue->getServer(),
-            'release' => $issue->getVersion(),
-            'environment' => $issue->getEnvironment(),
+            'logger' => $log->getLogger(),
+            'transaction' =>  $log->getAction(),
+            'server_name' =>  $log->getServer(),
+            'release' => $log->getVersion(),
+            'environment' => $log->getEnvironment(),
             'message' => [
-                'message' => $issue->getMessage()
+                'message' => $log->getMessage()
             ],
-            'tags'=> $issue->getTags(),
-            'extra'=> $issue->getExtra(),
+            'tags'=> $log->getTags(),
+            'extra'=> $log->getExtra(),
             'breadcrumbs'=> $breadcrumbsArray,
             'user'=> [
-                'id' => $issue->getUser()->getId(),
-                'email' => $issue->getUser()->getEmail(),
-                'username' => $issue->getUser()->getUsername(),
+                'id' => $log->getUser()->getId(),
+                'email' => $log->getUser()->getEmail(),
+                'username' => $log->getUser()->getUsername(),
             ]
         ];
 

@@ -16,26 +16,26 @@ use PHPUnit\Framework\TestCase;
 use Utopia\Logging\Adapter\AppSignal;
 use Utopia\Logging\Adapter\Raygun;
 use Utopia\Logging\Adapter\Sentry;
-use Utopia\Logging\Issue;
-use Utopia\Logging\Issue\Breadcrumb;
-use Utopia\Logging\Issue\User;
+use Utopia\Logging\Log;
+use Utopia\Logging\Log\Breadcrumb;
+use Utopia\Logging\Log\User;
 use Utopia\Logging\Logging;
 
 class LoggingTest extends TestCase
 {
-    public function testIssue()
+    public function testLog()
     {
-        // Prepare issue
-        $issue = new Issue();
-        $issue->setAction("controller.database.deleteDocument");
-        $issue->setEnvironment("production");
-        $issue->setLogger("api");
-        $issue->setServer("digitalocean-us-001");
-        $issue->setType("warning");
-        $issue->setVersion("0.11.5");
-        $issue->setMessage("Document efgh5678 not found");
-        $issue->setUser(new User("efgh5678"));
-        $issue->setBreadcrumbs([
+        // Prepare log
+        $log = new Log();
+        $log->setAction("controller.database.deleteDocument");
+        $log->setEnvironment("production");
+        $log->setLogger("api");
+        $log->setServer("digitalocean-us-001");
+        $log->setType("warning");
+        $log->setVersion("0.11.5");
+        $log->setMessage("Document efgh5678 not found");
+        $log->setUser(new User("efgh5678"));
+        $log->setBreadcrumbs([
             new Breadcrumb("debug", "http", "DELETE /api/v1/database/abcd1234/efgh5678", \microtime(true) - 500),
             new Breadcrumb("debug", "auth", "Using API key", \microtime(true) - 400),
             new Breadcrumb("info", "auth", "Authenticated with * Using API Key", \microtime(true) - 350),
@@ -43,14 +43,14 @@ class LoggingTest extends TestCase
             new Breadcrumb("debug", "database", "Permission for collection abcd1234 met", \microtime(true) - 200),
             new Breadcrumb("error", "database", "Missing document when searching by ID!", \microtime(true)),
         ]);
-        $issue->setTags([
+        $log->setTags([
             'sdk' => 'Flutter',
             'sdkVersion' => '0.0.1',
             'authMode' => 'default',
             'authMethod' => 'cookie',
             'authProvider' => 'MagicLink'
         ]);
-        $issue->setExtra([
+        $log->setExtra([
             'urgent' => false,
             'isExpected' => true
         ]);
@@ -58,19 +58,19 @@ class LoggingTest extends TestCase
         // Test Sentry
         $adapter = new Sentry(\getenv("TEST_SENTRY_KEY"), \getenv("TEST_SENTRY_PROJECT_ID"));
         $logging = new Logging($adapter);
-        $response = $logging->addIssue($issue);
+        $response = $logging->addLog($log);
         self::assertEquals(200, $response);
 
         // Test AppSignal
         $adapter = new AppSignal(\getenv("TEST_APPSIGNAL_KEY"));
         $logging = new Logging($adapter);
-        $response = $logging->addIssue($issue);
+        $response = $logging->addLog($log);
         self::assertEquals(200, $response);
 
         // Test Raygun
         $adapter = new Raygun(\getenv("TEST_RAYGUN_KEY"));
         $logging = new Logging($adapter);
-        $response = $logging->addIssue($issue);
+        $response = $logging->addLog($log);
         self::assertEquals(202, $response);
     }
 }

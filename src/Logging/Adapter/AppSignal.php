@@ -3,7 +3,7 @@
 namespace Utopia\Logging\Adapter;
 
 use Utopia\Logging\Adapter;
-use Utopia\Logging\Issue;
+use Utopia\Logging\Log;
 
 class AppSignal extends Adapter
 {
@@ -23,20 +23,20 @@ class AppSignal extends Adapter
     }
 
     /**
-     * Push issue to external provider
+     * Push log to external provider
      *
-     * @param Issue $issue
+     * @param Log $log
      * @return int
      */
-    public function pushIssue(Issue $issue): int
+    public function pushLog(Log $log): int
     {
         $params = [];
 
-        foreach($issue->getExtra() as $paramKey => $paramValue) {
+        foreach($log->getExtra() as $paramKey => $paramValue) {
             $params[$paramKey] = var_export($paramValue, true);
         }
 
-        $breadcrumbsObject = $issue->getBreadcrumbs();
+        $breadcrumbsObject = $log->getBreadcrumbs();
         $breadcrumbsArray = [];
 
         foreach ($breadcrumbsObject as $breadcrumb) {
@@ -52,38 +52,38 @@ class AppSignal extends Adapter
 
         $tags = array();
 
-        foreach($issue->getTags() as $tagKey => $tagValue) {
+        foreach($log->getTags() as $tagKey => $tagValue) {
             $tags[$tagKey] = $tagValue;
         }
 
-        if(!empty($issue->getType())) {
-            $tags['type'] = $issue->getType();
+        if(!empty($log->getType())) {
+            $tags['type'] = $log->getType();
         }
-        if(!empty($issue->getUser()->getId())) {
-            $tags['userId'] = $issue->getUser()->getId();
+        if(!empty($log->getUser()->getId())) {
+            $tags['userId'] = $log->getUser()->getId();
         }
-        if(!empty($issue->getUser()->getUsername())) {
-            $tags['userName'] = $issue->getUser()->getUsername();
+        if(!empty($log->getUser()->getUsername())) {
+            $tags['userName'] = $log->getUser()->getUsername();
         }
-        if(!empty($issue->getUser()->getEmail())) {
-            $tags['userEmail'] = $issue->getUser()->getEmail();
+        if(!empty($log->getUser()->getEmail())) {
+            $tags['userEmail'] = $log->getUser()->getEmail();
         }
 
         $requestBody = [
-            'timestamp'=> \intval($issue->getTimestamp()),
-            'namespace'=> $issue->getLogger(),
+            'timestamp'=> \intval($log->getTimestamp()),
+            'namespace'=> $log->getLogger(),
             'error'=> [
-                'name'=> $issue->getMessage(),
-                'message'=> $issue->getMessage(),
+                'name'=> $log->getMessage(),
+                'message'=> $log->getMessage(),
                 'backtrace'=> []
             ],
             'environment'=> [
-                'environment'=> $issue->getEnvironment(),
-                'server'=> $issue->getServer(),
-                'version'=> $issue->getVersion(),
+                'environment'=> $log->getEnvironment(),
+                'server'=> $log->getServer(),
+                'version'=> $log->getVersion(),
             ],
-            'revision'=> $issue->getVersion(),
-            'action'=> $issue->getAction(),
+            'revision'=> $log->getVersion(),
+            'action'=> $log->getAction(),
             'params'=> $params,
             'tags'=> $tags,
             'breadcrumbs' => $breadcrumbsArray

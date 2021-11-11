@@ -13,10 +13,10 @@ abstract class Adapter
 
 
     /**
-     * Push issue to external provider
+     * Push log to external provider
      *
-     * @param Issue $issue
+     * @param Log $log
      * @return int
      */
-    abstract public function pushIssue(Issue $issue): int;
+    abstract public function pushLog(Log $log): int;
 }

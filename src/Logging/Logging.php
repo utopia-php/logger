@@ -22,24 +22,24 @@ class Logging
     }
 
     /**
-     * Store new issue. Currently, it is instantly pushed to Adapter, but in future it could pool to increase performance.
+     * Store new log. Currently, it is instantly pushed to Adapter, but in future it could pool to increase performance.
      *
-     * @param Issue $issue
+     * @param Log $log
      * @return int
      */
-    public function addIssue(Issue $issue): int {
-        // Validate issue
+    public function addLog(Log $log): int {
+        // Validate log
         if(
-            empty($issue->getAction()) ||
-            empty($issue->getEnvironment()) ||
-            empty($issue->getMessage()) ||
-            empty($issue->getType()) ||
-            empty($issue->getVersion())
+            empty($log->getAction()) ||
+            empty($log->getEnvironment()) ||
+            empty($log->getMessage()) ||
+            empty($log->getType()) ||
+            empty($log->getVersion())
         ) {
-            throw new Exception('Issue is not ready to be pushed.');
+            throw new Exception('Log is not ready to be pushed.');
         }
 
-        // Push issue
-        return $this->adapter->pushIssue($issue);
+        // Push log
+        return $this->adapter->pushLog($log);
     }
 }
