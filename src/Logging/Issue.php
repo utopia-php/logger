@@ -84,15 +84,18 @@ class Issue
      * @throws Exception
      */
     public function setType(string $type): void {
-        if($type !== "log" && $type !== "error" && $type !== "warning") {
-            throw new Exception('Unsupported type of issue');
+        switch ($type) {
+              case "log":
+              case "error":
+              case "warning": break;
+              default: throw new Exception("Unsupported issue type. Must be one of 'log', 'warning' or 'error'");
         }
 
         $this->type = $type;
     }
 
     /**
-     * Get a type
+     * Get the type of this Issue
      *
      * @return string (can be 'log', 'error' or 'warning')
      */
@@ -113,7 +116,7 @@ class Issue
     /**
      * Get timestamp in seconds when issue occurred
      *
-     * @return float (can be 'log', 'error' or 'warning')
+     * @return float
      */
     public function getTimestamp(): float {
         return $this->timestamp;
@@ -158,7 +161,7 @@ class Issue
     }
 
     /**
-     * Set an action to describe where error is coming from
+     * Set an action to describe what caused this log
      *
      * @param string $action (required, for example 'databaseController.deleteDocument' or 'functionsWorker.executeFunction')
      * @return void

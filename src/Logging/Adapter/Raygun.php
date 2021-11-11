@@ -23,7 +23,7 @@ class Raygun extends Adapter
     }
 
     /**
-     * Push issue to external server
+     * Push issue to external provider
      *
      * @param Issue $issue
      * @return int
