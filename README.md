@@ -20,18 +20,61 @@ composer require utopia-php/logging
 
 require_once '../vendor/autoload.php';
 
-use blabla;
+use Utopia\Logging\Adapter\AppSignal;
+use Utopia\Logging\Adapter\Raygun;
+use Utopia\Logging\Adapter\Sentry;
+use Utopia\Logging\Log;
+use Utopia\Logging\Log\Breadcrumb;
+use Utopia\Logging\Log\User;
+use Utopia\Logging\Logging;
 
-blabla
+// Prepare log
+$log = new Log();
+$log->setAction("controller.database.deleteDocument");
+$log->setEnvironment("production");
+$log->setLogger("api");
+$log->setServer("digitalocean-us-001");
+$log->setType("warning");
+$log->setVersion("0.11.5");
+$log->setMessage("Document efgh5678 not found");
+$log->setUser(new User("efgh5678"));
+$log->setBreadcrumbs([
+    new Breadcrumb("debug", "http", "DELETE /api/v1/database/abcd1234/efgh5678", \microtime(true) - 500),
+    new Breadcrumb("debug", "auth", "Using API key", \microtime(true) - 400),
+    new Breadcrumb("info", "auth", "Authenticated with * Using API Key", \microtime(true) - 350),
+    new Breadcrumb("info", "database", "Found collection abcd1234", \microtime(true) - 300),
+    new Breadcrumb("debug", "database", "Permission for collection abcd1234 met", \microtime(true) - 200),
+    new Breadcrumb("error", "database", "Missing document when searching by ID!", \microtime(true)),
+]);
+$log->setTags([
+    'sdk' => 'Flutter',
+    'sdkVersion' => '0.0.1',
+    'authMode' => 'default',
+    'authMethod' => 'cookie',
+    'authProvider' => 'MagicLink'
+]);
+$log->setExtra([
+    'urgent' => false,
+    'isExpected' => true
+]);
+
+// Sentry
+$adapter = new Sentry("[YOUR_SENTRY_KEY]", \getenv("[YOUR_SENTRY_PROJECT_ID]"));
+$logging = new Logging($adapter);
+$logging->addLog($log);
+
+// AppSignal
+$adapter = new AppSignal(\getenv("[YOUR_APPSIGNAL_KEY]"));
+$logging = new Logging($adapter);
+$logging->addLog($log);
+
+// Raygun
+$adapter = new Raygun(\getenv("[YOUR_RAYGUN_KEY]"));
+$logging = new Logging($adapter);
+$logging->addLog($log);
+
 ```
 
-## Library API
-
-* **blabla()** - bla bla
-
-> bla bla
-> 
->
 ### Adapters
 
 Below is a list of supported adapters, and thier compatibly tested versions alongside a list of supported features and relevant limits.
