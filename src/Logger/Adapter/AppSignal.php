@@ -1,9 +1,10 @@
 <?php
 
-namespace Utopia\Logging\Adapter;
+namespace Utopia\Logger\Adapter;
 
-use Utopia\Logging\Adapter;
-use Utopia\Logging\Log;
+use Utopia\Logger\Adapter;
+use Utopia\Logger\Log;
+use Utopia\Logger\Logger;
 
 class AppSignal extends Adapter
 {
@@ -69,9 +70,11 @@ class AppSignal extends Adapter
             $tags['userEmail'] = $log->getUser()->getEmail();
         }
 
+        $tags['sdk'] = 'utopia-logger/' . Logger::LIBRARY_VERSION;
+
         $requestBody = [
             'timestamp'=> \intval($log->getTimestamp()),
-            'namespace'=> $log->getLogger(),
+            'namespace'=> $log->getNamespace(),
             'error'=> [
                 'name'=> $log->getMessage(),
                 'message'=> $log->getMessage(),

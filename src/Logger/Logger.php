@@ -1,18 +1,20 @@
 <?php
 
-namespace Utopia\Logging;
+namespace Utopia\Logger;
 
 use Exception;
 
-class Logging
+class Logger
 {
+    const LIBRARY_VERSION = "0.1.0";
+
     /**
      * @var Adapter
      */
     protected Adapter $adapter;
 
     /**
-     * Logging constructor.
+     * Logger constructor.
      *
      * @param Adapter $adapter
      */

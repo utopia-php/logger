@@ -1,6 +1,6 @@
 <?php
 
-namespace Utopia\Logging\Log;
+namespace Utopia\Logger\Log;
 
 class User
 {

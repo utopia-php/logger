@@ -1,20 +1,27 @@
 <?php
 
-namespace Utopia\Logging;
+namespace Utopia\Logger;
 
 use Exception;
-use Utopia\Logging\Log\Breadcrumb;
-use Utopia\Logging\Log\User;
+use Utopia\Logger\Log\Breadcrumb;
+use Utopia\Logger\Log\User;
 
 class Log
 {
+    const TYPE_DEBUG = "log";
+    const TYPE_ERROR = "error";
+    const TYPE_WARNING = "warning";
+
+    const ENVIRONMENT_PRODUCTION = "production";
+    const ENVIRONMENT_STAGING = "staging";
+
     /**
      * @var float (required, set by default to microtime())
      */
     protected float $timestamp;
 
     /**
-     * @var string (required can be 'log', 'error' or 'warning')
+     * @var string (required can be 'TYPE_DEBUG', 'TYPE_ERROR' or 'TYPE_WARNING')
      */
     protected string $type;
 
@@ -51,7 +58,7 @@ class Log
     /**
      * @var string (optional)
      */
-    protected string $logger;
+    protected string $namespace;
 
     /**
      * @var string (optional)
@@ -85,10 +92,10 @@ class Log
      */
     public function setType(string $type): void {
         switch ($type) {
-              case "log":
-              case "error":
-              case "warning": break;
-              default: throw new Exception("Unsupported log type. Must be one of 'log', 'warning' or 'error'");
+              case self::TYPE_DEBUG:
+              case self::TYPE_ERROR:
+              case self::TYPE_WARNING: break;
+              default: throw new Exception("Unsupported log type. Must be one of TYPE_DEBUG, TYPE_ERROR or TYPE_WARNING.");
         }
 
         $this->type = $type;
@@ -142,22 +149,22 @@ class Log
     }
 
     /**
-     * Set a custom logger for easier categorizing
+     * Set a custom namespace for easier categorizing
      *
-     * @param string $logger (required, for example 'api')
+     * @param string $namespace (required, for example 'api')
      * @return void
      */
-    public function setLogger(string $logger): void {
-        $this->logger = $logger;
+    public function setNamespace(string $namespace): void {
+        $this->namespace = $namespace;
     }
 
     /**
-     * Set a custom logger
+     * Set a custom namespace
      *
      * @return string
      */
-    public function getLogger(): string {
-        return $this->logger;
+    public function getNamespace(): string {
+        return $this->namespace;
     }
 
     /**
@@ -220,12 +227,16 @@ class Log
     /**
      * Set version of application for easier bug hunting
      *
-     * @param string $environment (required, can be 'production' or 'staging')
+     * @param string $environment (required, can be ENVIRONMENT_PRODUCTION or ENVIRONMENT_STAGING)
      * @return void
      */
     public function setEnvironment(string $environment): void {
-        if($environment !== "production" && $environment !== "staging") {
-            throw new Exception('Unsupported environment of log');
+        switch ($environment) {
+            case self::ENVIRONMENT_PRODUCTION:
+            case self::ENVIRONMENT_STAGING:
+                break;
+            default:
+                throw new Exception('Unsupported environment of log. Must be one of ENVIRONMENT_PRODUCTION, ENVIRONMENT_STAGING.');
         }
 
         $this->environment = $environment;

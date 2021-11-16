@@ -1,10 +1,10 @@
-# Utopia Logging
+# Utopia Logger
 
-[![Build Status](https://travis-ci.org/utopia-php/logging.svg?branch=main)](https://travis-ci.com/utopia-php/logging)
-![Total Downloads](https://img.shields.io/packagist/dt/utopia-php/logging.svg)
+[![Build Status](https://travis-ci.org/utopia-php/logger.svg?branch=main)](https://travis-ci.com/utopia-php/logger)
+![Total Downloads](https://img.shields.io/packagist/dt/utopia-php/logger.svg)
 [![Discord](https://img.shields.io/discord/564160730845151244)](https://appwrite.io/discord)
 
-Utopia Logging library is simple and lite library for logging information, such as errors or warnings. This library aims to be as simple and easy to learn and use as possible. This library is maintained by the [Appwrite team](https://appwrite.io).
+Utopia Logger library is simple and lite library for logging information, such as errors or warnings. This library aims to be as simple and easy to learn and use as possible. This library is maintained by the [Appwrite team](https://appwrite.io).
 
 Although the library was built for the [Utopia Framework](https://github.com/utopia-php/framework) project, it is completely independent, **dependency-free** and can be used with any other PHP project or framework.
 
@@ -12,7 +12,7 @@ Although the library was built for the [Utopia Framework](https://github.com/uto
 
 Install using composer:
 ```bash
-composer require utopia-php/logging
+composer require utopia-php/logger
 ```
 
 ```php
@@ -20,31 +20,31 @@ composer require utopia-php/logging
 
 require_once '../vendor/autoload.php';
 
-use Utopia\Logging\Adapter\AppSignal;
-use Utopia\Logging\Adapter\Raygun;
-use Utopia\Logging\Adapter\Sentry;
-use Utopia\Logging\Log;
-use Utopia\Logging\Log\Breadcrumb;
-use Utopia\Logging\Log\User;
-use Utopia\Logging\Logging;
+use Utopia\Logger\Adapter\AppSignal;
+use Utopia\Logger\Adapter\Raygun;
+use Utopia\Logger\Adapter\Sentry;
+use Utopia\Logger\Log;
+use Utopia\Logger\Log\Breadcrumb;
+use Utopia\Logger\Log\User;
+use Utopia\Logger\Logger;
 
 // Prepare log
 $log = new Log();
 $log->setAction("controller.database.deleteDocument");
 $log->setEnvironment("production");
-$log->setLogger("api");
+$log->setNamespace("api");
 $log->setServer("digitalocean-us-001");
-$log->setType("warning");
+$log->setType(Log::TYPE_WARNING);
 $log->setVersion("0.11.5");
 $log->setMessage("Document efgh5678 not found");
 $log->setUser(new User("efgh5678"));
 $log->setBreadcrumbs([
-    new Breadcrumb("debug", "http", "DELETE /api/v1/database/abcd1234/efgh5678", \microtime(true) - 500),
-    new Breadcrumb("debug", "auth", "Using API key", \microtime(true) - 400),
-    new Breadcrumb("info", "auth", "Authenticated with * Using API Key", \microtime(true) - 350),
-    new Breadcrumb("info", "database", "Found collection abcd1234", \microtime(true) - 300),
-    new Breadcrumb("debug", "database", "Permission for collection abcd1234 met", \microtime(true) - 200),
-    new Breadcrumb("error", "database", "Missing document when searching by ID!", \microtime(true)),
+    new Breadcrumb(Breadcrumb::TYPE_DEBUG, "http", "DELETE /api/v1/database/abcd1234/efgh5678", \microtime(true) - 500),
+    new Breadcrumb(Breadcrumb::TYPE_DEBUG, "auth", "Using API key", \microtime(true) - 400),
+    new Breadcrumb(Breadcrumb::TYPE_INFO, "auth", "Authenticated with * Using API Key", \microtime(true) - 350),
+    new Breadcrumb(Breadcrumb::TYPE_INFO, "database", "Found collection abcd1234", \microtime(true) - 300),
+    new Breadcrumb(Breadcrumb::TYPE_DEBUG, "database", "Permission for collection abcd1234 met", \microtime(true) - 200),
+    new Breadcrumb(Breadcrumb::TYPE_ERROR, "database", "Missing document when searching by ID!", \microtime(true)),
 ]);
 $log->setTags([
     'sdk' => 'Flutter',
@@ -60,18 +60,18 @@ $log->setExtra([
 
 // Sentry
 $adapter = new Sentry("[YOUR_SENTRY_KEY]", \getenv("[YOUR_SENTRY_PROJECT_ID]"));
-$logging = new Logging($adapter);
-$logging->addLog($log);
+$logger = new Logger($adapter);
+$logger->addLog($log);
 
 // AppSignal
 $adapter = new AppSignal(\getenv("[YOUR_APPSIGNAL_KEY]"));
-$logging = new Logging($adapter);
-$logging->addLog($log);
+$logger = new Logger($adapter);
+$logger->addLog($log);
 
 // Raygun
 $adapter = new Raygun(\getenv("[YOUR_RAYGUN_KEY]"));
-$logging = new Logging($adapter);
-$logging->addLog($log);
+$logger = new Logger($adapter);
+$logger->addLog($log);
 
 ```
 
@@ -83,7 +83,7 @@ Below is a list of supported adapters, and thier compatibly tested versions alon
 |---------|---------|
 | Sentry | ✅ |
 | AppSignal | ✅ |
-| Raygun | 🛠 |
+| Raygun | ✅ |
 
 ` ✅  - supported, 🛠  - work in progress`
 

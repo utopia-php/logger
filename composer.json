@@ -1,8 +1,8 @@
 {
-    "name": "utopia-php/logging",
-    "description": "Utopia Logging library is simple and lite library for logging information, such as errors or warnings. This library is aiming to be as simple and easy to learn and use.",
+    "name": "utopia-php/logger",
+    "description": "Utopia Logger library is simple and lite library for logging information, such as errors or warnings. This library is aiming to be as simple and easy to learn and use.",
     "type": "library",
-    "keywords": ["php","framework", "upf", "utopia", "logging", "errors", "warnings", "logs", "sentry", "raygun", "appsignal"],
+    "keywords": ["php","framework", "upf", "utopia", "logger", "logging", "errors", "warnings", "logs", "sentry", "raygun", "appsignal"],
     "license": "MIT",
     "authors": [
         {
@@ -19,7 +19,7 @@
         }
     ],
     "autoload": {
-        "psr-4": {"Utopia\\Logging\\": "src/Logging"}
+        "psr-4": {"Utopia\\Logger\\": "src/Logger"}
     },
     "require": {
         "php": ">=7.4"

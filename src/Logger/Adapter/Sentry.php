@@ -1,9 +1,10 @@
 <?php
 
-namespace Utopia\Logging\Adapter;
+namespace Utopia\Logger\Adapter;
 
-use Utopia\Logging\Adapter;
-use Utopia\Logging\Log;
+use Utopia\Logger\Adapter;
+use Utopia\Logger\Log;
+use Utopia\Logger\Logger;
 
 class Sentry extends Adapter
 {
@@ -53,7 +54,7 @@ class Sentry extends Adapter
             'timestamp' => $log->getTimestamp(),
             'platform' => 'php',
             'level' => 'error',
-            'logger' => $log->getLogger(),
+            'logger' => $log->getNamespace(),
             'transaction' =>  $log->getAction(),
             'server_name' =>  $log->getServer(),
             'release' => $log->getVersion(),
@@ -81,8 +82,7 @@ class Sentry extends Adapter
             CURLOPT_POST => true,
             CURLOPT_POSTFIELDS => \json_encode($requestBody),
             CURLOPT_HEADEROPT => CURLHEADER_UNIFIED,
-            CURLOPT_HTTPHEADER => array('Content-Type: application/json', 'X-Sentry-Auth: Sentry sentry_version=7, sentry_key=' . $this->sentryKey . ', sentry_client=utopia-logging/1.0')
-            // TODO: ^ Automatically figure out version (1.0)
+            CURLOPT_HTTPHEADER => array('Content-Type: application/json', 'X-Sentry-Auth: Sentry sentry_version=7, sentry_key=' . $this->sentryKey . ', sentry_client=utopia-logger/' . Logger::LIBRARY_VERSION)
         );
 
         // apply those options

@@ -32,9 +32,9 @@ body:
       description: "What did actually happen? Add screenshots, if applicable."
       placeholder: "It actually ..."
   - type: dropdown
-    id: Utopia-Logging-version
+    id: Utopia-Logger-version
     attributes:
-      label: "🎲 Utopia Logging version"
+      label: "🎲 Utopia Logger version"
       description: "What version of the library are you running?"
       options:
         - Version 0.1.x

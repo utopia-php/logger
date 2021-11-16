@@ -1,9 +1,10 @@
 <?php
 
-namespace Utopia\Logging\Adapter;
+namespace Utopia\Logger\Adapter;
 
-use Utopia\Logging\Adapter;
-use Utopia\Logging\Log;
+use Utopia\Logger\Adapter;
+use Utopia\Logger\Log;
+use Utopia\Logger\Logger;
 
 class Raygun extends Adapter
 {
@@ -51,13 +52,14 @@ class Raygun extends Adapter
 
         \array_push($tagsArray, 'type: ' . $log->getType());
         \array_push($tagsArray, 'environment: ' . $log->getEnvironment());
+        \array_push($tagsArray, 'sdk: utopia-logger/' . Logger::LIBRARY_VERSION);
 
         // prepare log (request body)
         $requestBody = [
             'occurredOn' =>  \intval($log->getTimestamp()),
             'details' => [
                 'machineName' => $log->getServer(),
-                'groupingKey' => $log->getLogger(),
+                'groupingKey' => $log->getNamespace(),
                 'version' => $log->getVersion(),
                 'error' => [
                     'className' => $log->getAction(),
