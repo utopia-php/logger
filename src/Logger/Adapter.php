@@ -19,4 +19,6 @@ abstract class Adapter
      * @return int
      */
     abstract public function pushLog(Log $log): int;
+
+    // TODO: validateLog(Log $log)
 }

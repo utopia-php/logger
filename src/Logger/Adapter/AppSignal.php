@@ -8,6 +8,8 @@ use Utopia\Logger\Logger;
 
 class AppSignal extends Adapter
 {
+    // TODO: Fix types (log, breadcrumb)
+
     /**
      * @var string (required, can be found in Appsignal -> Project -> App Settings -> Push & deploy -> Push Key)
      */

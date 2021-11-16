@@ -8,20 +8,22 @@ use Utopia\Logger\Log\User;
 
 class Log
 {
-    const TYPE_DEBUG = "log";
+    const TYPE_DEBUG = "debug";
     const TYPE_ERROR = "error";
     const TYPE_WARNING = "warning";
+    const TYPE_INFO = "info";
+    const TYPE_VERBOSE = "verbose";
 
     const ENVIRONMENT_PRODUCTION = "production";
     const ENVIRONMENT_STAGING = "staging";
 
     /**
-     * @var float (required, set by default to microtime())
+     * @var float (required, set by default to microtime(true))
      */
     protected float $timestamp;
 
     /**
-     * @var string (required can be 'TYPE_DEBUG', 'TYPE_ERROR' or 'TYPE_WARNING')
+     * @var string (required, for example 'Log::TYPE_INFO')
      */
     protected string $type;
 
@@ -92,10 +94,13 @@ class Log
      */
     public function setType(string $type): void {
         switch ($type) {
-              case self::TYPE_DEBUG:
-              case self::TYPE_ERROR:
-              case self::TYPE_WARNING: break;
-              default: throw new Exception("Unsupported log type. Must be one of TYPE_DEBUG, TYPE_ERROR or TYPE_WARNING.");
+            case self::TYPE_DEBUG:
+            case self::TYPE_ERROR:
+            case self::TYPE_VERBOSE:
+            case self::TYPE_INFO:
+            case self::TYPE_WARNING:
+                break;
+            default: throw new Exception("Unsupported log type. Must be one of Log::TYPE_DEBUG, Log::TYPE_ERROR, Log::TYPE_WARNING, Log::TYPE_INFO, Log::VERBOSE.");
         }
 
         $this->type = $type;
@@ -168,7 +173,7 @@ class Log
     }
 
     /**
-     * Set an action to describe what caused this log
+     * Set the action that caused this log
      *
      * @param string $action (required, for example 'databaseController.deleteDocument' or 'functionsWorker.executeFunction')
      * @return void
@@ -178,7 +183,7 @@ class Log
     }
 
     /**
-     * Get an action
+     * Get the action
      *
      * @return string
      */

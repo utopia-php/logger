@@ -8,6 +8,8 @@ use Utopia\Logger\Logger;
 
 class Sentry extends Adapter
 {
+    // TODO: Fix types (log, breadcrumb)
+
     /**
      * @var string (required, this part of Sentry DSN: 'https://{{THIS_PART}}@blabla.ingest.sentry.io/blabla')
      */

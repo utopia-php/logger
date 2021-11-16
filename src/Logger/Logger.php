@@ -41,6 +41,8 @@ class Logger
             throw new Exception('Log is not ready to be pushed.');
         }
 
+        // TODO: Validate
+
         // Push log
         return $this->adapter->pushLog($log);
     }

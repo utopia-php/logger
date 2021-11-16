@@ -6,12 +6,8 @@ use Exception;
 
 class Breadcrumb
 {
-    const TYPE_DEBUG = "debug";
-    const TYPE_ERROR = "error";
-    const TYPE_INFO = "info";
-
     /**
-     * @var string (required, can be one of 'TYPE_DEBUG', 'TYPE_ERROR', 'TYPE_INFO')
+     * @var string (required, for example 'Log::TYPE_ERROR')
      */
     protected string $type;
 
@@ -46,12 +42,14 @@ class Breadcrumb
         $this->timestamp = $timestamp;
 
         switch ($this->getType()) {
-            case self::TYPE_DEBUG:
-            case self::TYPE_ERROR:
-            case self::TYPE_INFO:
+            case Log::TYPE_DEBUG:
+            case Log::TYPE_ERROR:
+            case Log::TYPE_INFO:
+            case Log::TYPE_WARNING:
+            case Log::TYPE_VERBOSE:
                 break;
             default:
-                throw new Exception("Type has to be one of TYPE_DEBUG, TYPE_ERROR, TYPE_INFO.");
+                throw new Exception("Type has to be one of Log::TYPE_DEBUG, Log::TYPE_ERROR, Log::TYPE_INFO, Log::TYPE_WARNING, Log::TYPE_VERBOSE.");
         }
     }
 

@@ -43,10 +43,6 @@ class LoggerTest extends TestCase
     public function testLog() {
         $log = new Log();
 
-        $message = "";
-        $version = "0.11.1";
-        $environment = "production";
-
         $timestamp = \microtime(true);
         $log->setTimestamp($timestamp);
         self::assertEquals($timestamp, $log->getTimestamp());
@@ -57,6 +53,10 @@ class LoggerTest extends TestCase
         self::assertEquals(Log::TYPE_DEBUG, $log->getType());
         $log->setType(Log::TYPE_WARNING);
         self::assertEquals(Log::TYPE_WARNING, $log->getType());
+        $log->setType(Log::TYPE_VERBOSE);
+        self::assertEquals(Log::TYPE_VERBOSE, $log->getType());
+        $log->setType(Log::TYPE_INFO);
+        self::assertEquals(Log::TYPE_INFO, $log->getType());
 
         $log->setMessage("Cannot read 'user' of undefined");
         self::assertEquals("Cannot read 'user' of undefined", $log->getMessage());
@@ -69,11 +69,11 @@ class LoggerTest extends TestCase
         $log->setEnvironment(Log::ENVIRONMENT_STAGING);
         self::assertEquals(Log::ENVIRONMENT_STAGING, $log->getEnvironment());
 
-        $log->setAction("getAuthUser");
+        $log->setNamespace("getAuthUser");
         self::assertEquals("getAuthUser", $log->getNamespace());
 
-        $log->setNamespace("authGuard");
-        self::assertEquals("authGuard", $log->getNamespace());
+        $log->setAction("authGuard");
+        self::assertEquals("authGuard", $log->getAction());
 
         $log->setServer("aws-001");
         self::assertEquals("aws-001", $log->getServer());
@@ -83,7 +83,7 @@ class LoggerTest extends TestCase
         self::assertEquals($extra, $log->getExtra());
 
         $tags = [ 'authMethod' => 'session', 'authProvider' => 'basic' ];
-        $log->getTags($tags);
+        $log->setTags($tags);
         self::assertEquals($tags, $log->getTags());
 
         $user = new User("myid123");
@@ -91,10 +91,10 @@ class LoggerTest extends TestCase
         self::assertEquals($user, $log->getUser());
         self::assertEquals("myid123", $log->getUser()->getId());
 
-        $breadcrumbs = [new Breadcrumb(Breadcrumb::TYPE_DEBUG, "http", "DELETE /api/v1/database/abcd1234/efgh5678", $timestamp)];
+        $breadcrumbs = [new Breadcrumb(Log::TYPE_DEBUG, "http", "DELETE /api/v1/database/abcd1234/efgh5678", $timestamp)];
         $log->setBreadcrumbs($breadcrumbs);
         self::assertEquals($breadcrumbs, $log->getBreadcrumbs());
-        self::assertEquals(Breadcrumb::TYPE_DEBUG, $log->getBreadcrumbs()[0]->getType());
+        self::assertEquals(Log::TYPE_DEBUG, $log->getBreadcrumbs()[0]->getType());
         self::assertEquals("http", $log->getBreadcrumbs()[0]->getCategory());
         self::assertEquals("DELETE /api/v1/database/abcd1234/efgh5678", $log->getBreadcrumbs()[0]->getMessage());
         self::assertEquals($timestamp, $log->getBreadcrumbs()[0]->getTimestamp());
@@ -105,19 +105,27 @@ class LoggerTest extends TestCase
 
     public function testLogBreadcrumb() {
         $timestamp = \microtime(true);
-        $breadcrumb = new Breadcrumb(Breadcrumb::TYPE_DEBUG, "http", "POST /user", $timestamp);
+        $breadcrumb = new Breadcrumb(Log::TYPE_DEBUG, "http", "POST /user", $timestamp);
 
-        self::assertEquals(Breadcrumb::TYPE_DEBUG, $breadcrumb->getType());
-        self::assertEquals("http", $breadcrumb->getMessage());
-        self::assertEquals("POST /user", $breadcrumb->getCategory());
+        self::assertEquals(Log::TYPE_DEBUG, $breadcrumb->getType());
+        self::assertEquals("http", $breadcrumb->getCategory());
+        self::assertEquals("POST /user", $breadcrumb->getMessage());
         self::assertEquals($timestamp, $breadcrumb->getTimestamp());
 
+        // TODO: Set and get tests
+
         // Assert FAILS
-        // TODO: Empty constructor
+        self::expectException(ArgumentCountError::class);
+        $breadcrumb = new Breadcrumb();
+        $breadcrumb = new Breadcrumb(Log::TYPE_DEBUG);
+        $breadcrumb = new Breadcrumb(Log::TYPE_DEBUG, "http");
+        $breadcrumb = new Breadcrumb(Log::TYPE_DEBUG, "http", "POST /user");
     }
 
     public function testAdapters()
     {
+        // TODO: Split into per-adapter and test validate function
+
         // Prepare log
         $log = new Log();
         $log->setAction("controller.database.deleteDocument");
@@ -129,12 +137,12 @@ class LoggerTest extends TestCase
         $log->setMessage("Document efgh5678 not found");
         $log->setUser(new User("efgh5678"));
         $log->setBreadcrumbs([
-            new Breadcrumb(Breadcrumb::TYPE_DEBUG, "http", "DELETE /api/v1/database/abcd1234/efgh5678", \microtime(true) - 500),
-            new Breadcrumb(Breadcrumb::TYPE_DEBUG, "auth", "Using API key", \microtime(true) - 400),
-            new Breadcrumb(Breadcrumb::TYPE_INFO, "auth", "Authenticated with * Using API Key", \microtime(true) - 350),
-            new Breadcrumb(Breadcrumb::TYPE_INFO, "database", "Found collection abcd1234", \microtime(true) - 300),
-            new Breadcrumb(Breadcrumb::TYPE_DEBUG, "database", "Permission for collection abcd1234 met", \microtime(true) - 200),
-            new Breadcrumb(Breadcrumb::TYPE_ERROR, "database", "Missing document when searching by ID!", \microtime(true)),
+            new Breadcrumb(Log::TYPE_DEBUG, "http", "DELETE /api/v1/database/abcd1234/efgh5678", \microtime(true) - 500),
+            new Breadcrumb(Log::TYPE_DEBUG, "auth", "Using API key", \microtime(true) - 400),
+            new Breadcrumb(Log::TYPE_INFO, "auth", "Authenticated with * Using API Key", \microtime(true) - 350),
+            new Breadcrumb(Log::TYPE_INFO, "database", "Found collection abcd1234", \microtime(true) - 300),
+            new Breadcrumb(Log::TYPE_DEBUG, "database", "Permission for collection abcd1234 met", \microtime(true) - 200),
+            new Breadcrumb(Log::TYPE_ERROR, "database", "Missing document when searching by ID!", \microtime(true)),
         ]);
         $log->setTags([
             'sdk' => 'Flutter',
