@@ -7,11 +7,26 @@ use Exception;
 class Logger
 {
     const LIBRARY_VERSION = "0.1.0";
+    /**
+     * @var string[]
+     */
+    static protected array $providerNames = array();
+
+    /**
+     * Get list of available providers
+     *
+     * @param string $providerName
+     * @return void
+     */
+    static public function registerProvider(string $providerName): void {
+        \array_push(Logger::$providerNames, $providerName);
+    }
 
     /**
      * @var Adapter
      */
     protected Adapter $adapter;
+
 
     /**
      * Logger constructor.
@@ -48,5 +63,30 @@ class Logger
         }
 
         return 500;
+    }
+
+    /**
+     * Get list of available providers
+     *
+     * @return int[]
+     */
+    public function getProviders(): array {
+        return Logger::$providerNames;
+    }
+
+    /**
+     * Check if provider is available
+     *
+     * @param string $providerName
+     * @return bool
+     */
+    public function hasProvider(string $providerName): bool {
+        foreach (Logger::$providerNames as $registeredProviderName) {
+            if($registeredProviderName === $providerName) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

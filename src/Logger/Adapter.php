@@ -31,4 +31,9 @@ abstract class Adapter
      * @throws Exception
      */
     abstract public function validateLog(Log $log): bool;
+
+    public function __construct(string $apiKey)
+    {
+        Logger::registerProvider($this->getAdapterName());
+    }
 }
