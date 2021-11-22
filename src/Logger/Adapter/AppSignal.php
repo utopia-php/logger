@@ -2,14 +2,16 @@
 
 namespace Utopia\Logger\Adapter;
 
+use Exception;
 use Utopia\Logger\Adapter;
 use Utopia\Logger\Log;
 use Utopia\Logger\Logger;
 
+// Reference Material
+// https://docs.appsignal.com/api/public-endpoint/errors.html
+
 class AppSignal extends Adapter
 {
-    // TODO: Fix types (log, breadcrumb)
-
     /**
      * @var string (required, can be found in Appsignal -> Project -> App Settings -> Push & deploy -> Push Key)
      */
@@ -130,5 +132,45 @@ class AppSignal extends Adapter
     public function __construct(string $apiKey)
     {
         $this->apiKey = $apiKey;
+    }
+
+    public function validateLog(Log $log): bool
+    {
+        // Supports all log types (as tag)
+        switch ($log->getType()) {
+            case Log::TYPE_INFO:
+            case Log::TYPE_DEBUG:
+            case Log::TYPE_VERBOSE:
+            case Log::TYPE_ERROR:
+            case Log::TYPE_WARNING:
+                break;
+            default:
+                throw new Exception("Supported log types for this adapter are: TYPE_INFO, TYPE_DEBUG, TYPE_VERBOSE, TYPE_ERROR, TYPE_WARNING");
+        }
+
+        // Support all breadcrumb types (as metadata)
+        foreach($log->getBreadcrumbs() as $breadcrumb) {
+            switch ($breadcrumb->getType()) {
+                case Log::TYPE_INFO:
+                case Log::TYPE_DEBUG:
+                case Log::TYPE_VERBOSE:
+                case Log::TYPE_ERROR:
+                case Log::TYPE_WARNING:
+                    break;
+                default:
+                    throw new Exception("Supported breadcrumb types for this adapter are: TYPE_INFO, TYPE_DEBUG, TYPE_VERBOSE, TYPE_ERROR, TYPE_WARNING");
+            }
+        }
+
+        // Support all environment types (as key-value pair)
+        switch ($log->getEnvironment()) {
+            case Log::ENVIRONMENT_STAGING:
+            case Log::ENVIRONMENT_PRODUCTION:
+                break;
+            default:
+                throw new Exception("Supported environments for this adapter are: ENVIRONMENT_STAGING, ENVIRONMENT_PRODUCTION");
+        }
+
+        return true;
     }
 }

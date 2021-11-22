@@ -28,6 +28,7 @@ class Logger
      *
      * @param Log $log
      * @return int
+     * @throws Exception
      */
     public function addLog(Log $log): int {
         // Validate log
@@ -41,9 +42,11 @@ class Logger
             throw new Exception('Log is not ready to be pushed.');
         }
 
-        // TODO: Validate
+        if($this->adapter->validateLog($log)) {
+            // Push log
+            return $this->adapter->pushLog($log);
+        }
 
-        // Push log
-        return $this->adapter->pushLog($log);
+        return 500;
     }
 }

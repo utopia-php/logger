@@ -2,14 +2,16 @@
 
 namespace Utopia\Logger\Adapter;
 
+use Exception;
 use Utopia\Logger\Adapter;
 use Utopia\Logger\Log;
 use Utopia\Logger\Logger;
 
+// Reference Material
+// https://develop.sentry.dev/sdk/event-payloads/
+
 class Sentry extends Adapter
 {
-    // TODO: Fix types (log, breadcrumb)
-
     /**
      * @var string (required, this part of Sentry DSN: 'https://{{THIS_PART}}@blabla.ingest.sentry.io/blabla')
      */
@@ -43,7 +45,7 @@ class Sentry extends Adapter
 
         foreach ($breadcrumbsObject as $breadcrumb) {
             \array_push($breadcrumbsArray, [
-                'type' => $breadcrumb->getType(),
+                'type' => "default",
                 'level' => $breadcrumb->getType(),
                 'category' => $breadcrumb->getCategory(),
                 'message' => $breadcrumb->getMessage(),
@@ -112,5 +114,44 @@ class Sentry extends Adapter
     {
         $this->sentryKey = $sentryKey;
         $this->projectId = $projectId;
+    }
+
+    public function validateLog(Log $log): bool
+    {
+        // Supports log types: fatal, error, warning, info, and debug
+        switch ($log->getType()) {
+            case Log::TYPE_ERROR:
+            case Log::TYPE_WARNING:
+            case Log::TYPE_DEBUG:
+            case Log::TYPE_INFO:
+                break;
+            default:
+                throw new Exception("Supported log types for this adapter are: TYPE_ERROR, TYPE_WARNING, TYPE_DEBUG, TYPE_INFO");
+        }
+
+        // Supported breadcrumb types: fatal, error, warning, info, and debug
+        foreach($log->getBreadcrumbs() as $breadcrumb) {
+            switch ($breadcrumb->getType()) {
+                case Log::TYPE_INFO:
+                case Log::TYPE_DEBUG:
+                case Log::TYPE_ERROR:
+                case Log::TYPE_WARNING:
+                    break;
+                default:
+                    throw new Exception("Supported breadcrumb types for this adapter are: TYPE_INFO, TYPE_DEBUG, TYPE_ERROR, TYPE_WARNING");
+            }
+        }
+
+
+        // Supported environment types: staging, production
+        switch ($log->getEnvironment()) {
+            case Log::ENVIRONMENT_STAGING:
+            case Log::ENVIRONMENT_PRODUCTION:
+                break;
+            default:
+                throw new Exception("Supported environments for this adapter are: ENVIRONMENT_STAGING, ENVIRONMENT_PRODUCTION");
+        }
+
+        return true;
     }
 }

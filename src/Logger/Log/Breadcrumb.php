@@ -3,6 +3,7 @@
 namespace Utopia\Logger\Log;
 
 use Exception;
+use Utopia\Logger\Log;
 
 class Breadcrumb
 {

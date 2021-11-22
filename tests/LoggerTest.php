@@ -99,8 +99,6 @@ class LoggerTest extends TestCase
         self::assertEquals("DELETE /api/v1/database/abcd1234/efgh5678", $log->getBreadcrumbs()[0]->getMessage());
         self::assertEquals($timestamp, $log->getBreadcrumbs()[0]->getTimestamp());
 
-        // Assert FAILS
-        // TODO: Different setType, setEnvironment
     }
 
     public function testLogBreadcrumb() {
@@ -112,7 +110,14 @@ class LoggerTest extends TestCase
         self::assertEquals("POST /user", $breadcrumb->getMessage());
         self::assertEquals($timestamp, $breadcrumb->getTimestamp());
 
-        // TODO: Set and get tests
+        $breadcrumb = new Breadcrumb(Log::TYPE_INFO, "http", "POST /user", $timestamp);
+        self::assertEquals(Log::TYPE_INFO, $breadcrumb->getType());
+        $breadcrumb = new Breadcrumb(Log::TYPE_VERBOSE, "http", "POST /user", $timestamp);
+        self::assertEquals(Log::TYPE_VERBOSE, $breadcrumb->getType());
+        $breadcrumb = new Breadcrumb(Log::TYPE_ERROR, "http", "POST /user", $timestamp);
+        self::assertEquals(Log::TYPE_ERROR, $breadcrumb->getType());
+        $breadcrumb = new Breadcrumb(Log::TYPE_WARNING, "http", "POST /user", $timestamp);
+        self::assertEquals(Log::TYPE_WARNING, $breadcrumb->getType());
 
         // Assert FAILS
         self::expectException(ArgumentCountError::class);
@@ -124,8 +129,6 @@ class LoggerTest extends TestCase
 
     public function testAdapters()
     {
-        // TODO: Split into per-adapter and test validate function
-
         // Prepare log
         $log = new Log();
         $log->setAction("controller.database.deleteDocument");

@@ -2,6 +2,8 @@
 
 namespace Utopia\Logger;
 
+use Exception;
+
 abstract class Adapter
 {
     /**
@@ -20,5 +22,13 @@ abstract class Adapter
      */
     abstract public function pushLog(Log $log): int;
 
-    // TODO: validateLog(Log $log)
+
+    /**
+     * Validate if a log is properly configured for specific adapter
+     *
+     * @param Log $log
+     * @return bool
+     * @throws Exception
+     */
+    abstract public function validateLog(Log $log): bool;
 }

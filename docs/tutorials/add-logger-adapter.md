@@ -53,7 +53,7 @@ use Utopia\Logger\Log;
 use Utopia\Logger\Logger;
 
 // Reference Material
-// [DOCS FROM OAUTH PROVIDER]
+// [DOCS FROM ADAPTER PROVIDER]
 
 class [ADAPTER_NAME] extends Adapter
 {
@@ -79,6 +79,18 @@ class [ADAPTER_NAME] extends Adapter
     {
         // TODO: Implement HTTP API request that submit a log into external server. For building HTTP request, use `curl_exec()`, just like all other adapters
     }
+    
+    /**
+     * Validate if a log is properly configured for specific adapter
+     *
+     * @param Log $log
+     * @return bool
+     */
+    public function validateLog(Log $log): bool
+    {
+        // TODO: Check support for error types, breadcrumb types and environment types
+        return true;
+    }
 
     /**
      * [ADAPTER_NAME] constructor.
@@ -92,7 +104,7 @@ class [ADAPTER_NAME] extends Adapter
 
 > If you copy this template, make sure to replace all placeholders wrapped like `[THIS]` and to implement everything marked as `TODO:`.
 
-Please mention in your documentation what resources or API docs you used to implement the provider's OAuth2 protocol. Also, make sure all of these parameters are pushed to external API server:
+Please mention in your documentation what resources or API docs you used to implement the provider's API. Also, make sure all of these parameters are pushed to external API server:
 
 - [ ] Timestamp
 - [ ] Type
