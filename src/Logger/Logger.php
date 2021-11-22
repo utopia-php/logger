@@ -13,16 +13,6 @@ class Logger
     static protected array $providerNames = array();
 
     /**
-     * Get list of available providers
-     *
-     * @param string $providerName
-     * @return void
-     */
-    static public function registerProvider(string $providerName): void {
-        \array_push(Logger::$providerNames, $providerName);
-    }
-
-    /**
      * @var Adapter
      */
     protected Adapter $adapter;
@@ -68,9 +58,19 @@ class Logger
     /**
      * Get list of available providers
      *
+     * @param string $providerName
+     * @return void
+     */
+    static public function registerProvider(string $providerName): void {
+        \array_push(Logger::$providerNames, $providerName);
+    }
+
+    /**
+     * Get list of available providers
+     *
      * @return int[]
      */
-    public function getProviders(): array {
+    static public function getProviders(): array {
         return Logger::$providerNames;
     }
 
@@ -80,7 +80,7 @@ class Logger
      * @param string $providerName
      * @return bool
      */
-    public function hasProvider(string $providerName): bool {
+    static public function hasProvider(string $providerName): bool {
         foreach (Logger::$providerNames as $registeredProviderName) {
             if($registeredProviderName === $providerName) {
                 return true;
