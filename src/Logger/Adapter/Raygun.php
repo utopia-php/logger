@@ -112,11 +112,11 @@ class Raygun extends Adapter
     /**
      * Raygun constructor.
      *
-     * @param string $apiKey
+     * @param string $configKey
      */
-    public function __construct(string $apiKey)
+    public function __construct(string $configKey)
     {
-        $this->apiKey = $apiKey;
+        $this->apiKey = $configKey;
     }
 
     public function validateLog(Log $log): bool

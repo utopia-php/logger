@@ -94,8 +94,10 @@ class [ADAPTER_NAME] extends Adapter
 
     /**
      * [ADAPTER_NAME] constructor.
+     *
+     * @param string $configKey
      */
-    public function __construct()
+    public function __construct(string $configKey)
     {
         // TODO: Fill protected variables with keys using values from constructor parameters
     }
@@ -103,6 +105,11 @@ class [ADAPTER_NAME] extends Adapter
 ```
 
 > If you copy this template, make sure to replace all placeholders wrapped like `[THIS]` and to implement everything marked as `TODO:`.
+
+When implementing new adapter, please make sure to follow these rules:
+
+- `getAdapterName()` needs to use same name as file name with first letter lowercased. For example, in `AppSignal.php`, we use `appSignal`
+- Consturctor needs to recieve exactly 1 parameter `$configKey`. This should all keys required for authentication. If multiple are needed, symbol `;` should be used for separation.
 
 Please mention in your documentation what resources or API docs you used to implement the provider's API. Also, make sure all of these parameters are pushed to external API server:
 

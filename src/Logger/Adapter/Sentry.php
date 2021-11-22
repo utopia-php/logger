@@ -107,13 +107,13 @@ class Sentry extends Adapter
     /**
      * Sentry constructor.
      *
-     * @param string $sentryKey
-     * @param string $projectId
+     * @param string $configKey
      */
-    public function __construct(string $sentryKey, string $projectId)
+    public function __construct(string $configKey)
     {
-        $this->sentryKey = $sentryKey;
-        $this->projectId = $projectId;
+        $configChunks = \explode(";", $configKey);
+        $this->sentryKey = $configChunks[0];
+        $this->projectId = $configChunks[1];
     }
 
     public function validateLog(Log $log): bool
