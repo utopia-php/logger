@@ -24,7 +24,7 @@ class AppSignal extends Adapter
      */
     public function getAdapterName(): string
     {
-        return "appsignal";
+        return "appSignal";
     }
 
     /**
