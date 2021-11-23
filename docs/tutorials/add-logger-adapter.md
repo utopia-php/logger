@@ -64,7 +64,7 @@ class [ADAPTER_NAME] extends Adapter
      *
      * @return string
      */
-    public function getAdapterName(): string
+    public static function getAdapterName(): string
     {
         return "[UNIQUE_ADAPTER_VERBOSE_ID]";
     }
@@ -127,6 +127,10 @@ Please mention in your documentation what resources or API docs you used to impl
 - [ ] Tags array
 
 If external API does not support any of these, feel free to add the information as tag. Every provider supports tags, so we can use that to store any officially un-supported information.
+
+### 2.2 Register newly created provider
+
+In `src/Logger/Logger.php` update variable `const PROVIDERS` to include your provider name.
 
 ## 3. Test your adapter
 

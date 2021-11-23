@@ -27,7 +27,7 @@ class Sentry extends Adapter
      *
      * @return string
      */
-    public function getAdapterName(): string
+    public static function getAdapterName(): string
     {
         return "sentry";
     }

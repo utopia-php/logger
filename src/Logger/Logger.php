@@ -7,6 +7,12 @@ use Exception;
 class Logger
 {
     const LIBRARY_VERSION = "0.1.0";
+    const PROVIDERS = [
+        "raygun",
+        "sentry",
+        "appSignal"
+    ];
+
     /**
      * @var string[]
      */
@@ -26,6 +32,10 @@ class Logger
     public function __construct(Adapter $adapter)
     {
         $this->adapter = $adapter;
+
+        foreach(Logger::PROVIDERS as $providerName) {
+            Logger::registerProvider($providerName);
+        }
     }
 
     /**
