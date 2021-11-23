@@ -59,7 +59,7 @@ class Logger
     /**
      * Get list of available providers
      *
-     * @return int[]
+     * @return string[]
      */
     static public function getProviders(): array {
         return Logger::PROVIDERS;

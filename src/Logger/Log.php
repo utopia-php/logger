@@ -204,9 +204,9 @@ class Log
     /**
      * Get identificator of server where log happened
      *
-     * @return string
+     * @return string|null
      */
-    public function getServer(): string {
+    public function getServer(): ?string {
         return $this->server;
     }
 
