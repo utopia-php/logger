@@ -69,7 +69,7 @@ class Sentry extends Adapter
             'tags'=> $log->getTags(),
             'extra'=> $log->getExtra(),
             'breadcrumbs'=> $breadcrumbsArray,
-            'user'=> [
+            'user'=> empty($log->getUser()) ? null : [
                 'id' => $log->getUser()->getId(),
                 'email' => $log->getUser()->getEmail(),
                 'username' => $log->getUser()->getUsername(),

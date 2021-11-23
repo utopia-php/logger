@@ -64,13 +64,13 @@ class AppSignal extends Adapter
         if(!empty($log->getType())) {
             $tags['type'] = $log->getType();
         }
-        if(!empty($log->getUser()->getId())) {
+        if(!empty($log->getUser()) &&  !empty($log->getUser()->getId())) {
             $tags['userId'] = $log->getUser()->getId();
         }
-        if(!empty($log->getUser()->getUsername())) {
+        if(!empty($log->getUser()) &&  !empty($log->getUser()->getUsername())) {
             $tags['userName'] = $log->getUser()->getUsername();
         }
-        if(!empty($log->getUser()->getEmail())) {
+        if(!empty($log->getUser()) &&  !empty($log->getUser()->getEmail())) {
             $tags['userEmail'] = $log->getUser()->getEmail();
         }
 

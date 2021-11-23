@@ -73,9 +73,9 @@ class Raygun extends Adapter
                 'userCustomData' => $log->getExtra(),
                 'user' => [
                     'isAnonymous' => empty($log->getUser()),
-                    'identifier' => $log->getUser()->getId(),
-                    'email' => $log->getUser()->getEmail(),
-                    'fullName' => $log->getUser()->getUsername(),
+                    'identifier' => empty($log->getUser()) ? null : $log->getUser()->getId(),
+                    'email' => empty($log->getUser()) ? null : $log->getUser()->getEmail(),
+                    'fullName' => empty($log->getUser()) ? null : $log->getUser()->getUsername(),
                 ],
                 'breadcrumbs' => $breadcrumbsArray
             ]
