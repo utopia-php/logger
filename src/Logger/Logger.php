@@ -14,11 +14,6 @@ class Logger
     ];
 
     /**
-     * @var string[]
-     */
-    static protected array $providerNames = array();
-
-    /**
      * @var Adapter
      */
     protected Adapter $adapter;
@@ -32,10 +27,6 @@ class Logger
     public function __construct(Adapter $adapter)
     {
         $this->adapter = $adapter;
-
-        foreach(Logger::PROVIDERS as $providerName) {
-            Logger::registerProvider($providerName);
-        }
     }
 
     /**
@@ -68,20 +59,10 @@ class Logger
     /**
      * Get list of available providers
      *
-     * @param string $providerName
-     * @return void
-     */
-    static public function registerProvider(string $providerName): void {
-        \array_push(Logger::$providerNames, $providerName);
-    }
-
-    /**
-     * Get list of available providers
-     *
      * @return int[]
      */
     static public function getProviders(): array {
-        return Logger::$providerNames;
+        return Logger::PROVIDERS;
     }
 
     /**
@@ -91,7 +72,7 @@ class Logger
      * @return bool
      */
     static public function hasProvider(string $providerName): bool {
-        foreach (Logger::$providerNames as $registeredProviderName) {
+        foreach (Logger::PROVIDERS as $registeredProviderName) {
             if($registeredProviderName === $providerName) {
                 return true;
             }
