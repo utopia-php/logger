@@ -166,9 +166,9 @@ class Log
     /**
      * Set a custom namespace
      *
-     * @return string
+     * @return string|null
      */
-    public function getNamespace(): string {
+    public function getNamespace(): ?string {
         return $this->namespace;
     }
 
@@ -194,10 +194,10 @@ class Log
     /**
      * Set identificator of server where log happened
      *
-     * @param string $server (required, for example 'digitalocean-us-005')
+     * @param string|null $server (required, for example 'digitalocean-us-005')
      * @return void
      */
-    public function setServer(string $server): void {
+    public function setServer(?string $server): void {
         $this->server = $server;
     }
 
@@ -307,9 +307,9 @@ class Log
     /**
      * Get user who caused the log
      *
-     * @return User
+     * @return User|null
      */
-    public function getUser(): User {
+    public function getUser(): ?User {
         return $this->user;
     }
 
