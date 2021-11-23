@@ -50,32 +50,32 @@ class Log
     /**
      * @var array (optional)
      */
-    protected array $tags;
+    protected array $tags = [];
 
     /**
      * @var array (optional)
      */
-    protected array $extra;
+    protected array $extra = [];
 
     /**
      * @var string (optional)
      */
-    protected string $namespace;
+    protected string $namespace = "UNKNOWN";
 
     /**
-     * @var string (optional)
+     * @var string|null (optional)
      */
-    protected string $server;
+    protected ?string $server = null;
 
     /**
-     * @var User (optional)
+     * @var User|null (optional)
      */
-    protected User $user;
+    protected ?User $user = null;
 
     /**
      * @var Breadcrumb[] (optional)
      */
-    protected array $breadcrumbs;
+    protected array $breadcrumbs = [];
 
     /**
      * Log constructor.
