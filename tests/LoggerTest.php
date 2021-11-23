@@ -160,7 +160,7 @@ class LoggerTest extends TestCase
         ]);
 
         // Test Sentry
-        $adapter = new Sentry(\getenv("TEST_SENTRY_KEY"), \getenv("TEST_SENTRY_PROJECT_ID"));
+        $adapter = new Sentry(\getenv("TEST_SENTRY_KEY") . ';' . \getenv("TEST_SENTRY_PROJECT_ID"));
         $logger = new Logger($adapter);
         $response = $logger->addLog($log);
         self::assertEquals(200, $response);
