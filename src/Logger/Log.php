@@ -257,13 +257,14 @@ class Log
     }
 
     /**
-     * Set tags (labels)
+     * Add tags (labels)
      *
-     * @param array $tags (required, for example ['theme' => 'dark', 'sdk' => 'javascript'])
+     * @param string $key
+     * @param string $value
      * @return void
      */
-    public function setTags(array $tags): void {
-        $this->tags = $tags;
+    public function addTag(string $key, string $value): void {
+        $this->tags[$key] = $value;
     }
 
     /**
@@ -276,13 +277,14 @@ class Log
     }
 
     /**
-     * Set extra metadata of log
+     * Add extra metadata of log
      *
-     * @param array $extra (required, for example ['theme' => 'dark', 'sdk' => 'javascript'])
+     * @param string $key
+     * @param $value
      * @return void
      */
-    public function setExtra(array $extra): void {
-        $this->extra = $extra;
+    public function addExtra(string $key, $value): void {
+        $this->extra[$key] = $value;
     }
 
     /**
@@ -314,13 +316,13 @@ class Log
     }
 
     /**
-     * Set reproduction steps
+     * Add reproduction step
      *
-     * @param array $breadcrumbs
+     * @param Breadcrumb $breadcrumb
      * @return void
      */
-    public function setBreadcrumbs($breadcrumbs): void {
-        $this->breadcrumbs = $breadcrumbs;
+    public function addBreadcrumb(Breadcrumb $breadcrumb): void {
+        \array_push($this->breadcrumbs, $breadcrumb);
     }
 
     /**
