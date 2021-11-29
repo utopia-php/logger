@@ -130,6 +130,7 @@ class Raygun extends Adapter
         switch ($log->getType()) {
             case Log::TYPE_ERROR:
             case Log::TYPE_WARNING:
+            case Log::TYPE_VERBOSE:
             case Log::TYPE_DEBUG:
             case Log::TYPE_INFO:
                 break;
