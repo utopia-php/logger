@@ -6,6 +6,11 @@ use Exception;
 use Utopia\Logger\Adapter;
 use Utopia\Logger\Log;
 use Utopia\Logger\Logger;
+use function curl_close;
+use function curl_error;
+use function curl_exec;
+use function curl_getinfo;
+use const CURLINFO_HTTP_CODE;
 
 // Reference Material
 // https://develop.sentry.dev/sdk/event-payloads/
@@ -27,7 +32,7 @@ class Sentry extends Adapter
      *
      * @return string
      */
-    public static function getAdapterName(): string
+    public static function getName(): string
     {
         return "sentry";
     }
@@ -37,6 +42,7 @@ class Sentry extends Adapter
      *
      * @param Log $log
      * @return int
+     * @throws Exception
      */
     public function pushLog(Log $log): int
     {
@@ -94,10 +100,11 @@ class Sentry extends Adapter
 
         // execute request and get response
         $result = curl_exec($ch);
-
-        // also get the error and response code
-        $errors = curl_error($ch);
         $response = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+        if(!$result) {
+            throw new Exception("Log could not be pushed with status code " . $response . ": " . curl_error($ch));
+        }
 
         curl_close($ch);
 

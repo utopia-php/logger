@@ -64,7 +64,7 @@ class [ADAPTER_NAME] extends Adapter
      *
      * @return string
      */
-    public static function getAdapterName(): string
+    public static function getName(): string
     {
         return "[UNIQUE_ADAPTER_VERBOSE_ID]";
     }
@@ -108,7 +108,7 @@ class [ADAPTER_NAME] extends Adapter
 
 When implementing new adapter, please make sure to follow these rules:
 
-- `getAdapterName()` needs to use same name as file name with first letter lowercased. For example, in `AppSignal.php`, we use `appSignal`
+- `getName()` needs to use same name as file name with first letter lowercased. For example, in `AppSignal.php`, we use `appSignal`
 - Consturctor needs to recieve exactly 1 parameter `$configKey`. This should all keys required for authentication. If multiple are needed, symbol `;` should be used for separation.
 
 Please mention in your documentation what resources or API docs you used to implement the provider's API. Also, make sure all of these parameters are pushed to external API server:

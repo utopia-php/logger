@@ -11,7 +11,7 @@ abstract class Adapter
      *
      * @return string
      */
-    abstract public static function getAdapterName(): string;
+    abstract public static function getName(): string;
 
 
     /**
@@ -19,6 +19,7 @@ abstract class Adapter
      *
      * @param Log $log
      * @return int
+     * @throws Exception
      */
     abstract public function pushLog(Log $log): int;
 
