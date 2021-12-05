@@ -86,7 +86,7 @@ Below is a list of supported adapters, and thier compatibly tested versions alon
 To run all unit tests, use the following Docker command:
 
 ```bash
-docker run --rm -e TEST_RAYGUN_KEY=KKKK -e TEST_APPSIGNAL_KEY=XXXX -e TEST_SENTRY_KEY=YYYY -e TEST_SENTRY_PROJECT_ID=ZZZZ -v $(pwd):$(pwd):rw -w $(pwd) php:7.4-cli-alpine sh -c "vendor/bin/phpunit --configuration phpunit.xml tests"
+docker run --rm -e TEST_RAYGUN_KEY=KKKK -e TEST_APPSIGNAL_KEY=XXXX -e TEST_SENTRY_KEY=YYYY -e TEST_SENTRY_PROJECT_ID=ZZZZ -v $(pwd):$(pwd):rw -w $(pwd) php:8.0-cli-alpine sh -c "vendor/bin/phpunit --configuration phpunit.xml tests"
 ```
 
 > Make sure to replace `TEST_SENTRY_KEY` and `TEST_SENTRY_PROJECT_ID` environment variables value with actual keys from Sentry. If your Sentry DSN is `https://something@otherthing.ingest.sentry.io/anything`, then `TEST_SENTRY_KEY=something` and `TEST_SENTRY_PROJECT_ID=anything`
@@ -98,12 +98,12 @@ docker run --rm -e TEST_RAYGUN_KEY=KKKK -e TEST_APPSIGNAL_KEY=XXXX -e TEST_SENTR
 To run static code analysis, use the following Psalm command:
 
 ```bash
-docker run --rm -v $(pwd):$(pwd):rw -w $(pwd) php:7.4-cli-alpine sh -c "vendor/bin/psalm --show-info=true"
+docker run --rm -v $(pwd):$(pwd):rw -w $(pwd) php:8.0-cli-alpine sh -c "vendor/bin/psalm --show-info=true"
 ```
 
 ## System Requirements
 
-Utopia Framework requires PHP 7.4 or later. We recommend using the latest PHP version whenever possible.
+Utopia Framework requires PHP 8.0 or later. We recommend using the latest PHP version whenever possible.
 
 ## Authors
 
