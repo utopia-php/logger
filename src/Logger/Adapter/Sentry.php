@@ -123,42 +123,32 @@ class Sentry extends Adapter
         $this->projectId = $configChunks[1];
     }
 
-    public function validateLog(Log $log): bool
+
+    public function getSupportedTypes(): array
     {
-        // Supports log types: fatal, error, warning, info, and debug
-        switch ($log->getType()) {
-            case Log::TYPE_ERROR:
-            case Log::TYPE_WARNING:
-            case Log::TYPE_DEBUG:
-            case Log::TYPE_INFO:
-                break;
-            default:
-                throw new Exception("Supported log types for this adapter are: TYPE_ERROR, TYPE_WARNING, TYPE_DEBUG, TYPE_INFO");
-        }
+        return [
+            Log::TYPE_INFO,
+            Log::TYPE_DEBUG,
+            Log::TYPE_WARNING,
+            Log::TYPE_ERROR
+        ];
+    }
 
-        // Supported breadcrumb types: fatal, error, warning, info, and debug
-        foreach($log->getBreadcrumbs() as $breadcrumb) {
-            switch ($breadcrumb->getType()) {
-                case Log::TYPE_INFO:
-                case Log::TYPE_DEBUG:
-                case Log::TYPE_ERROR:
-                case Log::TYPE_WARNING:
-                    break;
-                default:
-                    throw new Exception("Supported breadcrumb types for this adapter are: TYPE_INFO, TYPE_DEBUG, TYPE_ERROR, TYPE_WARNING");
-            }
-        }
+    public function getSupportedEnvironments(): array
+    {
+        return [
+            Log::ENVIRONMENT_STAGING,
+            Log::ENVIRONMENT_PRODUCTION,
+        ];
+    }
 
-
-        // Supported environment types: staging, production
-        switch ($log->getEnvironment()) {
-            case Log::ENVIRONMENT_STAGING:
-            case Log::ENVIRONMENT_PRODUCTION:
-                break;
-            default:
-                throw new Exception("Supported environments for this adapter are: ENVIRONMENT_STAGING, ENVIRONMENT_PRODUCTION");
-        }
-
-        return true;
+    public function getSupportedBreadcrumbTypes(): array
+    {
+        return [
+            Log::TYPE_INFO,
+            Log::TYPE_DEBUG,
+            Log::TYPE_WARNING,
+            Log::TYPE_ERROR
+        ];
     }
 }

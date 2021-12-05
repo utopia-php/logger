@@ -79,18 +79,6 @@ class [ADAPTER_NAME] extends Adapter
     {
         // TODO: Implement HTTP API request that submit a log into external server. For building HTTP request, use `curl_exec()`, just like all other adapters
     }
-    
-    /**
-     * Validate if a log is properly configured for specific adapter
-     *
-     * @param Log $log
-     * @return bool
-     */
-    public function validateLog(Log $log): bool
-    {
-        // TODO: Check support for error types, breadcrumb types and environment types
-        return true;
-    }
 
     /**
      * [ADAPTER_NAME] constructor.
@@ -100,6 +88,21 @@ class [ADAPTER_NAME] extends Adapter
     public function __construct(string $configKey)
     {
         // TODO: Fill protected variables with keys using values from constructor parameters
+    }
+    
+    public function getSupportedTypes(): array
+    {
+        // TODO: Return array of supported log types, such as Log::TYPE_DEBUG or Log::TYPE_ERROR
+    }
+
+    public function getSupportedEnvironments(): array
+    {
+        // TODO: Return array of supported environments, such as Log::ENVIRONMENT_STAGING or Log::ENVIRONMENT_PRODUCTION
+    }
+
+    public function getSupportedBreadcrumbTypes(): array
+    {
+        // TODO: Return array of supported breadcrumb types, such as Log::TYPE_WARNING or Log::TYPE_INFO
     }
 }
 ```
@@ -127,6 +130,8 @@ Please mention in your documentation what resources or API docs you used to impl
 - [ ] Tags array
 
 If external API does not support any of these, feel free to add the information as tag. Every provider supports tags, so we can use that to store any officially un-supported information.
+
+If you need a custom logic for validation, you can implement `validateLog` function from which you call parent's implementation of it and extend the logic with whatever validation your adapter requires.
 
 ### 2.2 Register newly created provider
 
