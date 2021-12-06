@@ -34,6 +34,7 @@ class Breadcrumb
      * @param string $category
      * @param string $message
      * @param float $timestamp
+     * @throws Exception
      */
     public function __construct(string $type, string $category, string $message, float $timestamp)
     {

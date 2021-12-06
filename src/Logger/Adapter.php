@@ -60,15 +60,15 @@ abstract class Adapter
         $supportedBreadcrumbTypes = $this->getSupportedBreadcrumbTypes();
 
         if(!\in_array($log->getType(), $supportedLogTypes)) {
-            throw new Exception("Supported log types for this adapter are: " . \implode(", " . $supportedLogTypes));
+            throw new Exception("Supported log types for this adapter are: " . \implode(", ", $supportedLogTypes));
         }
         if(!\in_array($log->getEnvironment(), $supportedEnvironments)) {
-            throw new Exception("Supported environments for this adapter are: " . \implode(", " . $supportedEnvironments));
+            throw new Exception("Supported environments for this adapter are: " . \implode(", ", $supportedEnvironments));
         }
 
         foreach($log->getBreadcrumbs() as $breadcrumb) {
             if(!\in_array($breadcrumb->getType(), $supportedBreadcrumbTypes)) {
-                throw new Exception("Supported breadcrumb types for this adapter are: " . \implode(", " . $supportedBreadcrumbTypes));
+                throw new Exception("Supported breadcrumb types for this adapter are: " . \implode(", ", $supportedBreadcrumbTypes));
             }
         }
 

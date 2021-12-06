@@ -40,6 +40,9 @@ class LoggerTest extends TestCase
         self::assertEquals("Meldiron", $user->getUsername());
     }
 
+    /**
+     * @throws Exception
+     */
     public function testLog() {
         $log = new Log();
 
@@ -100,6 +103,9 @@ class LoggerTest extends TestCase
 
     }
 
+    /**
+     * @throws Exception
+     */
     public function testLogBreadcrumb() {
         $timestamp = \microtime(true);
         $breadcrumb = new Breadcrumb(Log::TYPE_DEBUG, "http", "POST /user", $timestamp);
@@ -126,6 +132,9 @@ class LoggerTest extends TestCase
         $breadcrumb = new Breadcrumb(Log::TYPE_DEBUG, "http", "POST /user");
     }
 
+    /**
+     * @throws Exception
+     */
     public function testAdapters()
     {
         // Prepare log

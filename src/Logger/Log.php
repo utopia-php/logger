@@ -234,6 +234,7 @@ class Log
      *
      * @param string $environment (required, can be ENVIRONMENT_PRODUCTION or ENVIRONMENT_STAGING)
      * @return void
+     * @throws Exception
      */
     public function setEnvironment(string $environment): void {
         switch ($environment) {
@@ -302,7 +303,7 @@ class Log
      * @param User $user
      * @return void
      */
-    public function setUser($user): void {
+    public function setUser(User $user): void {
         $this->user = $user;
     }
 
@@ -330,7 +331,8 @@ class Log
      *
      * @return Breadcrumb[]
      */
-    public function getBreadcrumbs() {
+    public function getBreadcrumbs(): array
+    {
         return $this->breadcrumbs;
     }
 }
