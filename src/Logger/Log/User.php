@@ -39,7 +39,8 @@ class User
      *
      * @return string|null
      */
-    public function getId(): ?string {
+    public function getId(): ?string
+    {
         return $this->userId;
     }
 
@@ -48,7 +49,8 @@ class User
      *
      * @return string|null
      */
-    public function getEmail(): ?string {
+    public function getEmail(): ?string
+    {
         return $this->userEmail;
     }
 
@@ -57,7 +59,8 @@ class User
      *
      * @return string|null
      */
-    public function getUsername(): ?string {
+    public function getUsername(): ?string
+    {
         return $this->userName;
     }
 }

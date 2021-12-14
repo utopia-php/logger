@@ -36,7 +36,8 @@ class Logger
      * @return int
      * @throws Exception
      */
-    public function addLog(Log $log): int {
+    public function addLog(Log $log): int
+    {
         // Validate log
         if(
             empty($log->getAction()) ||
@@ -61,7 +62,8 @@ class Logger
      *
      * @return string[]
      */
-    static public function getProviders(): array {
+    static public function getProviders(): array
+    {
         return Logger::PROVIDERS;
     }
 
@@ -71,7 +73,8 @@ class Logger
      * @param string $providerName
      * @return bool
      */
-    static public function hasProvider(string $providerName): bool {
+    static public function hasProvider(string $providerName): bool
+    {
         foreach (Logger::PROVIDERS as $registeredProviderName) {
             if($registeredProviderName === $providerName) {
                 return true;

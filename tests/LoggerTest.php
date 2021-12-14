@@ -23,7 +23,8 @@ use Utopia\Logger\Logger;
 
 class LoggerTest extends TestCase
 {
-    public function testLogUser() {
+    public function testLogUser()
+    {
         $user = new User();
 
         self::assertEquals(null, $user->getEmail());
@@ -43,7 +44,8 @@ class LoggerTest extends TestCase
     /**
      * @throws Exception
      */
-    public function testLog() {
+    public function testLog()
+    {
         $log = new Log();
 
         $timestamp = \microtime(true);
@@ -106,7 +108,8 @@ class LoggerTest extends TestCase
     /**
      * @throws Exception
      */
-    public function testLogBreadcrumb() {
+    public function testLogBreadcrumb()
+    {
         $timestamp = \microtime(true);
         $breadcrumb = new Breadcrumb(Log::TYPE_DEBUG, "http", "POST /user", $timestamp);
 

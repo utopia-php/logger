@@ -60,7 +60,8 @@ class Breadcrumb
      *
      * @return string
      */
-    public function getType(): string {
+    public function getType(): string
+    {
         return $this->type;
     }
 
@@ -69,7 +70,8 @@ class Breadcrumb
      *
      * @return string
      */
-    public function getCategory(): string {
+    public function getCategory(): string
+    {
         return $this->category;
     }
 
@@ -78,7 +80,8 @@ class Breadcrumb
      *
      * @return string
      */
-    public function getMessage(): string {
+    public function getMessage(): string
+    {
         return $this->message;
     }
 
@@ -87,7 +90,8 @@ class Breadcrumb
      *
      * @return float
      */
-    public function getTimestamp(): float {
+    public function getTimestamp(): float
+    {
         return $this->timestamp;
     }
 

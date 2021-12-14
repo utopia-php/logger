@@ -92,7 +92,8 @@ class Log
      * @return void
      * @throws Exception
      */
-    public function setType(string $type): void {
+    public function setType(string $type): void
+    {
         switch ($type) {
             case self::TYPE_DEBUG:
             case self::TYPE_ERROR:
@@ -111,7 +112,8 @@ class Log
      *
      * @return string (can be 'log', 'error' or 'warning')
      */
-    public function getType(): string {
+    public function getType(): string
+    {
         return $this->type;
     }
 
@@ -121,7 +123,8 @@ class Log
      * @param float $timestamp (required)
      * @return void
      */
-    public function setTimestamp(float $timestamp): void {
+    public function setTimestamp(float $timestamp): void
+    {
         $this->timestamp = $timestamp;
     }
 
@@ -130,7 +133,8 @@ class Log
      *
      * @return float
      */
-    public function getTimestamp(): float {
+    public function getTimestamp(): float
+    {
         return $this->timestamp;
     }
 
@@ -140,7 +144,8 @@ class Log
      * @param string $message (required, for example 'Collection abcd1234 not found')
      * @return void
      */
-    public function setMessage(string $message): void {
+    public function setMessage(string $message): void
+    {
         $this->message = $message;
     }
 
@@ -149,7 +154,8 @@ class Log
      *
      * @return string
      */
-    public function getMessage(): string {
+    public function getMessage(): string
+    {
         return $this->message;
     }
 
@@ -159,7 +165,8 @@ class Log
      * @param string $namespace (required, for example 'api')
      * @return void
      */
-    public function setNamespace(string $namespace): void {
+    public function setNamespace(string $namespace): void
+    {
         $this->namespace = $namespace;
     }
 
@@ -168,7 +175,8 @@ class Log
      *
      * @return string|null
      */
-    public function getNamespace(): ?string {
+    public function getNamespace(): ?string
+    {
         return $this->namespace;
     }
 
@@ -178,7 +186,8 @@ class Log
      * @param string $action (required, for example 'databaseController.deleteDocument' or 'functionsWorker.executeFunction')
      * @return void
      */
-    public function setAction(string $action): void {
+    public function setAction(string $action): void
+    {
         $this->action = $action;
     }
 
@@ -187,7 +196,8 @@ class Log
      *
      * @return string
      */
-    public function getAction(): string {
+    public function getAction(): string
+    {
         return $this->action;
     }
 
@@ -197,7 +207,8 @@ class Log
      * @param string|null $server (required, for example 'digitalocean-us-005')
      * @return void
      */
-    public function setServer(?string $server): void {
+    public function setServer(?string $server): void
+    {
         $this->server = $server;
     }
 
@@ -206,7 +217,8 @@ class Log
      *
      * @return string|null
      */
-    public function getServer(): ?string {
+    public function getServer(): ?string
+    {
         return $this->server;
     }
 
@@ -216,7 +228,8 @@ class Log
      * @param string $version (required, for example '0.11.2')
      * @return void
      */
-    public function setVersion(string $version): void {
+    public function setVersion(string $version): void
+    {
         $this->version = $version;
     }
 
@@ -225,7 +238,8 @@ class Log
      *
      * @return string
      */
-    public function getVersion(): string {
+    public function getVersion(): string
+    {
         return $this->version;
     }
 
@@ -236,7 +250,8 @@ class Log
      * @return void
      * @throws Exception
      */
-    public function setEnvironment(string $environment): void {
+    public function setEnvironment(string $environment): void
+    {
         switch ($environment) {
             case self::ENVIRONMENT_PRODUCTION:
             case self::ENVIRONMENT_STAGING:
@@ -253,7 +268,8 @@ class Log
      *
      * @return string
      */
-    public function getEnvironment(): string {
+    public function getEnvironment(): string
+    {
         return $this->environment;
     }
 
@@ -264,7 +280,8 @@ class Log
      * @param string $value
      * @return void
      */
-    public function addTag(string $key, string $value): void {
+    public function addTag(string $key, string $value): void
+    {
         $this->tags[$key] = $value;
     }
 
@@ -273,7 +290,8 @@ class Log
      *
      * @return array
      */
-    public function getTags(): array {
+    public function getTags(): array
+    {
         return $this->tags;
     }
 
@@ -284,7 +302,8 @@ class Log
      * @param $value
      * @return void
      */
-    public function addExtra(string $key, $value): void {
+    public function addExtra(string $key, $value): void
+    {
         $this->extra[$key] = $value;
     }
 
@@ -293,7 +312,8 @@ class Log
      *
      * @return array
      */
-    public function getExtra(): array {
+    public function getExtra(): array
+    {
         return $this->extra;
     }
 
@@ -303,7 +323,8 @@ class Log
      * @param User $user
      * @return void
      */
-    public function setUser(User $user): void {
+    public function setUser(User $user): void
+    {
         $this->user = $user;
     }
 
@@ -312,7 +333,8 @@ class Log
      *
      * @return User|null
      */
-    public function getUser(): ?User {
+    public function getUser(): ?User
+    {
         return $this->user;
     }
 
@@ -322,7 +344,8 @@ class Log
      * @param Breadcrumb $breadcrumb
      * @return void
      */
-    public function addBreadcrumb(Breadcrumb $breadcrumb): void {
+    public function addBreadcrumb(Breadcrumb $breadcrumb): void
+    {
         \array_push($this->breadcrumbs, $breadcrumb);
     }
 
