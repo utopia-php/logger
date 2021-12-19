@@ -21,7 +21,7 @@ abstract class Adapter
      * @return int
      * @throws Exception
      */
-    abstract public function pushLog(Log $log): int;
+    abstract public function push(Log $log): int;
 
     /**
      * Return a list of log types supported by Adapter
@@ -53,7 +53,7 @@ abstract class Adapter
      * @return bool
      * @throws Exception
      */
-    public function validateLog(Log $log): bool
+    public function validate(Log $log): bool
     {
         $supportedLogTypes = $this->getSupportedTypes();
         $supportedEnvironments = $this->getSupportedEnvironments();

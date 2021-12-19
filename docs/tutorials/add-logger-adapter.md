@@ -75,7 +75,7 @@ class [ADAPTER_NAME] extends Adapter
      * @param Log $log
      * @return int
      */
-    public function pushLog(Log $log): int
+    public function push(Log $log): int
     {
         // TODO: Implement HTTP API request that submit a log into external server. For building HTTP request, use `curl_exec()`, just like all other adapters
     }
@@ -131,7 +131,7 @@ Please mention in your documentation what resources or API docs you used to impl
 
 If external API does not support any of these, feel free to add the information as tag. Every provider supports tags, so we can use that to store any officially un-supported information.
 
-If you need a custom logic for validation, you can implement `validateLog` function from which you call parent's implementation of it and extend the logic with whatever validation your adapter requires.
+If you need a custom logic for validation, you can implement `validate` function from which you call parent's implementation of it and extend the logic with whatever validation your adapter requires.
 
 ### 2.2 Register newly created provider
 

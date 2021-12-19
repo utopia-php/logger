@@ -6,9 +6,6 @@ use Exception;
 use Utopia\Logger\Adapter;
 use Utopia\Logger\Log;
 use Utopia\Logger\Logger;
-use function curl_error;
-use function curl_getinfo;
-use const CURLINFO_HTTP_CODE;
 
 // Reference Material
 // https://raygun.com/documentation/product-guides/crash-reporting/api/
@@ -37,7 +34,7 @@ class Raygun extends Adapter
      * @return int
      * @throws Exception
      */
-    public function pushLog(Log $log): int
+    public function push(Log $log): int
     {
         $breadcrumbsObject = $log->getBreadcrumbs();
         $breadcrumbsArray = [];
@@ -86,7 +83,7 @@ class Raygun extends Adapter
         ];
 
         // init curl object
-        $ch = curl_init();
+        $ch = \curl_init();
 
         // define options
         $optArray = array(
@@ -94,22 +91,22 @@ class Raygun extends Adapter
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_POST => true,
             CURLOPT_POSTFIELDS => \json_encode($requestBody),
-            CURLOPT_HEADEROPT => CURLHEADER_UNIFIED,
+            CURLOPT_HEADEROPT => \CURLHEADER_UNIFIED,
             CURLOPT_HTTPHEADER => array('Content-Type: application/json', 'X-ApiKey: ' . $this->apiKey)
         );
 
         // apply those options
-        curl_setopt_array($ch, $optArray);
+        \curl_setopt_array($ch, $optArray);
 
         // execute request and get response
-        $result = curl_exec($ch);
-        $response = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $result = \curl_exec($ch);
+        $response = \curl_getinfo($ch, \CURLINFO_HTTP_CODE);
 
         if(!$result && $response >= 400) {
-            throw new Exception("Log could not be pushed with status code " . $response . ": " . curl_error($ch));
+            throw new Exception("Log could not be pushed with status code " . $response . ": " . \curl_error($ch));
         }
 
-        curl_close($ch);
+        \curl_close($ch);
 
         return $response;
     }
