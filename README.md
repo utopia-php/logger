@@ -53,7 +53,7 @@ $log->addExtra('urgent', false);
 $log->addExtra('isExpected', true);
 
 // Sentry
-$adapter = new Sentry("[YOUR_SENTRY_KEY]", \getenv("[YOUR_SENTRY_PROJECT_ID]"));
+$adapter = new Sentry(\getenv("[YOUR_SENTRY_KEY]"), \getenv("[YOUR_SENTRY_PROJECT_ID]"));
 $logger = new Logger($adapter);
 $logger->addLog($log);
 
