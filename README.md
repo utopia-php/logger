@@ -1,6 +1,6 @@
 # Utopia Logger
 
-[![Build Status](https://travis-ci.org/utopia-php/logger.svg?branch=main)](https://travis-ci.com/utopia-php/logger)
+[![Build Status](https://app.travis-ci.com/utopia-php/logger.svg?branch=main)](https://app.travis-ci.com/github/utopia-php/logger)
 ![Total Downloads](https://img.shields.io/packagist/dt/utopia-php/logger.svg)
 [![Discord](https://img.shields.io/discord/564160730845151244)](https://appwrite.io/discord)
 
