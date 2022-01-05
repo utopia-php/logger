@@ -165,7 +165,7 @@ class LoggerTest extends TestCase
         $log->addExtra('isExpected', true);
 
         // Test Sentry
-        $adapter = new Sentry(\getenv("TEST_SENTRY_KEY") . ';' . \getenv("TEST_SENTRY_PROJECT_ID"));
+        $adapter = new Sentry(\getenv("TEST_SENTRY_KEY") . ';' . \getenv("TEST_SENTRY_PROJECT_ID") . ';' . \getenv("TEST_SENTRY_HOST"));
         $logger = new Logger($adapter);
         $response = $logger->addLog($log);
         // self::assertEquals(200, $response);
