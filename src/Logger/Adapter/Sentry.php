@@ -23,6 +23,12 @@ class Sentry extends Adapter
     protected string $projectId;
 
     /**
+     * @var string (optional, the host where Sentry is reachable, in case of self-hosted Sentry could
+     *              look like 'https://sentry.mycompany.com'. defaults to 'https://sentry.io')
+     */
+    protected string $sentryHost;
+
+    /**
      * Return unique adapter name
      *
      * @return string
@@ -82,7 +88,7 @@ class Sentry extends Adapter
 
         // define options
         $optArray = array(
-            CURLOPT_URL => 'https://sentry.io/api/' . $this->projectId . '/store/',
+            CURLOPT_URL => $this->sentryHost . '/api/' . $this->projectId . '/store/',
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_POST => true,
             CURLOPT_POSTFIELDS => \json_encode($requestBody),
@@ -116,6 +122,11 @@ class Sentry extends Adapter
         $configChunks = \explode(";", $configKey);
         $this->sentryKey = $configChunks[0];
         $this->projectId = $configChunks[1];
+        $this->sentryHost = 'https://sentry.io';
+
+        if(count($configChunks) > 2 && !empty($configChunks[2])) {
+            $this->sentryHost = $configChunks[2];
+        }
     }
 
 

@@ -89,7 +89,8 @@ To run all unit tests, use the following Docker command:
 docker run --rm -e TEST_RAYGUN_KEY=KKKK -e TEST_APPSIGNAL_KEY=XXXX -e TEST_SENTRY_KEY=YYYY -e TEST_SENTRY_PROJECT_ID=ZZZZ -v $(pwd):$(pwd):rw -w $(pwd) php:8.0-cli-alpine sh -c "vendor/bin/phpunit --configuration phpunit.xml tests"
 ```
 
-> Make sure to replace `TEST_SENTRY_KEY` and `TEST_SENTRY_PROJECT_ID` environment variables value with actual keys from Sentry. If your Sentry DSN is `https://something@otherthing.ingest.sentry.io/anything`, then `TEST_SENTRY_KEY=something` and `TEST_SENTRY_PROJECT_ID=anything`
+> Make sure to replace `TEST_SENTRY_KEY` and `TEST_SENTRY_PROJECT_ID` environment variables value with actual keys from Sentry. If your Sentry DSN is `https://something@otherthing.ingest.sentry.io/anything`, then `TEST_SENTRY_KEY=something` and `TEST_SENTRY_PROJECT_ID=anything`.
+  Optionally `TEST_SENTRY_HOST` can be added to specify a self-hosted Sentry instance. 
 
 > Make sure to replace `TEST_APPSIGNAL_KEY` with key found in Appsignal -> Project -> App Settings -> Push & deploy -> Push Key
 
