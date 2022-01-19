@@ -8,8 +8,8 @@ use Utopia\Logger\Log;
 use Utopia\Logger\Logger;
 
 // Reference Material
-// https://docs.logowl.io/docs/
-// https://github.com/jz222/logowl-adapter-nodejs/tree/master/lib
+// https://docs.logowl.io/docs/custom-adapter
+// https://github.com/jz222/logowl-adapter-nodejs/blob/master/lib/broker/index.js
 
 class LogOwl extends Adapter
 {
@@ -29,6 +29,26 @@ class LogOwl extends Adapter
     }
 
     /**
+     * Return adapter type
+     *
+     * @return string
+     */
+    public static function getAdapterType():string
+    {
+        return "php";
+    }
+
+    /**
+     * Return adapter version
+     *
+     * @return string
+     */
+    public static function getAdapterVersion():string
+    {
+        return "1.0";
+    }
+
+    /**
      * Push log to external provider
      *
      * @param Log $log
@@ -37,13 +57,51 @@ class LogOwl extends Adapter
      */
     public function push(Log $log): int
     {
-        // TODO: Implement HTTP API request that submit a log into external server. For building HTTP request, use `curl_exec()`, just like all other adapters
+        $line = isset($log->getExtra()['line']) ? $log->getExtra()['line'] : '';
+        $file = isset($log->getExtra()['file']) ? $log->getExtra()['file'] : '';
+        $trace = isset($log->getExtra()['trace']) ? $log->getExtra()['trace'] : '';
+        $id = empty($log->getUser()) ? null : $log->getUser()->getId();
+        $email = empty($log->getUser()) ? null : $log->getUser()->getEmail();
+        $username = empty($log->getUser()) ? null : $log->getUser()->getUsername();
         
+        $breadcrumbsObject = $log->getBreadcrumbs();
+        $breadcrumbsArray = [];
+
+        foreach ($breadcrumbsObject as $breadcrumb) {
+            \array_push($breadcrumbsArray, [
+                'type' => 'log',
+                'log' => $breadcrumb->getMessage(),
+                'timestamp' => \intval($breadcrumb->getTimestamp()),
+            ]);
+        }
+
         // prepare log (request body)
         $requestBody = [
             'ticket' => $this->ticket,
-            'message' => $log->getMessage(),
-            'timestamp' => \intval($log->getTimestamp())
+            'message' => $log->getAction(),
+            'path' => $file,
+            'line' => $line,
+            'stacktrace' => $trace,
+            'badges' => [
+                'environment'=> $log->getEnvironment(),
+                'namespace' => $log->getNamespace(),
+                'version' => $log->getVersion(),
+                'message' => $log->getMessage(),
+                'id' => $id,
+                '$email' => $email,
+                '$username' => $username
+            ],
+            'type' => $log->getType(),
+            'metrics'=> [
+                'platform' => $log->getServer()
+            ],
+            'logs'=> $breadcrumbsArray,
+            'timestamp' => \intval($log->getTimestamp()),
+            'adapter' => [
+                'name' => $this->getName(),
+                'type' => $this->getAdapterType(),
+                'version' => $this->getAdapterVersion()
+            ]
         ];
 
         // init curl object
@@ -76,7 +134,7 @@ class LogOwl extends Adapter
     }
 
     /**
-     * [ADAPTER_NAME] constructor.
+     * LogOwl constructor.
      *
      * @param string $configKey
      */
@@ -87,7 +145,6 @@ class LogOwl extends Adapter
     
     public function getSupportedTypes(): array
     {
-        // TODO: Return array of supported log types, such as Log::TYPE_DEBUG or Log::TYPE_ERROR
         return [
             Log::TYPE_ERROR
         ];
@@ -97,12 +154,17 @@ class LogOwl extends Adapter
     {
         return [
             Log::ENVIRONMENT_STAGING,
-            Log::ENVIRONMENT_PRODUCTION,
+            Log::ENVIRONMENT_PRODUCTION
         ];
     }
 
     public function getSupportedBreadcrumbTypes(): array
     {
-        return [];
+        return [
+            Log::TYPE_INFO,
+            Log::TYPE_DEBUG,
+            Log::TYPE_WARNING,
+            Log::TYPE_ERROR
+        ];
     }
 }
