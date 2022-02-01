@@ -167,23 +167,23 @@ class LoggerTest extends TestCase
         $log->addExtra('file', '/User/example/server/src/server/server.js');
         $log->addExtra('line', '15');
         
-        // Test Sentry
-        $adapter = new Sentry(\getenv("TEST_SENTRY_KEY") . ';' . \getenv("TEST_SENTRY_PROJECT_ID") . ';' . \getenv("TEST_SENTRY_HOST"));
-        $logger = new Logger($adapter);
-        $response = $logger->addLog($log);
-        self::assertEquals(200, $response);
+        // // Test Sentry
+        // $adapter = new Sentry(\getenv("TEST_SENTRY_KEY") . ';' . \getenv("TEST_SENTRY_PROJECT_ID") . ';' . \getenv("TEST_SENTRY_HOST"));
+        // $logger = new Logger($adapter);
+        // $response = $logger->addLog($log);
+        // self::assertEquals(200, $response);
 
-        // Test AppSignal
-        $adapter = new AppSignal(\getenv("TEST_APPSIGNAL_KEY"));
-        $logger = new Logger($adapter);
-        $response = $logger->addLog($log);
-        self::assertEquals(200, $response);
+        // // Test AppSignal
+        // $adapter = new AppSignal(\getenv("TEST_APPSIGNAL_KEY"));
+        // $logger = new Logger($adapter);
+        // $response = $logger->addLog($log);
+        // self::assertEquals(200, $response);
 
-        // Test Raygun
-        $adapter = new Raygun(\getenv("TEST_RAYGUN_KEY"));
-        $logger = new Logger($adapter);
-        $response = $logger->addLog($log);
-        self::assertEquals(202, $response);
+        // // Test Raygun
+        // $adapter = new Raygun(\getenv("TEST_RAYGUN_KEY"));
+        // $logger = new Logger($adapter);
+        // $response = $logger->addLog($log);
+        // self::assertEquals(202, $response);
 
          // Test LogOwl
          $adapter = new LogOwl(\getenv("TEST_LOGOWL_KEY"));

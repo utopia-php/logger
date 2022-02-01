@@ -19,6 +19,12 @@ class LogOwl extends Adapter
     protected string $ticket;
 
     /**
+     * @var string (optional, the host where LogOwl is reachable, in case of self-hosted LogOwl could
+     *              look like 'https://logowl.example.com'. defaults to 'https://api.logowl.io/logging/')
+     */
+    protected string $logOwlHost;
+
+    /**
      * Return unique adapter name
      *
      * @return string
@@ -33,9 +39,9 @@ class LogOwl extends Adapter
      *
      * @return string
      */
-    public static function getAdapterType():string
+    public static function getAdapterType(): string
     {
-        return "php";
+        return "utopia-logger";
     }
 
     /**
@@ -43,9 +49,9 @@ class LogOwl extends Adapter
      *
      * @return string
      */
-    public static function getAdapterVersion():string
+    public static function getAdapterVersion(): string
     {
-        return "1.0";
+        return Logger::LIBRARY_VERSION;
     }
 
     /**
@@ -109,7 +115,7 @@ class LogOwl extends Adapter
 
         // define options
         $optArray = array(
-            CURLOPT_URL => 'https://api.logowl.io/logging/' . $log->getType(),
+            CURLOPT_URL => $this->logOwlHost . $log->getType(),
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_POST => true,
             CURLOPT_POSTFIELDS => \json_encode($requestBody),
@@ -140,7 +146,13 @@ class LogOwl extends Adapter
      */
     public function __construct(string $configKey)
     {
-        $this->ticket = $configKey;
+        $configChunks = \explode(";", $configKey);
+        $this->ticket = $configChunks[0];
+        $this->logOwlHost = 'https://api.logowl.io/logging/';
+
+        if(count($configChunks) > 1 && !empty($configChunks[1])) {
+            $this->logOwlHost = $configChunks[1];
+        }
     }
     
     public function getSupportedTypes(): array
