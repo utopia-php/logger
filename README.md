@@ -23,6 +23,7 @@ require_once '../vendor/autoload.php';
 use Utopia\Logger\Adapter\AppSignal;
 use Utopia\Logger\Adapter\Raygun;
 use Utopia\Logger\Adapter\Sentry;
+use Utopia\Logger\Adapter\LogOwl;
 use Utopia\Logger\Log;
 use Utopia\Logger\Log\Breadcrumb;
 use Utopia\Logger\Log\User;
@@ -53,17 +54,22 @@ $log->addExtra('urgent', false);
 $log->addExtra('isExpected', true);
 
 // Sentry
-$adapter = new Sentry(\getenv("[YOUR_SENTRY_KEY]"), \getenv("[YOUR_SENTRY_PROJECT_ID]"));
+$adapter = new Sentry("[YOUR_SENTRY_KEY]"), "[YOUR_SENTRY_PROJECT_ID]");
 $logger = new Logger($adapter);
 $logger->addLog($log);
 
 // AppSignal
-$adapter = new AppSignal(\getenv("[YOUR_APPSIGNAL_KEY]"));
+$adapter = new AppSignal("[YOUR_APPSIGNAL_KEY]");
 $logger = new Logger($adapter);
 $logger->addLog($log);
 
 // Raygun
-$adapter = new Raygun(\getenv("[YOUR_RAYGUN_KEY]"));
+$adapter = new Raygun("[YOUR_RAYGUN_KEY]");
+$logger = new Logger($adapter);
+$logger->addLog($log);
+
+// Log Owl
+$adapter = new LogOwl("[YOUR_SERVICE_TICKET]");
 $logger = new Logger($adapter);
 $logger->addLog($log);
 
@@ -78,6 +84,7 @@ Below is a list of supported adapters, and thier compatibly tested versions alon
 | Sentry | ✅ |
 | AppSignal | ✅ |
 | Raygun | ✅ |
+| Log Owl | ✅ |
 
 ` ✅  - supported, 🛠  - work in progress`
 

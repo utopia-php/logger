@@ -95,7 +95,7 @@ class Sentry extends Adapter
             CURLOPT_HEADEROPT => \CURLHEADER_UNIFIED,
             CURLOPT_HTTPHEADER => array('Content-Type: application/json', 'X-Sentry-Auth: Sentry sentry_version=7, sentry_key=' . $this->sentryKey . ', sentry_client=utopia-logger/' . Logger::LIBRARY_VERSION)
         );
-
+        
         // apply those options
         \curl_setopt_array($ch, $optArray);
 

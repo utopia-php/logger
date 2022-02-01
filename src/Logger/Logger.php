@@ -10,7 +10,8 @@ class Logger
     const PROVIDERS = [
         "raygun",
         "sentry",
-        "appSignal"
+        "appSignal",
+        "logOwl"
     ];
 
     /**
