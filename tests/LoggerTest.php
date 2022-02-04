@@ -171,24 +171,24 @@ class LoggerTest extends TestCase
         $adapter = new Sentry(\getenv("TEST_SENTRY_KEY") . ';' . \getenv("TEST_SENTRY_PROJECT_ID") . ';' . \getenv("TEST_SENTRY_HOST"));
         $logger = new Logger($adapter);
         $response = $logger->addLog($log);
-        self::assertEquals(200, $response);
+        $this->assertEquals(200, $response);
 
         // Test AppSignal
         $adapter = new AppSignal(\getenv("TEST_APPSIGNAL_KEY"));
         $logger = new Logger($adapter);
         $response = $logger->addLog($log);
-        self::assertEquals(200, $response);
+        $this->assertEquals(200, $response);
 
         // Test Raygun
         $adapter = new Raygun(\getenv("TEST_RAYGUN_KEY"));
         $logger = new Logger($adapter);
         $response = $logger->addLog($log);
-        self::assertEquals(202, $response);
+        $this->assertEquals(202, $response);
 
          // Test LogOwl
          $adapter = new LogOwl(\getenv("TEST_LOGOWL_KEY"));
          $logger = new Logger($adapter);
          $response = $logger->addLog($log);
-         self::assertEquals(200, $response);
+         $this->assertEquals(200, $response);
     }
 }
