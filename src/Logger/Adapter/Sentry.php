@@ -60,6 +60,21 @@ class Sentry extends Adapter
             ]);
         }
 
+        $stackFrames = [];
+
+        if (isset($log->getExtra()['detailedTrace'])) {
+            foreach ($log->getExtra()['detailedTrace'] as $trace) {
+                \array_push($stackFrames, [
+                    'filename' => $trace['file'],
+                    'lineno' => $trace['line'],
+                    'function' => $trace['function'],
+                ]);
+            }
+        }
+
+        // Reverse array (because Sentry expects the list to go from the oldest to the newest calls)
+        $stackFrames = \array_reverse($stackFrames);
+
         // prepare log (request body)
         $requestBody = [
             'timestamp' => $log->getTimestamp(),
@@ -72,6 +87,16 @@ class Sentry extends Adapter
             'environment' => $log->getEnvironment(),
             'message' => [
                 'message' => $log->getMessage()
+            ],
+            'exception' => [
+                'values' => [
+                    [
+                        'type' => $log->getMessage(),
+                        'stacktrace' => [
+                            'frames' => $stackFrames
+                        ]
+                    ]
+                ]
             ],
             'tags'=> $log->getTags(),
             'extra'=> $log->getExtra(),
