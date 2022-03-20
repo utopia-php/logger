@@ -72,6 +72,10 @@ This will allow the Utopia-php community to have sufficient discussion about the
 
 This is also important for the Utopia-php lead developers to be able to give technical input and different emphasis regarding the feature design and architecture. Some bigger features might need to go through our [RFC process](https://github.com/appwrite/rfc).
 
+## Adding a New Adapter
+
+You can follow our [Adding new Logger Adapter tutorial](docs/tutorials/add-logger-adapter.md) to add new logger support in this library.
+
 ## Other Ways to Help
 
 Pull requests are great, but there are many other areas where you can help Utopia-php.
