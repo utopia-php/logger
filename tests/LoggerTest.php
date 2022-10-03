@@ -14,6 +14,7 @@
 
 namespace Tests;
 
+use ArgumentCountError;
 use PHPUnit\Framework\TestCase;
 use Utopia\Logger\Adapter\AppSignal;
 use Utopia\Logger\Adapter\LogOwl;
