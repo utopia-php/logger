@@ -45,13 +45,13 @@ class Raygun extends Adapter
                 'message' => $breadcrumb->getMessage(),
                 'type' => $breadcrumb->getType(),
                 'level' => "request",
-                'timestamp' =>\intval($breadcrumb->getTimestamp())
+                'timestamp' => \intval($breadcrumb->getTimestamp())
             ]);
         }
 
         $tagsArray = [];
 
-        foreach($log->getTags() as $tagKey => $tagValue) {
+        foreach ($log->getTags() as $tagKey => $tagValue) {
             \array_push($tagsArray, $tagKey . ': ' . $tagValue);
         }
 
@@ -102,7 +102,7 @@ class Raygun extends Adapter
         $result = \curl_exec($ch);
         $response = \curl_getinfo($ch, \CURLINFO_HTTP_CODE);
 
-        if(!$result && $response >= 400) {
+        if (!$result && $response >= 400) {
             throw new Exception("Log could not be pushed with status code " . $response . ": " . \curl_error($ch));
         }
 

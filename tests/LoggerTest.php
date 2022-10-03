@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Utopia PHP Framework
  *
@@ -11,8 +12,9 @@
  * @license The MIT License (MIT) <http://www.opensource.org/licenses/mit-license.php>
  */
 
-use PHPUnit\Framework\TestCase;
+namespace Tests;
 
+use PHPUnit\Framework\TestCase;
 use Utopia\Logger\Adapter\AppSignal;
 use Utopia\Logger\Adapter\LogOwl;
 use Utopia\Logger\Adapter\Raygun;
@@ -103,7 +105,6 @@ class LoggerTest extends TestCase
         self::assertEquals("http", $log->getBreadcrumbs()[0]->getCategory());
         self::assertEquals("DELETE /api/v1/database/abcd1234/efgh5678", $log->getBreadcrumbs()[0]->getMessage());
         self::assertEquals($timestamp, $log->getBreadcrumbs()[0]->getTimestamp());
-
     }
 
     /**

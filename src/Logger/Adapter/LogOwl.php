@@ -69,7 +69,7 @@ class LogOwl extends Adapter
         $id = empty($log->getUser()) ? null : $log->getUser()->getId();
         $email = empty($log->getUser()) ? null : $log->getUser()->getEmail();
         $username = empty($log->getUser()) ? null : $log->getUser()->getUsername();
-        
+
         $breadcrumbsObject = $log->getBreadcrumbs();
         $breadcrumbsArray = [];
 
@@ -89,7 +89,7 @@ class LogOwl extends Adapter
             'line' => $line,
             'stacktrace' => $trace,
             'badges' => [
-                'environment'=> $log->getEnvironment(),
+                'environment' => $log->getEnvironment(),
                 'namespace' => $log->getNamespace(),
                 'version' => $log->getVersion(),
                 'message' => $log->getMessage(),
@@ -98,10 +98,10 @@ class LogOwl extends Adapter
                 '$username' => $username
             ],
             'type' => $log->getType(),
-            'metrics'=> [
+            'metrics' => [
                 'platform' => $log->getServer()
             ],
-            'logs'=> $breadcrumbsArray,
+            'logs' => $breadcrumbsArray,
             'timestamp' => \intval($log->getTimestamp()),
             'adapter' => [
                 'name' => $this->getName(),
@@ -130,7 +130,7 @@ class LogOwl extends Adapter
         $result = curl_exec($ch);
         $response = curl_getinfo($ch, \CURLINFO_HTTP_CODE);
 
-        if(!$result && $response >= 400) {
+        if (!$result && $response >= 400) {
             throw new Exception("Log could not be pushed with status code " . $response . ": " . \curl_error($ch));
         }
 
@@ -150,11 +150,11 @@ class LogOwl extends Adapter
         $this->ticket = $configChunks[0];
         $this->logOwlHost = 'https://api.logowl.io/logging/';
 
-        if(count($configChunks) > 1 && !empty($configChunks[1])) {
+        if (count($configChunks) > 1 && !empty($configChunks[1])) {
             $this->logOwlHost = $configChunks[1];
         }
     }
-    
+
     public function getSupportedTypes(): array
     {
         return [

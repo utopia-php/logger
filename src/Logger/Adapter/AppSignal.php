@@ -38,7 +38,7 @@ class AppSignal extends Adapter
     {
         $params = [];
 
-        foreach($log->getExtra() as $paramKey => $paramValue) {
+        foreach ($log->getExtra() as $paramKey => $paramValue) {
             $params[$paramKey] = var_export($paramValue, true);
         }
 
@@ -58,42 +58,42 @@ class AppSignal extends Adapter
 
         $tags = array();
 
-        foreach($log->getTags() as $tagKey => $tagValue) {
+        foreach ($log->getTags() as $tagKey => $tagValue) {
             $tags[$tagKey] = $tagValue;
         }
 
-        if(!empty($log->getType())) {
+        if (!empty($log->getType())) {
             $tags['type'] = $log->getType();
         }
-        if(!empty($log->getUser()) &&  !empty($log->getUser()->getId())) {
+        if (!empty($log->getUser()) &&  !empty($log->getUser()->getId())) {
             $tags['userId'] = $log->getUser()->getId();
         }
-        if(!empty($log->getUser()) &&  !empty($log->getUser()->getUsername())) {
+        if (!empty($log->getUser()) &&  !empty($log->getUser()->getUsername())) {
             $tags['userName'] = $log->getUser()->getUsername();
         }
-        if(!empty($log->getUser()) &&  !empty($log->getUser()->getEmail())) {
+        if (!empty($log->getUser()) &&  !empty($log->getUser()->getEmail())) {
             $tags['userEmail'] = $log->getUser()->getEmail();
         }
 
         $tags['sdk'] = 'utopia-logger/' . Logger::LIBRARY_VERSION;
 
         $requestBody = [
-            'timestamp'=> \intval($log->getTimestamp()),
-            'namespace'=> $log->getNamespace(),
-            'error'=> [
-                'name'=> $log->getMessage(),
-                'message'=> $log->getMessage(),
-                'backtrace'=> []
+            'timestamp' => \intval($log->getTimestamp()),
+            'namespace' => $log->getNamespace(),
+            'error' => [
+                'name' => $log->getMessage(),
+                'message' => $log->getMessage(),
+                'backtrace' => []
             ],
-            'environment'=> [
-                'environment'=> $log->getEnvironment(),
-                'server'=> $log->getServer(),
-                'version'=> $log->getVersion(),
+            'environment' => [
+                'environment' => $log->getEnvironment(),
+                'server' => $log->getServer(),
+                'version' => $log->getVersion(),
             ],
-            'revision'=> $log->getVersion(),
-            'action'=> $log->getAction(),
-            'params'=> $params,
-            'tags'=> $tags,
+            'revision' => $log->getVersion(),
+            'action' => $log->getAction(),
+            'params' => $params,
+            'tags' => $tags,
             'breadcrumbs' => $breadcrumbsArray
         ];
 
@@ -117,7 +117,7 @@ class AppSignal extends Adapter
         $result = \curl_exec($ch);
         $response = \curl_getinfo($ch, \CURLINFO_HTTP_CODE);
 
-        if(!$result && $response >= 400) {
+        if (!$result && $response >= 400) {
             throw new Exception("Log could not be pushed with status code " . $response . ": " . \curl_error($ch));
         }
 

@@ -98,10 +98,10 @@ class Sentry extends Adapter
                     ]
                 ]
             ],
-            'tags'=> $log->getTags(),
-            'extra'=> $log->getExtra(),
-            'breadcrumbs'=> $breadcrumbsArray,
-            'user'=> empty($log->getUser()) ? null : [
+            'tags' => $log->getTags(),
+            'extra' => $log->getExtra(),
+            'breadcrumbs' => $breadcrumbsArray,
+            'user' => empty($log->getUser()) ? null : [
                 'id' => $log->getUser()->getId(),
                 'email' => $log->getUser()->getEmail(),
                 'username' => $log->getUser()->getUsername(),
@@ -120,7 +120,7 @@ class Sentry extends Adapter
             CURLOPT_HEADEROPT => \CURLHEADER_UNIFIED,
             CURLOPT_HTTPHEADER => array('Content-Type: application/json', 'X-Sentry-Auth: Sentry sentry_version=7, sentry_key=' . $this->sentryKey . ', sentry_client=utopia-logger/' . Logger::LIBRARY_VERSION)
         );
-        
+
         // apply those options
         \curl_setopt_array($ch, $optArray);
 
@@ -128,7 +128,7 @@ class Sentry extends Adapter
         $result = curl_exec($ch);
         $response = curl_getinfo($ch, \CURLINFO_HTTP_CODE);
 
-        if(!$result && $response >= 400) {
+        if (!$result && $response >= 400) {
             throw new Exception("Log could not be pushed with status code " . $response . ": " . \curl_error($ch));
         }
 
@@ -149,7 +149,7 @@ class Sentry extends Adapter
         $this->projectId = $configChunks[1];
         $this->sentryHost = 'https://sentry.io';
 
-        if(count($configChunks) > 2 && !empty($configChunks[2])) {
+        if (count($configChunks) > 2 && !empty($configChunks[2])) {
             $this->sentryHost = $configChunks[2];
         }
     }

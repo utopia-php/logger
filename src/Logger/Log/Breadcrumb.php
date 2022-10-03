@@ -94,5 +94,4 @@ class Breadcrumb
     {
         return $this->timestamp;
     }
-
 }
