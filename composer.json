@@ -4,20 +4,6 @@
     "type": "library",
     "keywords": ["php","framework", "upf", "utopia", "logger", "logging", "errors", "warnings", "logs", "sentry", "raygun", "appsignal"],
     "license": "MIT",
-    "authors": [
-        {
-            "name": "Eldad Fux",
-            "email": "eldad@appwrite.io"
-        },
-        {
-            "name": "Matej Bačo",
-            "email": "matej@appwrite.io"
-        },
-        {
-            "name": "Christy Jacob",
-            "email": "christy@appwrite.io"
-        }
-    ],
     "autoload": {
         "psr-4": {"Utopia\\Logger\\": "src/Logger"}
     },
