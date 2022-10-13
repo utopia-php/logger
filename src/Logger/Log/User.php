@@ -22,9 +22,9 @@ class User
     /**
      * User constructor.
      *
-     * @param string|null $userId
-     * @param string|null $userEmail
-     * @param string|null $userName
+     * @param  string|null  $userId
+     * @param  string|null  $userEmail
+     * @param  string|null  $userName
      */
     public function __construct(string $userId = null, string $userEmail = null, string $userName = null)
     {
@@ -32,7 +32,6 @@ class User
         $this->userEmail = $userEmail;
         $this->userName = $userName;
     }
-
 
     /**
      * Get user's identifier
