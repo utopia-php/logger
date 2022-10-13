@@ -73,6 +73,10 @@ $adapter = new LogOwl("[YOUR_SERVICE_TICKET]");
 $logger = new Logger($adapter);
 $logger->addLog($log);
 
+// Airbrake
+$adapter = new Airbrake("[YOUR_PROJECT_ID];[YOUR_PROJECT_KEY]");
+$logger = new Logger($adapter);
+$logger->addLog($log);
 ```
 
 ### Adapters
@@ -85,6 +89,7 @@ Below is a list of supported adapters, and thier compatibly tested versions alon
 | AppSignal | ✅ |
 | Raygun | ✅ |
 | Log Owl | ✅ |
+| Airbrake | ✅ |
 
 ` ✅  - supported, 🛠  - work in progress`
 
