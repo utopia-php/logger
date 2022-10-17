@@ -1,16 +1,4 @@
 <?php
-/**
- * Utopia PHP Framework
- *
- *
- * @link https://github.com/utopia-php/framework
- *
- * @author Eldad Fux <eldad@appwrite.io>
- *
- * @version 1.0 RC4
- *
- * @license The MIT License (MIT) <http://www.opensource.org/licenses/mit-license.php>
- */
 
 use PHPUnit\Framework\TestCase;
 use Utopia\Logger\Adapter\AppSignal;
