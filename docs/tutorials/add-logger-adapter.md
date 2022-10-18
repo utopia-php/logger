@@ -1,6 +1,6 @@
 # Adding a new logger adapter 💾
 
-This document is part of the Utopia contributors' guide. Before you continue reading this document make sure you have read the [Code of Conduct](https://raw.githubusercontent.com/utopia-php/logger/main/CODE_OF_CONDUCT.md) and the [Contributing Guide](https://raw.githubusercontent.com/utopia-php/logger/main/CONTRIBUTING.md).
+This document is part of the Utopia contributors' guide. Before you continue reading this document make sure you have read the [Code of Conduct](../../CODE_OF_CONDUCT.md) and the [Contributing Guide](../../CONTRIBUTING.md).
 
 ## Getting started
 
