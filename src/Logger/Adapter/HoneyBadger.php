@@ -120,7 +120,7 @@ class HoneyBadger extends Adapter
         return $response;
     }
     /**
-     * [ADAPTER_NAME] constructor.
+     * HoneyBadger constructor.
      *
      * @param string $configKey
      */
