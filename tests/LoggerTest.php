@@ -4,6 +4,7 @@
 use PHPUnit\Framework\TestCase;
 
 use Utopia\Logger\Adapter\AppSignal;
+use Utopia\Logger\Adapter\HoneyBadger;
 use Utopia\Logger\Adapter\LogOwl;
 use Utopia\Logger\Adapter\Raygun;
 use Utopia\Logger\Adapter\Sentry;
@@ -75,11 +76,11 @@ class LoggerTest extends TestCase
         self::assertEquals("aws-001", $log->getServer());
 
         $log->addExtra('isLoggedIn', false);
-        self::assertEquals([ 'isLoggedIn' => false ], $log->getExtra());
+        self::assertEquals(['isLoggedIn' => false], $log->getExtra());
 
         $log->addTag('authMethod', 'session');
         $log->addTag('authProvider', 'basic');
-        self::assertEquals([ 'authMethod' => 'session', 'authProvider' => 'basic' ], $log->getTags());
+        self::assertEquals(['authMethod' => 'session', 'authProvider' => 'basic'], $log->getTags());
 
         $user = new User("myid123");
         $log->setUser($user);
@@ -93,7 +94,6 @@ class LoggerTest extends TestCase
         self::assertEquals("http", $log->getBreadcrumbs()[0]->getCategory());
         self::assertEquals("DELETE /api/v1/database/abcd1234/efgh5678", $log->getBreadcrumbs()[0]->getMessage());
         self::assertEquals($timestamp, $log->getBreadcrumbs()[0]->getTimestamp());
-
     }
 
     /**
@@ -175,10 +175,16 @@ class LoggerTest extends TestCase
         $response = $logger->addLog($log);
         $this->assertEquals(202, $response);
 
-         // Test LogOwl
-         $adapter = new LogOwl(\getenv("TEST_LOGOWL_KEY"));
-         $logger = new Logger($adapter);
-         $response = $logger->addLog($log);
-         $this->assertEquals(200, $response);
+        // Test LogOwl
+        $adapter = new LogOwl(\getenv("TEST_LOGOWL_KEY"));
+        $logger = new Logger($adapter);
+        $response = $logger->addLog($log);
+        $this->assertEquals(200, $response);
+
+        // Test HoneyBadger
+        $adapter = new HoneyBadger(\getenv("TEST_HONEYBADGER_KEY"));
+        $logger = new Logger($adapter);
+        $response = $logger->addLog($log);
+        $this->assertEquals(201, $response);
     }
 }
