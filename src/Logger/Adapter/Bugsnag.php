@@ -10,7 +10,7 @@ use Utopia\Logger\Logger;
 // Reference Material
 // https://bugsnagerrorreportingapi.docs.apiary.io/#reference/0/notify/send-error-reports
 
-class LogOwl extends Adapter
+class Bugsnag extends Adapter
 {
     /**
      * @var string (required, can be found in Bugsnag -> Project -> Project settings -> Notifier API key)
