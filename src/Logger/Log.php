@@ -48,14 +48,14 @@ class Log
     protected string $action;
 
     /**
-     * @var array (optional)
+     * @var array<string, string> (optional)
      */
     protected array $tags = [];
 
     /**
      * @var array (optional)
      */
-    protected array $extra = [];
+    protected array $extra = []; /** @phpstan-ignore-line */
 
     /**
      * @var string (optional)
@@ -288,7 +288,7 @@ class Log
     /**
      * Get tags
      *
-     * @return array
+     * @return array<string, string>
      */
     public function getTags(): array
     {
@@ -302,7 +302,7 @@ class Log
      * @param $value
      * @return void
      */
-    public function addExtra(string $key, $value): void
+    public function addExtra(string $key, $value): void // @phpstan-ignore-line
     {
         $this->extra[$key] = $value;
     }
@@ -312,7 +312,7 @@ class Log
      *
      * @return array
      */
-    public function getExtra(): array
+    public function getExtra(): array // @phpstan-ignore-line
     {
         return $this->extra;
     }
