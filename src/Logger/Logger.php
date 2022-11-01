@@ -11,7 +11,8 @@ class Logger
         "raygun",
         "sentry",
         "appSignal",
-        "logOwl"
+        "logOwl",
+        "dynatrace"
     ];
 
     /**

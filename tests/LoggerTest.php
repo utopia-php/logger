@@ -4,6 +4,7 @@
 use PHPUnit\Framework\TestCase;
 
 use Utopia\Logger\Adapter\AppSignal;
+use Utopia\Logger\Adapter\Dynatrace;
 use Utopia\Logger\Adapter\LogOwl;
 use Utopia\Logger\Adapter\Raygun;
 use Utopia\Logger\Adapter\Sentry;
@@ -180,5 +181,11 @@ class LoggerTest extends TestCase
          $logger = new Logger($adapter);
          $response = $logger->addLog($log);
          $this->assertEquals(200, $response);
+
+        // Test Dynatrace
+        $adapter = new Dynatrace(\getenv("TEST_DYNATRACE_KEY") . ';' . \getenv("TEST_DYNATRACE_ENV_ID"));
+        $logger = new Logger($adapter);
+        $response = $logger->addLog($log);
+        $this->assertEquals(201, $response);
     }
 }
