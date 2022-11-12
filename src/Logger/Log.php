@@ -53,9 +53,9 @@ class Log
     protected array $tags = [];
 
     /**
-     * @var array (optional)
+     * @var array<string, mixed> (optional)
      */
-    protected array $extra = []; /** @phpstan-ignore-line */
+    protected array $extra = []; 
 
     /**
      * @var string (optional)
@@ -302,7 +302,7 @@ class Log
      * @param $value
      * @return void
      */
-    public function addExtra(string $key, $value): void // @phpstan-ignore-line
+    public function addExtra(string $key, mixed $value): void 
     {
         $this->extra[$key] = $value;
     }
@@ -310,9 +310,9 @@ class Log
     /**
      * Get extra metadata
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    public function getExtra(): array // @phpstan-ignore-line
+    public function getExtra(): array 
     {
         return $this->extra;
     }

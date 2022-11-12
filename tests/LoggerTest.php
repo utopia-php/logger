@@ -121,10 +121,10 @@ class LoggerTest extends TestCase
 
         // Assert FAILS
         self::expectException(ArgumentCountError::class);
-        $breadcrumb = new Breadcrumb(); // @phpstan-ignore-line
-        $breadcrumb = new Breadcrumb(Log::TYPE_DEBUG); // @phpstan-ignore-line
-        $breadcrumb = new Breadcrumb(Log::TYPE_DEBUG, "http"); // @phpstan-ignore-line
-        $breadcrumb = new Breadcrumb(Log::TYPE_DEBUG, "http", "POST /user"); // @phpstan-ignore-line
+        $breadcrumb = new Breadcrumb();
+        $breadcrumb = new Breadcrumb(Log::TYPE_DEBUG);
+        $breadcrumb = new Breadcrumb(Log::TYPE_DEBUG, "http");
+        $breadcrumb = new Breadcrumb(Log::TYPE_DEBUG, "http", "POST /user");
     }
 
     /**
