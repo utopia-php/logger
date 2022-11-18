@@ -193,7 +193,7 @@ class LoggerTest extends TestCase
          $this->assertEquals(200, $response);
 
          // Test NewRelic
-        $adapter = new NewRelic(\getenv("TEST_NEW_RELIC_KEY") . ';' . \getenv("TEST_NEW_RELIC_REGION"));
+         $adapter = new NewRelic(\getenv("TEST_NEW_RELIC_KEY") . ';' . \getenv("TEST_NEW_RELIC_REGION"));
          $logger = new Logger($adapter);
          $response = $logger->addLog($log);
          $this->assertEquals(202, $response);
