@@ -65,9 +65,9 @@ class Sentry extends Adapter
         if (isset($log->getExtra()['detailedTrace'])) {
             foreach ($log->getExtra()['detailedTrace'] as $trace) {
                 \array_push($stackFrames, [
-                    'filename' => $trace['file'],
-                    'lineno' => $trace['line'],
-                    'function' => $trace['function'],
+                    'filename' => $trace['file'] ?? '',
+                    'lineno' => $trace['line'] ?? '',
+                    'function' => $trace['function'] ?? '',
                 ]);
             }
         }
