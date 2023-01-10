@@ -14,7 +14,7 @@ use Utopia\Logger\Logger;
 
 class LoggerTest extends TestCase
 {
-    public function testLogUser()
+    public function testLogUser(): void
     {
         $user = new User();
 
@@ -35,7 +35,7 @@ class LoggerTest extends TestCase
     /**
      * @throws Exception
      */
-    public function testLog()
+    public function testLog(): void
     {
         $log = new Log();
 
@@ -81,10 +81,11 @@ class LoggerTest extends TestCase
         $log->addTag('authProvider', 'basic');
         self::assertEquals([ 'authMethod' => 'session', 'authProvider' => 'basic' ], $log->getTags());
 
-        $user = new User("myid123");
+        $userId = "myid123";
+        $user = new User($userId);
         $log->setUser($user);
         self::assertEquals($user, $log->getUser());
-        self::assertEquals("myid123", $log->getUser()->getId());
+        self::assertEquals($userId, $log->getUser()?->getId());
 
         $breadcrumb = new Breadcrumb(Log::TYPE_DEBUG, "http", "DELETE /api/v1/database/abcd1234/efgh5678", $timestamp);
         $log->addBreadcrumb($breadcrumb);
@@ -99,7 +100,7 @@ class LoggerTest extends TestCase
     /**
      * @throws Exception
      */
-    public function testLogBreadcrumb()
+    public function testLogBreadcrumb(): void
     {
         $timestamp = \microtime(true);
         $breadcrumb = new Breadcrumb(Log::TYPE_DEBUG, "http", "POST /user", $timestamp);
@@ -120,16 +121,16 @@ class LoggerTest extends TestCase
 
         // Assert FAILS
         self::expectException(ArgumentCountError::class);
-        $breadcrumb = new Breadcrumb();
-        $breadcrumb = new Breadcrumb(Log::TYPE_DEBUG);
-        $breadcrumb = new Breadcrumb(Log::TYPE_DEBUG, "http");
-        $breadcrumb = new Breadcrumb(Log::TYPE_DEBUG, "http", "POST /user");
+        $breadcrumb = new Breadcrumb();  // @phpstan-ignore-line
+        $breadcrumb = new Breadcrumb(Log::TYPE_DEBUG);  // @phpstan-ignore-line
+        $breadcrumb = new Breadcrumb(Log::TYPE_DEBUG, "http");  // @phpstan-ignore-line
+        $breadcrumb = new Breadcrumb(Log::TYPE_DEBUG, "http", "POST /user");  // @phpstan-ignore-line
     }
 
     /**
      * @throws Exception
      */
-    public function testAdapters()
+    public function testAdapters(): void
     {
         // Prepare log
         $log = new Log();
@@ -164,19 +165,22 @@ class LoggerTest extends TestCase
         $this->assertEquals(200, $response);
 
         // Test AppSignal
-        $adapter = new AppSignal(\getenv("TEST_APPSIGNAL_KEY"));
+        $appSignalKey = \getenv("TEST_APPSIGNAL_KEY");
+        $adapter = new AppSignal($appSignalKey ? $appSignalKey : "");
         $logger = new Logger($adapter);
         $response = $logger->addLog($log);
         $this->assertEquals(200, $response);
 
         // Test Raygun
-        $adapter = new Raygun(\getenv("TEST_RAYGUN_KEY"));
+        $raygunKey = \getenv("TEST_RAYGUN_KEY");
+        $adapter = new Raygun($raygunKey ? $raygunKey : "");
         $logger = new Logger($adapter);
         $response = $logger->addLog($log);
         $this->assertEquals(202, $response);
 
          // Test LogOwl
-         $adapter = new LogOwl(\getenv("TEST_LOGOWL_KEY"));
+        $logOwlKey = \getenv("TEST_LOGOWL_KEY");
+         $adapter = new LogOwl($logOwlKey ? $logOwlKey : "");
          $logger = new Logger($adapter);
          $response = $logger->addLog($log);
          $this->assertEquals(200, $response);
