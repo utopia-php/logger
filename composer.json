@@ -4,6 +4,9 @@
     "type": "library",
     "keywords": ["php","framework", "upf", "utopia", "logger", "logging", "errors", "warnings", "logs", "sentry", "raygun", "appsignal"],
     "license": "MIT",
+    "scripts": {
+        "check": "./vendor/bin/phpstan analyse --level max src tests"
+    },
     "autoload": {
         "psr-4": {"Utopia\\Logger\\": "src/Logger"}
     },
@@ -12,7 +15,8 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^9.3",
-        "vimeo/psalm": "4.0.1"
+        "vimeo/psalm": "4.0.1",
+        "phpstan/phpstan": "1.9.x-dev"
     },
     "minimum-stability": "dev"
 }
