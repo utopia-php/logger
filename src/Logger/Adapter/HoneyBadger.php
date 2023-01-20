@@ -3,6 +3,7 @@
 namespace Utopia\Logger\Adapter;
 
 use Exception;
+use phpDocumentor\Reflection\DocBlock\Tags\Var_;
 use Utopia\Logger\Adapter;
 use Utopia\Logger\Log;
 use Utopia\Logger\Logger;
@@ -52,44 +53,57 @@ class HoneyBadger extends Adapter
             ]);
         }
 
-        $tags = array();
+        // $tags = array();
 
-        foreach ($log->getTags() as $tagKey => $tagValue) {
-            $tags[$tagKey] = $tagValue;
-        }
+        // foreach ($log->getTags() as $tagKey => $tagValue) {
+        //     $tags[$tagKey] = $tagValue;
+        // }
 
-        if (!empty($log->getType())) {
-            $tags['type'] = $log->getType();
-        }
-        if (!empty($log->getUser()) &&  !empty($log->getUser()->getId())) {
-            $tags['userId'] = $log->getUser()->getId();
-        }
-        if (!empty($log->getUser()) &&  !empty($log->getUser()->getUsername())) {
-            $tags['userName'] = $log->getUser()->getUsername();
-        }
-        if (!empty($log->getUser()) &&  !empty($log->getUser()->getEmail())) {
-            $tags['userEmail'] = $log->getUser()->getEmail();
-        }
+        // if (!empty($log->getType())) {
+        //     $tags['type'] = $log->getType();
+        // }
+        // if (!empty($log->getUser()) &&  !empty($log->getUser()->getId())) {
+        //     $tags['userId'] = $log->getUser()->getId();
+        // }
+        // if (!empty($log->getUser()) &&  !empty($log->getUser()->getUsername())) {
+        //     $tags['userName'] = $log->getUser()->getUsername();
+        // }
+        // if (!empty($log->getUser()) &&  !empty($log->getUser()->getEmail())) {
+        //     $tags['userEmail'] = $log->getUser()->getEmail();
+        // }
 
         $requestBody = [
-            'timestamp' => \intval($log->getTimestamp()),
-            'namespace' => $log->getNamespace(),
+            'notifier' => [
+                'name' => 'utopia-logger',
+                'url' => 'https://github.com/utopia-php/logger',
+                'version' => $log->getVersion(),
+            ],
             'error' => [
-                'name' => $log->getMessage(),
+                'class' => $log->getType(),
                 'message' => $log->getMessage(),
                 'backtrace' => []
             ],
-            'environment' => [
-                'environment' => $log->getEnvironment(),
-                'server' => $log->getServer(),
-                'version' => $log->getVersion(),
+            // 'environment' => [
+            //     'environment' => $log->getEnvironment(),
+            //     'server' => $log->getServer(),
+            //     'version' => $log->getVersion(),
+            // ],
+            'request' => [
+                'params' => $params,
+                'action' => $log->getAction(),
+                'context' => empty($log->getUser()) ? null : [
+                    'user_id' => $log->getUser()->getId(),
+                    'user_email' => $log->getUser()->getEmail(),
+                ]
+
             ],
-            'revision' => $log->getVersion(),
-            'action' => $log->getAction(),
-            'params' => $params,
-            'tags' => $tags,
+            // 'revision' => $log->getVersion(),
+            // 'action' => $log->getAction(),
+            // 'tags' => $tags,
             'breadcrumbs' => $breadcrumbsArray
         ];
+
+        var_dump($requestBody);
 
         // init curl object
         $ch = \curl_init();
@@ -110,6 +124,7 @@ class HoneyBadger extends Adapter
         // execute request and get response
         $result = \curl_exec($ch);
         $response = \curl_getinfo($ch, \CURLINFO_HTTP_CODE);
+
 
         if (!$result && $response >= 400) {
             throw new Exception("Log could not be pushed with status code " . $response . ": " . \curl_error($ch));
