@@ -3,7 +3,6 @@
 namespace Utopia\Logger\Adapter;
 
 use Exception;
-use phpDocumentor\Reflection\DocBlock\Tags\Var_;
 use Utopia\Logger\Adapter;
 use Utopia\Logger\Log;
 use Utopia\Logger\Logger;
@@ -44,50 +43,34 @@ class HoneyBadger extends Adapter
 
         foreach ($breadcrumbsObject as $breadcrumb) {
             \array_push($breadcrumbsArray, [
-                'timestamp' => \intval($breadcrumb->getTimestamp()),
                 'category' => $breadcrumb->getCategory(),
-                'action' => $breadcrumb->getMessage(),
+                'timestamp' => \intval($breadcrumb->getTimestamp()),
+                'message' => $breadcrumb->getMessage(),
                 'metadata' => [
-                    'type' => $breadcrumb->getType()
+                    'exception' => $breadcrumb->getType()
                 ]
             ]);
         }
-
-        // $tags = array();
-
-        // foreach ($log->getTags() as $tagKey => $tagValue) {
-        //     $tags[$tagKey] = $tagValue;
-        // }
-
-        // if (!empty($log->getType())) {
-        //     $tags['type'] = $log->getType();
-        // }
-        // if (!empty($log->getUser()) &&  !empty($log->getUser()->getId())) {
-        //     $tags['userId'] = $log->getUser()->getId();
-        // }
-        // if (!empty($log->getUser()) &&  !empty($log->getUser()->getUsername())) {
-        //     $tags['userName'] = $log->getUser()->getUsername();
-        // }
-        // if (!empty($log->getUser()) &&  !empty($log->getUser()->getEmail())) {
-        //     $tags['userEmail'] = $log->getUser()->getEmail();
-        // }
 
         $requestBody = [
             'notifier' => [
                 'name' => 'utopia-logger',
                 'url' => 'https://github.com/utopia-php/logger',
+                'tags' => $log->getTags(),
                 'version' => $log->getVersion(),
             ],
             'error' => [
                 'class' => $log->getType(),
                 'message' => $log->getMessage(),
-                'backtrace' => []
+                'backtrace' => [],
+                //TODO: Add causes
+                'causes' => []
             ],
-            // 'environment' => [
-            //     'environment' => $log->getEnvironment(),
-            //     'server' => $log->getServer(),
-            //     'version' => $log->getVersion(),
-            // ],
+            'breadcrumbs' => [
+                "enabled" => true,
+                "trail" => $breadcrumbsArray
+            ],
+
             'request' => [
                 'params' => $params,
                 'action' => $log->getAction(),
@@ -97,13 +80,14 @@ class HoneyBadger extends Adapter
                 ]
 
             ],
-            // 'revision' => $log->getVersion(),
-            // 'action' => $log->getAction(),
-            // 'tags' => $tags,
-            'breadcrumbs' => $breadcrumbsArray
+            'server' => [
+                'project_root' => $log->getServer(),
+                'environment_name' => $log->getEnvironment(),
+                'hostname' => $log->getServer(),
+            ],
+
         ];
 
-        var_dump($requestBody);
 
         // init curl object
         $ch = \curl_init();
