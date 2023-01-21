@@ -178,12 +178,12 @@ class LoggerTest extends TestCase
         $response = $logger->addLog($log);
         $this->assertEquals(202, $response);
 
-         // Test LogOwl
+        // Test LogOwl
         $logOwlKey = \getenv("TEST_LOGOWL_KEY");
-         $adapter = new LogOwl($logOwlKey ? $logOwlKey : "");
-         $logger = new Logger($adapter);
-         $response = $logger->addLog($log);
-         $this->assertEquals(200, $response);
+        $adapter = new LogOwl($logOwlKey ? $logOwlKey : "");
+        $logger = new Logger($adapter);
+        $response = $logger->addLog($log);
+        $this->assertEquals(200, $response);
 
         // Test HoneyBadger
         $adapter = new HoneyBadger(\getenv("TEST_HONEYBADGER_KEY"));
