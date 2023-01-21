@@ -52,6 +52,25 @@ class HoneyBadger extends Adapter
             ]);
         }
 
+        $stackFrames = [];
+
+        if (isset($log->getExtra()['stackTrace'])) {
+            $detailedTrace = $log->getExtra()['stackTrace'];
+            if (!is_array($detailedTrace)) {
+                throw new Exception("stackTrace must be an array");
+            }
+            foreach ($detailedTrace as $trace) {
+                if (!is_array($trace)) {
+                    throw new Exception("stackTrace must be an array of arrays");
+                }
+                \array_push($stackFrames, [
+                    'number' => $trace['number'],
+                    'file' => $trace['file'],
+                    'method' => $trace['method'],
+                ]);
+            }
+        }
+
         $requestBody = [
             'notifier' => [
                 'name' => 'utopia-logger',
@@ -62,9 +81,7 @@ class HoneyBadger extends Adapter
             'error' => [
                 'class' => $log->getType(),
                 'message' => $log->getMessage(),
-                'backtrace' => [],
-                //TODO: Add causes
-                'causes' => []
+                'backtrace' => $stackFrames,
             ],
             'breadcrumbs' => [
                 "enabled" => true,

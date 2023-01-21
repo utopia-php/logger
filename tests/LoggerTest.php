@@ -157,6 +157,7 @@ class LoggerTest extends TestCase
         $log->addExtra('isExpected', true);
         $log->addExtra('file', '/User/example/server/src/server/server.js');
         $log->addExtra('line', '15');
+        $log->addExtra('stackTrace', [["number" => 15, "file" => "User/example/server/src/server/server.js", "method" => "runtime_error"]]);
 
         // Test Sentry
         $adapter = new Sentry(\getenv("TEST_SENTRY_KEY") . ';' . \getenv("TEST_SENTRY_PROJECT_ID") . ';' . \getenv("TEST_SENTRY_HOST"));
