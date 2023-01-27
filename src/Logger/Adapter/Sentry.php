@@ -65,12 +65,12 @@ class Sentry extends Adapter
 
         if (isset($log->getExtra()['detailedTrace'])) {
             $detailedTrace = $log->getExtra()['detailedTrace'];
-            if (!is_array($detailedTrace)) {
-                throw new Exception("detailedTrace must be an array");
+            if (! is_array($detailedTrace)) {
+                throw new Exception('detailedTrace must be an array');
             }
             foreach ($detailedTrace as $trace) {
-                if (!is_array($trace)) {
-                    throw new Exception("detailedTrace must be an array of arrays");
+                if (! is_array($trace)) {
+                    throw new Exception('detailedTrace must be an array of arrays');
                 }
                 \array_push($stackFrames, [
                     'filename' => $trace['file'],

@@ -79,7 +79,7 @@ class LoggerTest extends TestCase
         $log->addTag('authProvider', 'basic');
         self::assertEquals(['authMethod' => 'session', 'authProvider' => 'basic'], $log->getTags());
 
-        $userId = "myid123";
+        $userId = 'myid123';
         $user = new User($userId);
         $log->setUser($user);
         self::assertEquals($user, $log->getUser());
@@ -120,8 +120,8 @@ class LoggerTest extends TestCase
         self::expectException(ArgumentCountError::class);
         $breadcrumb = new Breadcrumb();  // @phpstan-ignore-line
         $breadcrumb = new Breadcrumb(Log::TYPE_DEBUG);  // @phpstan-ignore-line
-        $breadcrumb = new Breadcrumb(Log::TYPE_DEBUG, "http");  // @phpstan-ignore-line
-        $breadcrumb = new Breadcrumb(Log::TYPE_DEBUG, "http", "POST /user");  // @phpstan-ignore-line
+        $breadcrumb = new Breadcrumb(Log::TYPE_DEBUG, 'http');  // @phpstan-ignore-line
+        $breadcrumb = new Breadcrumb(Log::TYPE_DEBUG, 'http', 'POST /user');  // @phpstan-ignore-line
     }
 
     /**
@@ -162,24 +162,24 @@ class LoggerTest extends TestCase
         $this->assertEquals(200, $response);
 
         // Test AppSignal
-        $appSignalKey = \getenv("TEST_APPSIGNAL_KEY");
-        $adapter = new AppSignal($appSignalKey ? $appSignalKey : "");
+        $appSignalKey = \getenv('TEST_APPSIGNAL_KEY');
+        $adapter = new AppSignal($appSignalKey ? $appSignalKey : '');
         $logger = new Logger($adapter);
         $response = $logger->addLog($log);
         $this->assertEquals(200, $response);
 
         // Test Raygun
-        $raygunKey = \getenv("TEST_RAYGUN_KEY");
-        $adapter = new Raygun($raygunKey ? $raygunKey : "");
+        $raygunKey = \getenv('TEST_RAYGUN_KEY');
+        $adapter = new Raygun($raygunKey ? $raygunKey : '');
         $logger = new Logger($adapter);
         $response = $logger->addLog($log);
         $this->assertEquals(202, $response);
 
-         // Test LogOwl
-        $logOwlKey = \getenv("TEST_LOGOWL_KEY");
-         $adapter = new LogOwl($logOwlKey ? $logOwlKey : "");
-         $logger = new Logger($adapter);
-         $response = $logger->addLog($log);
-         $this->assertEquals(200, $response);
+        // Test LogOwl
+        $logOwlKey = \getenv('TEST_LOGOWL_KEY');
+        $adapter = new LogOwl($logOwlKey ? $logOwlKey : '');
+        $logger = new Logger($adapter);
+        $response = $logger->addLog($log);
+        $this->assertEquals(200, $response);
     }
 }

@@ -60,7 +60,7 @@ class Log
     /**
      * @var array<string, mixed> (optional)
      */
-    protected array $extra = []; 
+    protected array $extra = [];
 
     /**
      * @var string (optional)
@@ -309,7 +309,7 @@ class Log
      * @param $value
      * @return void
      */
-    public function addExtra(string $key, mixed $value): void 
+    public function addExtra(string $key, mixed $value): void
     {
         $this->extra[$key] = $value;
     }
@@ -319,7 +319,7 @@ class Log
      *
      * @return array<string, mixed>
      */
-    public function getExtra(): array 
+    public function getExtra(): array
     {
         return $this->extra;
     }
