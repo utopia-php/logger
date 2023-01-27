@@ -53,14 +53,14 @@ class Log
     protected string $action;
 
     /**
-     * @var array (optional)
+     * @var array<string, string> (optional)
      */
     protected array $tags = [];
 
     /**
-     * @var array (optional)
+     * @var array<string, mixed> (optional)
      */
-    protected array $extra = [];
+    protected array $extra = []; 
 
     /**
      * @var string (optional)
@@ -295,7 +295,7 @@ class Log
     /**
      * Get tags
      *
-     * @return array
+     * @return array<string, string>
      */
     public function getTags(): array
     {
@@ -309,7 +309,7 @@ class Log
      * @param $value
      * @return void
      */
-    public function addExtra(string $key, $value): void
+    public function addExtra(string $key, mixed $value): void 
     {
         $this->extra[$key] = $value;
     }
@@ -317,9 +317,9 @@ class Log
     /**
      * Get extra metadata
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    public function getExtra(): array
+    public function getExtra(): array 
     {
         return $this->extra;
     }

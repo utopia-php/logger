@@ -64,7 +64,14 @@ class Sentry extends Adapter
         $stackFrames = [];
 
         if (isset($log->getExtra()['detailedTrace'])) {
-            foreach ($log->getExtra()['detailedTrace'] as $trace) {
+            $detailedTrace = $log->getExtra()['detailedTrace'];
+            if (!is_array($detailedTrace)) {
+                throw new Exception("detailedTrace must be an array");
+            }
+            foreach ($detailedTrace as $trace) {
+                if (!is_array($trace)) {
+                    throw new Exception("detailedTrace must be an array of arrays");
+                }
                 \array_push($stackFrames, [
                     'filename' => $trace['file'],
                     'lineno' => $trace['line'],
