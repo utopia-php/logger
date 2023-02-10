@@ -72,9 +72,9 @@ class Sentry extends Adapter
                     throw new Exception("detailedTrace must be an array of arrays");
                 }
                 \array_push($stackFrames, [
-                    'filename' => $trace['file'],
-                    'lineno' => $trace['line'],
-                    'function' => $trace['function'],
+                    'filename' => $trace['file'] ?? '',
+                    'lineno' => $trace['line'] ?? '',
+                    'function' => $trace['function'] ?? '',
                 ]);
             }
         }
