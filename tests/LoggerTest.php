@@ -2,7 +2,7 @@
 
 
 use PHPUnit\Framework\TestCase;
-
+use Utopia\Logger\Adapter\Airbrake;
 use Utopia\Logger\Adapter\AppSignal;
 use Utopia\Logger\Adapter\LogOwl;
 use Utopia\Logger\Adapter\Raygun;
@@ -184,5 +184,11 @@ class LoggerTest extends TestCase
          $logger = new Logger($adapter);
          $response = $logger->addLog($log);
          $this->assertEquals(200, $response);
+
+        // Test Airbrake
+        $adapter = new Airbrake(\getenv("TEST_AIRBRAKE_ID") . ';' . \getenv("TEST_AIRBRAKE_KEY"));
+        $logger = new Logger($adapter);
+        $response = $logger->addLog($log);
+        $this->assertEquals(201, $response);
     }
 }
