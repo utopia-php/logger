@@ -24,14 +24,15 @@ class Raygun extends Adapter
      */
     public static function getName(): string
     {
-        return "raygun";
+        return 'raygun';
     }
 
     /**
      * Push log to external provider
      *
-     * @param Log $log
+     * @param  Log  $log
      * @return int
+     *
      * @throws Exception
      */
     public function push(Log $log): int
@@ -44,31 +45,31 @@ class Raygun extends Adapter
                 'category' => $breadcrumb->getCategory(),
                 'message' => $breadcrumb->getMessage(),
                 'type' => $breadcrumb->getType(),
-                'level' => "request",
-                'timestamp' =>\intval($breadcrumb->getTimestamp())
+                'level' => 'request',
+                'timestamp' => \intval($breadcrumb->getTimestamp()),
             ]);
         }
 
         $tagsArray = [];
 
-        foreach($log->getTags() as $tagKey => $tagValue) {
-            \array_push($tagsArray, $tagKey . ': ' . $tagValue);
+        foreach ($log->getTags() as $tagKey => $tagValue) {
+            \array_push($tagsArray, $tagKey.': '.$tagValue);
         }
 
-        \array_push($tagsArray, 'type: ' . $log->getType());
-        \array_push($tagsArray, 'environment: ' . $log->getEnvironment());
-        \array_push($tagsArray, 'sdk: utopia-logger/' . Logger::LIBRARY_VERSION);
+        \array_push($tagsArray, 'type: '.$log->getType());
+        \array_push($tagsArray, 'environment: '.$log->getEnvironment());
+        \array_push($tagsArray, 'sdk: utopia-logger/'.Logger::LIBRARY_VERSION);
 
         // prepare log (request body)
         $requestBody = [
-            'occurredOn' =>  \intval($log->getTimestamp()),
+            'occurredOn' => \intval($log->getTimestamp()),
             'details' => [
                 'machineName' => $log->getServer(),
                 'groupingKey' => $log->getNamespace(),
                 'version' => $log->getVersion(),
                 'error' => [
                     'className' => $log->getAction(),
-                    'message' => $log->getMessage()
+                    'message' => $log->getMessage(),
                 ],
                 'tags' => $tagsArray,
                 'userCustomData' => $log->getExtra(),
@@ -78,22 +79,22 @@ class Raygun extends Adapter
                     'email' => empty($log->getUser()) ? null : $log->getUser()->getEmail(),
                     'fullName' => empty($log->getUser()) ? null : $log->getUser()->getUsername(),
                 ],
-                'breadcrumbs' => $breadcrumbsArray
-            ]
+                'breadcrumbs' => $breadcrumbsArray,
+            ],
         ];
 
         // init curl object
         $ch = \curl_init();
 
         // define options
-        $optArray = array(
+        $optArray = [
             CURLOPT_URL => 'https://api.raygun.com/entries',
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_POST => true,
             CURLOPT_POSTFIELDS => \json_encode($requestBody),
             CURLOPT_HEADEROPT => \CURLHEADER_UNIFIED,
-            CURLOPT_HTTPHEADER => array('Content-Type: application/json', 'X-ApiKey: ' . $this->apiKey)
-        );
+            CURLOPT_HTTPHEADER => ['Content-Type: application/json', 'X-ApiKey: '.$this->apiKey],
+        ];
 
         // apply those options
         \curl_setopt_array($ch, $optArray);
@@ -102,8 +103,8 @@ class Raygun extends Adapter
         $result = \curl_exec($ch);
         $response = \curl_getinfo($ch, \CURLINFO_HTTP_CODE);
 
-        if(!$result && $response >= 400) {
-            throw new Exception("Log could not be pushed with status code " . $response . ": " . \curl_error($ch));
+        if (! $result && $response >= 400) {
+            throw new Exception('Log could not be pushed with status code '.$response.': '.\curl_error($ch));
         }
 
         \curl_close($ch);
@@ -114,7 +115,7 @@ class Raygun extends Adapter
     /**
      * Raygun constructor.
      *
-     * @param string $configKey
+     * @param  string  $configKey
      */
     public function __construct(string $configKey)
     {
@@ -128,7 +129,7 @@ class Raygun extends Adapter
             Log::TYPE_DEBUG,
             Log::TYPE_VERBOSE,
             Log::TYPE_WARNING,
-            Log::TYPE_ERROR
+            Log::TYPE_ERROR,
         ];
     }
 
@@ -147,7 +148,7 @@ class Raygun extends Adapter
             Log::TYPE_DEBUG,
             Log::TYPE_VERBOSE,
             Log::TYPE_WARNING,
-            Log::TYPE_ERROR
+            Log::TYPE_ERROR,
         ];
     }
 }
