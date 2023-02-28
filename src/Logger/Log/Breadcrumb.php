@@ -30,10 +30,11 @@ class Breadcrumb
     /**
      * Breadcrumb constructor.
      *
-     * @param string $type
-     * @param string $category
-     * @param string $message
-     * @param float $timestamp
+     * @param  string  $type
+     * @param  string  $category
+     * @param  string  $message
+     * @param  float  $timestamp
+     *
      * @throws Exception
      */
     public function __construct(string $type, string $category, string $message, float $timestamp)
@@ -51,7 +52,7 @@ class Breadcrumb
             case Log::TYPE_VERBOSE:
                 break;
             default:
-                throw new Exception("Type has to be one of Log::TYPE_DEBUG, Log::TYPE_ERROR, Log::TYPE_INFO, Log::TYPE_WARNING, Log::TYPE_VERBOSE.");
+                throw new Exception('Type has to be one of Log::TYPE_DEBUG, Log::TYPE_ERROR, Log::TYPE_INFO, Log::TYPE_WARNING, Log::TYPE_VERBOSE.');
         }
     }
 
@@ -94,5 +95,4 @@ class Breadcrumb
     {
         return $this->timestamp;
     }
-
 }

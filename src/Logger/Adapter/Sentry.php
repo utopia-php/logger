@@ -35,14 +35,15 @@ class Sentry extends Adapter
      */
     public static function getName(): string
     {
-        return "sentry";
+        return 'sentry';
     }
 
     /**
      * Push log to external provider
      *
-     * @param Log $log
+     * @param  Log  $log
      * @return int
+     *
      * @throws Exception
      */
     public function push(Log $log): int
@@ -52,11 +53,11 @@ class Sentry extends Adapter
 
         foreach ($breadcrumbsObject as $breadcrumb) {
             \array_push($breadcrumbsArray, [
-                'type' => "default",
+                'type' => 'default',
                 'level' => $breadcrumb->getType(),
                 'category' => $breadcrumb->getCategory(),
                 'message' => $breadcrumb->getMessage(),
-                'timestamp' => $breadcrumb->getTimestamp()
+                'timestamp' => $breadcrumb->getTimestamp(),
             ]);
         }
 
@@ -64,17 +65,17 @@ class Sentry extends Adapter
 
         if (isset($log->getExtra()['detailedTrace'])) {
             $detailedTrace = $log->getExtra()['detailedTrace'];
-            if (!is_array($detailedTrace)) {
-                throw new Exception("detailedTrace must be an array");
+            if (! is_array($detailedTrace)) {
+                throw new Exception('detailedTrace must be an array');
             }
             foreach ($detailedTrace as $trace) {
-                if (!is_array($trace)) {
-                    throw new Exception("detailedTrace must be an array of arrays");
+                if (! is_array($trace)) {
+                    throw new Exception('detailedTrace must be an array of arrays');
                 }
                 \array_push($stackFrames, [
-                    'filename' => $trace['file'],
-                    'lineno' => $trace['line'],
-                    'function' => $trace['function'],
+                    'filename' => $trace['file'] ?? '',
+                    'lineno' => $trace['line'] ?? '',
+                    'function' => $trace['function'] ?? '',
                 ]);
             }
         }
@@ -88,46 +89,46 @@ class Sentry extends Adapter
             'platform' => 'php',
             'level' => 'error',
             'logger' => $log->getNamespace(),
-            'transaction' =>  $log->getAction(),
-            'server_name' =>  $log->getServer(),
+            'transaction' => $log->getAction(),
+            'server_name' => $log->getServer(),
             'release' => $log->getVersion(),
             'environment' => $log->getEnvironment(),
             'message' => [
-                'message' => $log->getMessage()
+                'message' => $log->getMessage(),
             ],
             'exception' => [
                 'values' => [
                     [
                         'type' => $log->getMessage(),
                         'stacktrace' => [
-                            'frames' => $stackFrames
-                        ]
-                    ]
-                ]
+                            'frames' => $stackFrames,
+                        ],
+                    ],
+                ],
             ],
-            'tags'=> $log->getTags(),
-            'extra'=> $log->getExtra(),
-            'breadcrumbs'=> $breadcrumbsArray,
-            'user'=> empty($log->getUser()) ? null : [
+            'tags' => $log->getTags(),
+            'extra' => $log->getExtra(),
+            'breadcrumbs' => $breadcrumbsArray,
+            'user' => empty($log->getUser()) ? null : [
                 'id' => $log->getUser()->getId(),
                 'email' => $log->getUser()->getEmail(),
                 'username' => $log->getUser()->getUsername(),
-            ]
+            ],
         ];
 
         // init curl object
         $ch = \curl_init();
 
         // define options
-        $optArray = array(
-            CURLOPT_URL => $this->sentryHost . '/api/' . $this->projectId . '/store/',
+        $optArray = [
+            CURLOPT_URL => $this->sentryHost.'/api/'.$this->projectId.'/store/',
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_POST => true,
             CURLOPT_POSTFIELDS => \json_encode($requestBody),
             CURLOPT_HEADEROPT => \CURLHEADER_UNIFIED,
-            CURLOPT_HTTPHEADER => array('Content-Type: application/json', 'X-Sentry-Auth: Sentry sentry_version=7, sentry_key=' . $this->sentryKey . ', sentry_client=utopia-logger/' . Logger::LIBRARY_VERSION)
-        );
-        
+            CURLOPT_HTTPHEADER => ['Content-Type: application/json', 'X-Sentry-Auth: Sentry sentry_version=7, sentry_key='.$this->sentryKey.', sentry_client=utopia-logger/'.Logger::LIBRARY_VERSION],
+        ];
+
         // apply those options
         \curl_setopt_array($ch, $optArray);
 
@@ -135,8 +136,8 @@ class Sentry extends Adapter
         $result = curl_exec($ch);
         $response = curl_getinfo($ch, \CURLINFO_HTTP_CODE);
 
-        if(!$result && $response >= 400) {
-            throw new Exception("Log could not be pushed with status code " . $response . ": " . \curl_error($ch));
+        if (! $result && $response >= 400) {
+            throw new Exception('Log could not be pushed with status code '.$response.': '.\curl_error($ch));
         }
 
         \curl_close($ch);
@@ -147,20 +148,19 @@ class Sentry extends Adapter
     /**
      * Sentry constructor.
      *
-     * @param string $configKey
+     * @param  string  $configKey
      */
     public function __construct(string $configKey)
     {
-        $configChunks = \explode(";", $configKey);
+        $configChunks = \explode(';', $configKey);
         $this->sentryKey = $configChunks[0];
         $this->projectId = $configChunks[1];
         $this->sentryHost = 'https://sentry.io';
 
-        if(count($configChunks) > 2 && !empty($configChunks[2])) {
+        if (count($configChunks) > 2 && ! empty($configChunks[2])) {
             $this->sentryHost = $configChunks[2];
         }
     }
-
 
     public function getSupportedTypes(): array
     {
@@ -168,7 +168,7 @@ class Sentry extends Adapter
             Log::TYPE_INFO,
             Log::TYPE_DEBUG,
             Log::TYPE_WARNING,
-            Log::TYPE_ERROR
+            Log::TYPE_ERROR,
         ];
     }
 
@@ -186,7 +186,7 @@ class Sentry extends Adapter
             Log::TYPE_INFO,
             Log::TYPE_DEBUG,
             Log::TYPE_WARNING,
-            Log::TYPE_ERROR
+            Log::TYPE_ERROR,
         ];
     }
 }

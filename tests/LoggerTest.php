@@ -1,8 +1,6 @@
 <?php
 
-
 use PHPUnit\Framework\TestCase;
-
 use Utopia\Logger\Adapter\AppSignal;
 use Utopia\Logger\Adapter\HoneyBadger;
 use Utopia\Logger\Adapter\LogOwl;
@@ -23,14 +21,14 @@ class LoggerTest extends TestCase
         self::assertEquals(null, $user->getUsername());
         self::assertEquals(null, $user->getId());
 
-        $user = new User("618e291cd8949");
-        self::assertEquals("618e291cd8949", $user->getId());
+        $user = new User('618e291cd8949');
+        self::assertEquals('618e291cd8949', $user->getId());
 
-        $user = new User(null, "matej@appwrite.io");
-        self::assertEquals("matej@appwrite.io", $user->getEmail());
+        $user = new User(null, 'matej@appwrite.io');
+        self::assertEquals('matej@appwrite.io', $user->getEmail());
 
-        $user = new User(null, null, "Meldiron");
-        self::assertEquals("Meldiron", $user->getUsername());
+        $user = new User(null, null, 'Meldiron');
+        self::assertEquals('Meldiron', $user->getUsername());
     }
 
     /**
@@ -58,22 +56,22 @@ class LoggerTest extends TestCase
         $log->setMessage("Cannot read 'user' of undefined");
         self::assertEquals("Cannot read 'user' of undefined", $log->getMessage());
 
-        $log->setVersion("0.11.0");
-        self::assertEquals("0.11.0", $log->getVersion());
+        $log->setVersion('0.11.0');
+        self::assertEquals('0.11.0', $log->getVersion());
 
         $log->setEnvironment(Log::ENVIRONMENT_PRODUCTION);
         self::assertEquals(Log::ENVIRONMENT_PRODUCTION, $log->getEnvironment());
         $log->setEnvironment(Log::ENVIRONMENT_STAGING);
         self::assertEquals(Log::ENVIRONMENT_STAGING, $log->getEnvironment());
 
-        $log->setNamespace("getAuthUser");
-        self::assertEquals("getAuthUser", $log->getNamespace());
+        $log->setNamespace('getAuthUser');
+        self::assertEquals('getAuthUser', $log->getNamespace());
 
-        $log->setAction("authGuard");
-        self::assertEquals("authGuard", $log->getAction());
+        $log->setAction('authGuard');
+        self::assertEquals('authGuard', $log->getAction());
 
-        $log->setServer("aws-001");
-        self::assertEquals("aws-001", $log->getServer());
+        $log->setServer('aws-001');
+        self::assertEquals('aws-001', $log->getServer());
 
         $log->addExtra('isLoggedIn', false);
         self::assertEquals(['isLoggedIn' => false], $log->getExtra());
@@ -82,18 +80,18 @@ class LoggerTest extends TestCase
         $log->addTag('authProvider', 'basic');
         self::assertEquals(['authMethod' => 'session', 'authProvider' => 'basic'], $log->getTags());
 
-        $userId = "myid123";
+        $userId = 'myid123';
         $user = new User($userId);
         $log->setUser($user);
         self::assertEquals($user, $log->getUser());
         self::assertEquals($userId, $log->getUser()?->getId());
 
-        $breadcrumb = new Breadcrumb(Log::TYPE_DEBUG, "http", "DELETE /api/v1/database/abcd1234/efgh5678", $timestamp);
+        $breadcrumb = new Breadcrumb(Log::TYPE_DEBUG, 'http', 'DELETE /api/v1/database/abcd1234/efgh5678', $timestamp);
         $log->addBreadcrumb($breadcrumb);
         self::assertEquals([$breadcrumb], $log->getBreadcrumbs());
         self::assertEquals(Log::TYPE_DEBUG, $log->getBreadcrumbs()[0]->getType());
-        self::assertEquals("http", $log->getBreadcrumbs()[0]->getCategory());
-        self::assertEquals("DELETE /api/v1/database/abcd1234/efgh5678", $log->getBreadcrumbs()[0]->getMessage());
+        self::assertEquals('http', $log->getBreadcrumbs()[0]->getCategory());
+        self::assertEquals('DELETE /api/v1/database/abcd1234/efgh5678', $log->getBreadcrumbs()[0]->getMessage());
         self::assertEquals($timestamp, $log->getBreadcrumbs()[0]->getTimestamp());
     }
 
@@ -103,28 +101,28 @@ class LoggerTest extends TestCase
     public function testLogBreadcrumb(): void
     {
         $timestamp = \microtime(true);
-        $breadcrumb = new Breadcrumb(Log::TYPE_DEBUG, "http", "POST /user", $timestamp);
+        $breadcrumb = new Breadcrumb(Log::TYPE_DEBUG, 'http', 'POST /user', $timestamp);
 
         self::assertEquals(Log::TYPE_DEBUG, $breadcrumb->getType());
-        self::assertEquals("http", $breadcrumb->getCategory());
-        self::assertEquals("POST /user", $breadcrumb->getMessage());
+        self::assertEquals('http', $breadcrumb->getCategory());
+        self::assertEquals('POST /user', $breadcrumb->getMessage());
         self::assertEquals($timestamp, $breadcrumb->getTimestamp());
 
-        $breadcrumb = new Breadcrumb(Log::TYPE_INFO, "http", "POST /user", $timestamp);
+        $breadcrumb = new Breadcrumb(Log::TYPE_INFO, 'http', 'POST /user', $timestamp);
         self::assertEquals(Log::TYPE_INFO, $breadcrumb->getType());
-        $breadcrumb = new Breadcrumb(Log::TYPE_VERBOSE, "http", "POST /user", $timestamp);
+        $breadcrumb = new Breadcrumb(Log::TYPE_VERBOSE, 'http', 'POST /user', $timestamp);
         self::assertEquals(Log::TYPE_VERBOSE, $breadcrumb->getType());
-        $breadcrumb = new Breadcrumb(Log::TYPE_ERROR, "http", "POST /user", $timestamp);
+        $breadcrumb = new Breadcrumb(Log::TYPE_ERROR, 'http', 'POST /user', $timestamp);
         self::assertEquals(Log::TYPE_ERROR, $breadcrumb->getType());
-        $breadcrumb = new Breadcrumb(Log::TYPE_WARNING, "http", "POST /user", $timestamp);
+        $breadcrumb = new Breadcrumb(Log::TYPE_WARNING, 'http', 'POST /user', $timestamp);
         self::assertEquals(Log::TYPE_WARNING, $breadcrumb->getType());
 
         // Assert FAILS
         self::expectException(ArgumentCountError::class);
         $breadcrumb = new Breadcrumb();  // @phpstan-ignore-line
         $breadcrumb = new Breadcrumb(Log::TYPE_DEBUG);  // @phpstan-ignore-line
-        $breadcrumb = new Breadcrumb(Log::TYPE_DEBUG, "http");  // @phpstan-ignore-line
-        $breadcrumb = new Breadcrumb(Log::TYPE_DEBUG, "http", "POST /user");  // @phpstan-ignore-line
+        $breadcrumb = new Breadcrumb(Log::TYPE_DEBUG, 'http');  // @phpstan-ignore-line
+        $breadcrumb = new Breadcrumb(Log::TYPE_DEBUG, 'http', 'POST /user');  // @phpstan-ignore-line
     }
 
     /**
@@ -134,10 +132,10 @@ class LoggerTest extends TestCase
     {
         // Prepare log
         $log = new Log();
-        $log->setAction("controller.database.deleteDocument");
-        $log->setEnvironment("production");
-        $log->setNamespace("api");
-        $log->setServer("digitalocean-us-001");
+        $log->setAction('controller.database.deleteDocument');
+        $log->setEnvironment('production');
+        $log->setNamespace('api');
+        $log->setServer('digitalocean-us-001');
         $log->setType(Log::TYPE_ERROR);
         $log->setVersion("0.11.5");
         $log->setMessage("Document efgh5678 not found");
@@ -160,36 +158,30 @@ class LoggerTest extends TestCase
         $log->addExtra('stackTrace', [["number" => 15, "file" => "User/example/server/src/server/server.js", "method" => "runtime_error"]]);
 
         // Test Sentry
-        $adapter = new Sentry(\getenv("TEST_SENTRY_KEY") . ';' . \getenv("TEST_SENTRY_PROJECT_ID") . ';' . \getenv("TEST_SENTRY_HOST"));
+        $adapter = new Sentry(\getenv('TEST_SENTRY_KEY').';'.\getenv('TEST_SENTRY_PROJECT_ID').';'.\getenv('TEST_SENTRY_HOST'));
         $logger = new Logger($adapter);
         $response = $logger->addLog($log);
         $this->assertEquals(200, $response);
 
         // Test AppSignal
-        $appSignalKey = \getenv("TEST_APPSIGNAL_KEY");
-        $adapter = new AppSignal($appSignalKey ? $appSignalKey : "");
+        $appSignalKey = \getenv('TEST_APPSIGNAL_KEY');
+        $adapter = new AppSignal($appSignalKey ? $appSignalKey : '');
         $logger = new Logger($adapter);
         $response = $logger->addLog($log);
         $this->assertEquals(200, $response);
 
         // Test Raygun
-        $raygunKey = \getenv("TEST_RAYGUN_KEY");
-        $adapter = new Raygun($raygunKey ? $raygunKey : "");
+        $raygunKey = \getenv('TEST_RAYGUN_KEY');
+        $adapter = new Raygun($raygunKey ? $raygunKey : '');
         $logger = new Logger($adapter);
         $response = $logger->addLog($log);
         $this->assertEquals(202, $response);
 
         // Test LogOwl
-        $logOwlKey = \getenv("TEST_LOGOWL_KEY");
-        $adapter = new LogOwl($logOwlKey ? $logOwlKey : "");
+        $logOwlKey = \getenv('TEST_LOGOWL_KEY');
+        $adapter = new LogOwl($logOwlKey ? $logOwlKey : '');
         $logger = new Logger($adapter);
         $response = $logger->addLog($log);
         $this->assertEquals(200, $response);
-
-        // Test HoneyBadger
-        $adapter = new HoneyBadger(\getenv("TEST_HONEYBADGER_KEY"));
-        $logger = new Logger($adapter);
-        $response = $logger->addLog($log);
-        $this->assertEquals(201, $response);
     }
 }

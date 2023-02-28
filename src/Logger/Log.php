@@ -8,14 +8,19 @@ use Utopia\Logger\Log\User;
 
 class Log
 {
-    const TYPE_DEBUG = "debug";
-    const TYPE_ERROR = "error";
-    const TYPE_WARNING = "warning";
-    const TYPE_INFO = "info";
-    const TYPE_VERBOSE = "verbose";
+    const TYPE_DEBUG = 'debug';
 
-    const ENVIRONMENT_PRODUCTION = "production";
-    const ENVIRONMENT_STAGING = "staging";
+    const TYPE_ERROR = 'error';
+
+    const TYPE_WARNING = 'warning';
+
+    const TYPE_INFO = 'info';
+
+    const TYPE_VERBOSE = 'verbose';
+
+    const ENVIRONMENT_PRODUCTION = 'production';
+
+    const ENVIRONMENT_STAGING = 'staging';
 
     /**
      * @var float (required, set by default to microtime(true))
@@ -55,12 +60,12 @@ class Log
     /**
      * @var array<string, mixed> (optional)
      */
-    protected array $extra = []; 
+    protected array $extra = [];
 
     /**
      * @var string (optional)
      */
-    protected string $namespace = "UNKNOWN";
+    protected string $namespace = 'UNKNOWN';
 
     /**
      * @var string|null (optional)
@@ -88,8 +93,9 @@ class Log
     /**
      * Set a type
      *
-     * @param string $type (required, can be 'log', 'error' or 'warning')
+     * @param  string  $type (required, can be 'log', 'error' or 'warning')
      * @return void
+     *
      * @throws Exception
      */
     public function setType(string $type): void
@@ -101,7 +107,7 @@ class Log
             case self::TYPE_INFO:
             case self::TYPE_WARNING:
                 break;
-            default: throw new Exception("Unsupported log type. Must be one of Log::TYPE_DEBUG, Log::TYPE_ERROR, Log::TYPE_WARNING, Log::TYPE_INFO, Log::VERBOSE.");
+            default: throw new Exception('Unsupported log type. Must be one of Log::TYPE_DEBUG, Log::TYPE_ERROR, Log::TYPE_WARNING, Log::TYPE_INFO, Log::VERBOSE.');
         }
 
         $this->type = $type;
@@ -120,7 +126,7 @@ class Log
     /**
      * Set timestamp in seconds when log occurred
      *
-     * @param float $timestamp (required)
+     * @param  float  $timestamp (required)
      * @return void
      */
     public function setTimestamp(float $timestamp): void
@@ -141,7 +147,7 @@ class Log
     /**
      * Set main message
      *
-     * @param string $message (required, for example 'Collection abcd1234 not found')
+     * @param  string  $message (required, for example 'Collection abcd1234 not found')
      * @return void
      */
     public function setMessage(string $message): void
@@ -162,7 +168,7 @@ class Log
     /**
      * Set a custom namespace for easier categorizing
      *
-     * @param string $namespace (required, for example 'api')
+     * @param  string  $namespace (required, for example 'api')
      * @return void
      */
     public function setNamespace(string $namespace): void
@@ -183,7 +189,7 @@ class Log
     /**
      * Set the action that caused this log
      *
-     * @param string $action (required, for example 'databaseController.deleteDocument' or 'functionsWorker.executeFunction')
+     * @param  string  $action (required, for example 'databaseController.deleteDocument' or 'functionsWorker.executeFunction')
      * @return void
      */
     public function setAction(string $action): void
@@ -204,7 +210,7 @@ class Log
     /**
      * Set identificator of server where log happened
      *
-     * @param string|null $server (required, for example 'digitalocean-us-005')
+     * @param  string|null  $server (required, for example 'digitalocean-us-005')
      * @return void
      */
     public function setServer(?string $server): void
@@ -225,7 +231,7 @@ class Log
     /**
      * Set version of application for easier bug hunting
      *
-     * @param string $version (required, for example '0.11.2')
+     * @param  string  $version (required, for example '0.11.2')
      * @return void
      */
     public function setVersion(string $version): void
@@ -246,8 +252,9 @@ class Log
     /**
      * Set version of application for easier bug hunting
      *
-     * @param string $environment (required, can be ENVIRONMENT_PRODUCTION or ENVIRONMENT_STAGING)
+     * @param  string  $environment (required, can be ENVIRONMENT_PRODUCTION or ENVIRONMENT_STAGING)
      * @return void
+     *
      * @throws Exception
      */
     public function setEnvironment(string $environment): void
@@ -276,8 +283,8 @@ class Log
     /**
      * Add tags (labels)
      *
-     * @param string $key
-     * @param string $value
+     * @param  string  $key
+     * @param  string  $value
      * @return void
      */
     public function addTag(string $key, string $value): void
@@ -298,11 +305,11 @@ class Log
     /**
      * Add extra metadata of log
      *
-     * @param string $key
+     * @param  string  $key
      * @param $value
      * @return void
      */
-    public function addExtra(string $key, mixed $value): void 
+    public function addExtra(string $key, mixed $value): void
     {
         $this->extra[$key] = $value;
     }
@@ -312,7 +319,7 @@ class Log
      *
      * @return array<string, mixed>
      */
-    public function getExtra(): array 
+    public function getExtra(): array
     {
         return $this->extra;
     }
@@ -320,7 +327,7 @@ class Log
     /**
      * Set user who caused the log
      *
-     * @param User $user
+     * @param  User  $user
      * @return void
      */
     public function setUser(User $user): void
@@ -341,7 +348,7 @@ class Log
     /**
      * Add reproduction step
      *
-     * @param Breadcrumb $breadcrumb
+     * @param  Breadcrumb  $breadcrumb
      * @return void
      */
     public function addBreadcrumb(Breadcrumb $breadcrumb): void
