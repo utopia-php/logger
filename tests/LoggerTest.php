@@ -183,5 +183,12 @@ class LoggerTest extends TestCase
         $logger = new Logger($adapter);
         $response = $logger->addLog($log);
         $this->assertEquals(200, $response);
+
+        // Test HoneyBadger
+        $honebadgerkey = \getenv('TEST_HONEYBADGER_KEY');
+        $adapter = new HoneyBadger($honebadgerkey ? $honebadgerkey : '');
+        $logger = new Logger($adapter);
+        $response = $logger->addLog($log);
+        $this->assertEquals(201, $response);
     }
 }
