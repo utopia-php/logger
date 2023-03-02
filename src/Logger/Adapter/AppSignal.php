@@ -24,21 +24,22 @@ class AppSignal extends Adapter
      */
     public static function getName(): string
     {
-        return "appSignal";
+        return 'appSignal';
     }
 
     /**
      * Push log to external provider
      *
-     * @param Log $log
+     * @param  Log  $log
      * @return int
+     *
      * @throws Exception
      */
     public function push(Log $log): int
     {
         $params = [];
 
-        foreach($log->getExtra() as $paramKey => $paramValue) {
+        foreach ($log->getExtra() as $paramKey => $paramValue) {
             $params[$paramKey] = var_export($paramValue, true);
         }
 
@@ -51,64 +52,64 @@ class AppSignal extends Adapter
                 'category' => $breadcrumb->getCategory(),
                 'action' => $breadcrumb->getMessage(),
                 'metadata' => [
-                    'type' => $breadcrumb->getType()
-                ]
+                    'type' => $breadcrumb->getType(),
+                ],
             ]);
         }
 
-        $tags = array();
+        $tags = [];
 
-        foreach($log->getTags() as $tagKey => $tagValue) {
+        foreach ($log->getTags() as $tagKey => $tagValue) {
             $tags[$tagKey] = $tagValue;
         }
 
-        if(!empty($log->getType())) {
+        if (! empty($log->getType())) {
             $tags['type'] = $log->getType();
         }
-        if(!empty($log->getUser()) &&  !empty($log->getUser()->getId())) {
+        if (! empty($log->getUser()) && ! empty($log->getUser()->getId())) {
             $tags['userId'] = $log->getUser()->getId();
         }
-        if(!empty($log->getUser()) &&  !empty($log->getUser()->getUsername())) {
+        if (! empty($log->getUser()) && ! empty($log->getUser()->getUsername())) {
             $tags['userName'] = $log->getUser()->getUsername();
         }
-        if(!empty($log->getUser()) &&  !empty($log->getUser()->getEmail())) {
+        if (! empty($log->getUser()) && ! empty($log->getUser()->getEmail())) {
             $tags['userEmail'] = $log->getUser()->getEmail();
         }
 
-        $tags['sdk'] = 'utopia-logger/' . Logger::LIBRARY_VERSION;
+        $tags['sdk'] = 'utopia-logger/'.Logger::LIBRARY_VERSION;
 
         $requestBody = [
-            'timestamp'=> \intval($log->getTimestamp()),
-            'namespace'=> $log->getNamespace(),
-            'error'=> [
-                'name'=> $log->getMessage(),
-                'message'=> $log->getMessage(),
-                'backtrace'=> []
+            'timestamp' => \intval($log->getTimestamp()),
+            'namespace' => $log->getNamespace(),
+            'error' => [
+                'name' => $log->getMessage(),
+                'message' => $log->getMessage(),
+                'backtrace' => [],
             ],
-            'environment'=> [
-                'environment'=> $log->getEnvironment(),
-                'server'=> $log->getServer(),
-                'version'=> $log->getVersion(),
+            'environment' => [
+                'environment' => $log->getEnvironment(),
+                'server' => $log->getServer(),
+                'version' => $log->getVersion(),
             ],
-            'revision'=> $log->getVersion(),
-            'action'=> $log->getAction(),
-            'params'=> $params,
-            'tags'=> $tags,
-            'breadcrumbs' => $breadcrumbsArray
+            'revision' => $log->getVersion(),
+            'action' => $log->getAction(),
+            'params' => $params,
+            'tags' => $tags,
+            'breadcrumbs' => $breadcrumbsArray,
         ];
 
         // init curl object
         $ch = \curl_init();
 
         // define options
-        $optArray = array(
-            CURLOPT_URL => 'https://appsignal-endpoint.net/collect?api_key=' . $this->apiKey . '&version=1.3.19',
+        $optArray = [
+            CURLOPT_URL => 'https://appsignal-endpoint.net/collect?api_key='.$this->apiKey.'&version=1.3.19',
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_POST => true,
             CURLOPT_POSTFIELDS => \json_encode($requestBody),
             CURLOPT_HEADEROPT => \CURLHEADER_UNIFIED,
-            CURLOPT_HTTPHEADER => array('Content-Type: application/json')
-        );
+            CURLOPT_HTTPHEADER => ['Content-Type: application/json'],
+        ];
 
         // apply those options
         \curl_setopt_array($ch, $optArray);
@@ -117,8 +118,8 @@ class AppSignal extends Adapter
         $result = \curl_exec($ch);
         $response = \curl_getinfo($ch, \CURLINFO_HTTP_CODE);
 
-        if(!$result && $response >= 400) {
-            throw new Exception("Log could not be pushed with status code " . $response . ": " . \curl_error($ch));
+        if (! $result && $response >= 400) {
+            throw new Exception('Log could not be pushed with status code '.$response.': '.\curl_error($ch));
         }
 
         \curl_close($ch);
@@ -129,7 +130,7 @@ class AppSignal extends Adapter
     /**
      * AppSignal constructor.
      *
-     * @param string $configKey
+     * @param  string  $configKey
      */
     public function __construct(string $configKey)
     {
@@ -143,7 +144,7 @@ class AppSignal extends Adapter
             Log::TYPE_DEBUG,
             Log::TYPE_VERBOSE,
             Log::TYPE_WARNING,
-            Log::TYPE_ERROR
+            Log::TYPE_ERROR,
         ];
     }
 
@@ -162,7 +163,7 @@ class AppSignal extends Adapter
             Log::TYPE_DEBUG,
             Log::TYPE_VERBOSE,
             Log::TYPE_WARNING,
-            Log::TYPE_ERROR
+            Log::TYPE_ERROR,
         ];
     }
 }

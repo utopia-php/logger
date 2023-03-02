@@ -13,12 +13,12 @@ abstract class Adapter
      */
     abstract public static function getName(): string;
 
-
     /**
      * Push log to external provider
      *
-     * @param Log $log
+     * @param  Log  $log
      * @return int
+     *
      * @throws Exception
      */
     abstract public function push(Log $log): int;
@@ -30,14 +30,12 @@ abstract class Adapter
      */
     abstract public function getSupportedTypes(): array;
 
-
     /**
      * Return a list of environment types supported by Adapter
      *
      * @return string[]
      */
     abstract public function getSupportedEnvironments(): array;
-
 
     /**
      * Return a list of breadcrumb types supported by Adapter
@@ -49,8 +47,9 @@ abstract class Adapter
     /**
      * Validate a log for compatibility with specific adapter.
      *
-     * @param Log $log
+     * @param  Log  $log
      * @return bool
+     *
      * @throws Exception
      */
     public function validate(Log $log): bool
@@ -59,16 +58,16 @@ abstract class Adapter
         $supportedEnvironments = $this->getSupportedEnvironments();
         $supportedBreadcrumbTypes = $this->getSupportedBreadcrumbTypes();
 
-        if(!\in_array($log->getType(), $supportedLogTypes)) {
-            throw new Exception("Supported log types for this adapter are: " . \implode(", ", $supportedLogTypes));
+        if (! \in_array($log->getType(), $supportedLogTypes)) {
+            throw new Exception('Supported log types for this adapter are: '.\implode(', ', $supportedLogTypes));
         }
-        if(!\in_array($log->getEnvironment(), $supportedEnvironments)) {
-            throw new Exception("Supported environments for this adapter are: " . \implode(", ", $supportedEnvironments));
+        if (! \in_array($log->getEnvironment(), $supportedEnvironments)) {
+            throw new Exception('Supported environments for this adapter are: '.\implode(', ', $supportedEnvironments));
         }
 
-        foreach($log->getBreadcrumbs() as $breadcrumb) {
-            if(!\in_array($breadcrumb->getType(), $supportedBreadcrumbTypes)) {
-                throw new Exception("Supported breadcrumb types for this adapter are: " . \implode(", ", $supportedBreadcrumbTypes));
+        foreach ($log->getBreadcrumbs() as $breadcrumb) {
+            if (! \in_array($breadcrumb->getType(), $supportedBreadcrumbTypes)) {
+                throw new Exception('Supported breadcrumb types for this adapter are: '.\implode(', ', $supportedBreadcrumbTypes));
             }
         }
 

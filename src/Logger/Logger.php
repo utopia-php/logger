@@ -6,13 +6,14 @@ use Exception;
 
 class Logger
 {
-    const LIBRARY_VERSION = "0.1.0";
+    const LIBRARY_VERSION = '0.1.0';
+
     const PROVIDERS = [
-        "raygun",
-        "sentry",
-        "appSignal",
-        "logOwl",
-        "dynatrace"
+        'raygun',
+        'sentry',
+        'appSignal',
+        'logOwl',
+        'dynatrace',
     ];
 
     /**
@@ -20,11 +21,10 @@ class Logger
      */
     protected Adapter $adapter;
 
-
     /**
      * Logger constructor.
      *
-     * @param Adapter $adapter
+     * @param  Adapter  $adapter
      */
     public function __construct(Adapter $adapter)
     {
@@ -34,14 +34,15 @@ class Logger
     /**
      * Store new log. Currently, it is instantly pushed to Adapter, but in future it could pool to increase performance.
      *
-     * @param Log $log
+     * @param  Log  $log
      * @return int
+     *
      * @throws Exception
      */
     public function addLog(Log $log): int
     {
         // Validate log
-        if(
+        if (
             empty($log->getAction()) ||
             empty($log->getEnvironment()) ||
             empty($log->getMessage()) ||
@@ -51,7 +52,7 @@ class Logger
             throw new Exception('Log is not ready to be pushed.');
         }
 
-        if($this->adapter->validate($log)) {
+        if ($this->adapter->validate($log)) {
             // Push log
             return $this->adapter->push($log);
         }
@@ -64,7 +65,7 @@ class Logger
      *
      * @return string[]
      */
-    static public function getProviders(): array
+    public static function getProviders(): array
     {
         return Logger::PROVIDERS;
     }
@@ -72,13 +73,13 @@ class Logger
     /**
      * Check if provider is available
      *
-     * @param string $providerName
+     * @param  string  $providerName
      * @return bool
      */
-    static public function hasProvider(string $providerName): bool
+    public static function hasProvider(string $providerName): bool
     {
         foreach (Logger::PROVIDERS as $registeredProviderName) {
-            if($registeredProviderName === $providerName) {
+            if ($registeredProviderName === $providerName) {
                 return true;
             }
         }
