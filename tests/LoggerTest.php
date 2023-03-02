@@ -184,7 +184,7 @@ class LoggerTest extends TestCase
         $this->assertEquals(200, $response);
 
         // Test Dynatrace
-        $adapter = new Dynatrace(\getenv("TEST_DYNATRACE_KEY").';'.\getenv("TEST_DYNATRACE_ENV_ID"));
+        $adapter = new Dynatrace(\getenv('TEST_DYNATRACE_KEY').';'.\getenv('TEST_DYNATRACE_ENV_ID'));
         $logger = new Logger($adapter);
         $response = $logger->addLog($log);
         $this->assertEquals(201, $response);
