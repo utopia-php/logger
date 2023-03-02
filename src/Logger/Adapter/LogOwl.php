@@ -31,7 +31,7 @@ class LogOwl extends Adapter
      */
     public static function getName(): string
     {
-        return "logOwl";
+        return 'logOwl';
     }
 
     /**
@@ -41,7 +41,7 @@ class LogOwl extends Adapter
      */
     public static function getAdapterType(): string
     {
-        return "utopia-logger";
+        return 'utopia-logger';
     }
 
     /**
@@ -57,8 +57,9 @@ class LogOwl extends Adapter
     /**
      * Push log to external provider
      *
-     * @param Log $log
+     * @param  Log  $log
      * @return int
+     *
      * @throws Exception
      */
     public function push(Log $log): int
@@ -69,7 +70,7 @@ class LogOwl extends Adapter
         $id = empty($log->getUser()) ? null : $log->getUser()->getId();
         $email = empty($log->getUser()) ? null : $log->getUser()->getEmail();
         $username = empty($log->getUser()) ? null : $log->getUser()->getUsername();
-        
+
         $breadcrumbsObject = $log->getBreadcrumbs();
         $breadcrumbsArray = [];
 
@@ -89,39 +90,39 @@ class LogOwl extends Adapter
             'line' => $line,
             'stacktrace' => $trace,
             'badges' => [
-                'environment'=> $log->getEnvironment(),
+                'environment' => $log->getEnvironment(),
                 'namespace' => $log->getNamespace(),
                 'version' => $log->getVersion(),
                 'message' => $log->getMessage(),
                 'id' => $id,
                 '$email' => $email,
-                '$username' => $username
+                '$username' => $username,
             ],
             'type' => $log->getType(),
-            'metrics'=> [
-                'platform' => $log->getServer()
+            'metrics' => [
+                'platform' => $log->getServer(),
             ],
-            'logs'=> $breadcrumbsArray,
+            'logs' => $breadcrumbsArray,
             'timestamp' => \intval($log->getTimestamp()),
             'adapter' => [
                 'name' => $this->getName(),
                 'type' => $this->getAdapterType(),
-                'version' => $this->getAdapterVersion()
-            ]
+                'version' => $this->getAdapterVersion(),
+            ],
         ];
 
         // init curl object
         $ch = \curl_init();
 
         // define options
-        $optArray = array(
-            CURLOPT_URL => $this->logOwlHost . $log->getType(),
+        $optArray = [
+            CURLOPT_URL => $this->logOwlHost.$log->getType(),
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_POST => true,
             CURLOPT_POSTFIELDS => \json_encode($requestBody),
             CURLOPT_HEADEROPT => \CURLHEADER_UNIFIED,
-            CURLOPT_HTTPHEADER => array('Content-Type: application/json')
-        );
+            CURLOPT_HTTPHEADER => ['Content-Type: application/json'],
+        ];
 
         // apply those options
         \curl_setopt_array($ch, $optArray);
@@ -130,8 +131,8 @@ class LogOwl extends Adapter
         $result = curl_exec($ch);
         $response = curl_getinfo($ch, \CURLINFO_HTTP_CODE);
 
-        if(!$result && $response >= 400) {
-            throw new Exception("Log could not be pushed with status code " . $response . ": " . \curl_error($ch));
+        if (! $result && $response >= 400) {
+            throw new Exception('Log could not be pushed with status code '.$response.': '.\curl_error($ch));
         }
 
         \curl_close($ch);
@@ -142,23 +143,23 @@ class LogOwl extends Adapter
     /**
      * LogOwl constructor.
      *
-     * @param string $configKey
+     * @param  string  $configKey
      */
     public function __construct(string $configKey)
     {
-        $configChunks = \explode(";", $configKey);
+        $configChunks = \explode(';', $configKey);
         $this->ticket = $configChunks[0];
         $this->logOwlHost = 'https://api.logowl.io/logging/';
 
-        if(count($configChunks) > 1 && !empty($configChunks[1])) {
+        if (count($configChunks) > 1 && ! empty($configChunks[1])) {
             $this->logOwlHost = $configChunks[1];
         }
     }
-    
+
     public function getSupportedTypes(): array
     {
         return [
-            Log::TYPE_ERROR
+            Log::TYPE_ERROR,
         ];
     }
 
@@ -166,7 +167,7 @@ class LogOwl extends Adapter
     {
         return [
             Log::ENVIRONMENT_STAGING,
-            Log::ENVIRONMENT_PRODUCTION
+            Log::ENVIRONMENT_PRODUCTION,
         ];
     }
 
@@ -176,7 +177,7 @@ class LogOwl extends Adapter
             Log::TYPE_INFO,
             Log::TYPE_DEBUG,
             Log::TYPE_WARNING,
-            Log::TYPE_ERROR
+            Log::TYPE_ERROR,
         ];
     }
 }
