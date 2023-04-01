@@ -176,6 +176,13 @@ class LoggerTest extends TestCase
         $response = $logger->addLog($log);
         $this->assertEquals(202, $response);
 
+        // Test LogOwl
+        $logOwlKey = \getenv('TEST_LOGOWL_KEY');
+        $adapter = new LogOwl($logOwlKey ? $logOwlKey : '');
+        $logger = new Logger($adapter);
+        $response = $logger->addLog($log);
+        $this->assertEquals(200, $response);
+
         // Test RollBar
         $rollBarKey = \getenv('TEST_ROLLBAR_KEY');
         $adapter = new RollBar($rollBarKey ? $rollBarKey : '');
