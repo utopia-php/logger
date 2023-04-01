@@ -7,11 +7,14 @@ use Utopia\Logger\Log;
 use Utopia\Logger\Logger;
 
 // Reference Material
-// [DOCS FROM ADAPTER PROVIDER]
+// https://docs.rollbar.com/reference/create-item
 
 class RollBar extends Adapter
 {
-    // TODO: Define protected variables with keys required for authentication with external Adapter API
+
+    /**
+     * @var string (required, can be found in Appsignal -> Project -> App Settings -> Push & deploy -> Push Key)
+     */
     protected string $apiKey;
 
     /**
@@ -32,7 +35,6 @@ class RollBar extends Adapter
      */
     public function push(Log $log): int
     {
-        // TODO: Implement HTTP API request that submit a log into external server. For building HTTP request, use `curl_exec()`, just like all other adapters
         $breadcrumbsObject = $log->getBreadcrumbs();
         $breadcrumbsArray = [];
 
@@ -48,19 +50,19 @@ class RollBar extends Adapter
         $tagsArray = [];
 
         foreach ($log->getTags() as $tagKey => $tagValue) {
-            \array_push($tagsArray, $tagKey.': '.$tagValue);
+            \array_push($tagsArray, $tagKey . ': ' . $tagValue);
         }
 
-        \array_push($tagsArray, 'type: '.$log->getType());
-        \array_push($tagsArray, 'environment: '.$log->getEnvironment());
-        \array_push($tagsArray, 'sdk: utopia-logger/'.Logger::LIBRARY_VERSION);
+        \array_push($tagsArray, 'type: ' . $log->getType());
+        \array_push($tagsArray, 'environment: ' . $log->getEnvironment());
+        \array_push($tagsArray, 'sdk: utopia-logger/' . Logger::LIBRARY_VERSION);
 
 
 
         // prepare log (request body)
         $requestBody = [
             'data' => [
-                'environment' =>  $log->getEnvironment(),
+                'environment' => $log->getEnvironment(),
                 'body' => [
                     'message' => [
                         'body' => $breadcrumb->getMessage()
@@ -75,8 +77,8 @@ class RollBar extends Adapter
                     'email' => $log->getUser()->getEmail(),
                     'username' => $log->getUser()->getUsername(),
                 ]
-            ] 
-        ]; 
+            ]
+        ];
 
 
 
@@ -90,7 +92,7 @@ class RollBar extends Adapter
             CURLOPT_POST => true,
             CURLOPT_POSTFIELDS => \json_encode($requestBody),
             CURLOPT_HEADEROPT => \CURLHEADER_UNIFIED,
-            CURLOPT_HTTPHEADER => ['Content-Type: application/json', 'X-Rollbar-Access-Token: '.$this->apiKey],
+            CURLOPT_HTTPHEADER => ['Content-Type: application/json', 'X-Rollbar-Access-Token: ' . $this->apiKey],
         ];
 
         // apply those options
@@ -100,27 +102,26 @@ class RollBar extends Adapter
         $result = \curl_exec($ch);
         $response = \curl_getinfo($ch, \CURLINFO_HTTP_CODE);
 
-        if (! $result && $response >= 400) {
-            throw new Exception('Log could not be pushed with status code '.$response.': '.\curl_error($ch));
+        if (!$result && $response >= 400) {
+            throw new Exception('Log could not be pushed with status code ' . $response . ': ' . \curl_error($ch));
         }
 
         \curl_close($ch);
 
         return $response;
-        
+
     }
 
     /**
-     * [ADAPTER_NAME] constructor.
+     * RollBar constructor.
      *
      * @param string $configKey
      */
     public function __construct(string $configKey)
     {
         $this->apiKey = $configKey;
-        // TODO: Fill protected variables with keys using values from constructor parameters
     }
-    
+
     public function getSupportedTypes(): array
     {
         return [
@@ -129,7 +130,6 @@ class RollBar extends Adapter
             Log::TYPE_WARNING,
             Log::TYPE_ERROR,
         ];
-        // TODO: Return array of supported log types, such as Log::TYPE_DEBUG or Log::TYPE_ERROR
     }
 
     public function getSupportedEnvironments(): array
@@ -138,7 +138,6 @@ class RollBar extends Adapter
             Log::ENVIRONMENT_STAGING,
             Log::ENVIRONMENT_PRODUCTION,
         ];
-        // TODO: Return array of supported environments, such as Log::ENVIRONMENT_STAGING or Log::ENVIRONMENT_PRODUCTION
     }
 
     public function getSupportedBreadcrumbTypes(): array
@@ -149,6 +148,5 @@ class RollBar extends Adapter
             Log::TYPE_WARNING,
             Log::TYPE_ERROR,
         ];
-        // TODO: Return array of supported breadcrumb types, such as Log::TYPE_WARNING or Log::TYPE_INFO
     }
 }
