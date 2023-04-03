@@ -6,7 +6,7 @@ This document is part of the Utopia contributors' guide. Before you continue rea
 
 Logger adapters help developers to store their logs on an external provider's servers that monitors, notifies and manages logs for them. Using such an external provider creates a flow that let you spot a bug as soon as possible and provides tools for proper tracking.
 
-Utopia is and will always be tech-agnostic, which means, we aren creating a tools based on technologies you already use and love, instead of creating a new tool-set for you. With that in mind, we accept all contributions with adapters for any third party providers.
+Utopia is and will always be tech-agnostic, which means, we are creating a tools based on technologies you already use and love, instead of creating a new tool-set for you. With that in mind, we accept all contributions with adapters for any third party providers.
 
 ## 1. Prerequisites
 
