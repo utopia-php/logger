@@ -54,19 +54,19 @@ class HoneyBadger extends Adapter
 
         $stackFrames = [];
 
-        if (isset($log->getExtra()['stackTrace'])) {
-            $detailedTrace = $log->getExtra()['stackTrace'];
+        if (isset($log->getExtra()['detailedTrace'])) {
+            $detailedTrace = $log->getExtra()['detailedTrace'];
             if (!is_array($detailedTrace)) {
-                throw new Exception("stackTrace must be an array");
+                throw new Exception("detailedTrace must be an array");
             }
             foreach ($detailedTrace as $trace) {
                 if (!is_array($trace)) {
-                    throw new Exception("stackTrace must be an array of arrays");
+                    throw new Exception("detailedTrace must be an array of arrays");
                 }
                 \array_push($stackFrames, [
-                    'number' => $trace['number'],
-                    'file' => $trace['file'],
-                    'method' => $trace['method'],
+                    'filename' => $trace['file'] ?? '',
+                    'lineno' => $trace['line'] ?? '',
+                    'function' => $trace['function'] ?? '',
                 ]);
             }
         }
