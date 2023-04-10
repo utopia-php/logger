@@ -2,6 +2,7 @@
 
 namespace Utopia\Logger\Adapter;
 
+use Exception;
 use Utopia\Logger\Adapter;
 use Utopia\Logger\Log;
 use Utopia\Logger\Logger;
@@ -58,6 +59,15 @@ class RollBar extends Adapter
         \array_push($tagsArray, 'sdk: utopia-logger/' . Logger::LIBRARY_VERSION);
 
 
+        if (! empty($log->getUser()) && ! empty($log->getUser()->getId())) {
+            $tags['userId'] = $log->getUser()->getId();
+        }
+        if (! empty($log->getUser()) && ! empty($log->getUser()->getUsername())) {
+            $tags['userName'] = $log->getUser()->getUsername();
+        }
+        if (! empty($log->getUser()) && ! empty($log->getUser()->getEmail())) {
+            $tags['userEmail'] = $log->getUser()->getEmail();
+        }
 
         // prepare log (request body)
         $requestBody = [
@@ -65,18 +75,13 @@ class RollBar extends Adapter
                 'environment' => $log->getEnvironment(),
                 'body' => [
                     'message' => [
-                        'body' => $breadcrumb->getMessage()
+                        'body' => $log->getMessage()
                     ],
                     'timestamp' => \intval($log->getTimestamp()),
                 ],
-                'trace_chain' => $breadcrumb,
+                'trace_chain' => $breadcrumbsArray,
                 'level' => $log->getType(),
-                'custom' => $tagsArray,
-                'person' => [
-                    'id' => $log->getUser()->getId(),
-                    'email' => $log->getUser()->getEmail(),
-                    'username' => $log->getUser()->getUsername(),
-                ]
+                'custom' => $tagsArray            
             ]
         ];
 
