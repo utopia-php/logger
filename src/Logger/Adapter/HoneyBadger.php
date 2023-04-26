@@ -21,13 +21,13 @@ class HoneyBadger extends Adapter
      */
     public static function getName(): string
     {
-        return "honeyBadger";
+        return 'honeyBadger';
     }
 
     /**
      * Push log to external provider
      *
-     * @param Log $log
+     * @param  Log  $log
      * @return int
      */
     public function push(Log $log): int
@@ -47,8 +47,8 @@ class HoneyBadger extends Adapter
                 'timestamp' => \intval($breadcrumb->getTimestamp()),
                 'message' => $breadcrumb->getMessage(),
                 'metadata' => [
-                    'exception' => $breadcrumb->getType()
-                ]
+                    'exception' => $breadcrumb->getType(),
+                ],
             ]);
         }
 
@@ -56,12 +56,12 @@ class HoneyBadger extends Adapter
 
         if (isset($log->getExtra()['detailedTrace'])) {
             $detailedTrace = $log->getExtra()['detailedTrace'];
-            if (!is_array($detailedTrace)) {
-                throw new Exception("detailedTrace must be an array");
+            if (! is_array($detailedTrace)) {
+                throw new Exception('detailedTrace must be an array');
             }
             foreach ($detailedTrace as $trace) {
-                if (!is_array($trace)) {
-                    throw new Exception("detailedTrace must be an array of arrays");
+                if (! is_array($trace)) {
+                    throw new Exception('detailedTrace must be an array of arrays');
                 }
                 \array_push($stackFrames, [
                     'filename' => $trace['file'] ?? '',
@@ -84,8 +84,8 @@ class HoneyBadger extends Adapter
                 'backtrace' => $stackFrames,
             ],
             'breadcrumbs' => [
-                "enabled" => true,
-                "trail" => $breadcrumbsArray
+                'enabled' => true,
+                'trail' => $breadcrumbsArray,
             ],
 
             'request' => [
@@ -94,7 +94,7 @@ class HoneyBadger extends Adapter
                 'context' => empty($log->getUser()) ? null : [
                     'user_id' => $log->getUser()->getId(),
                     'user_email' => $log->getUser()->getEmail(),
-                ]
+                ],
 
             ],
             'server' => [
@@ -105,19 +105,18 @@ class HoneyBadger extends Adapter
 
         ];
 
-
         // init curl object
         $ch = \curl_init();
 
         // define options
-        $optArray = array(
+        $optArray = [
             CURLOPT_URL => 'https://api.honeybadger.io/v1/notices',
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_POST => true,
             CURLOPT_POSTFIELDS => \json_encode($requestBody),
             CURLOPT_HEADEROPT => \CURLHEADER_UNIFIED,
-            CURLOPT_HTTPHEADER => array('Content-Type: application/json', 'X-API-Key: ' . $this->apiKey, 'Accept: application/json', 'User-Agent: utopia-logger/' . Logger::LIBRARY_VERSION)
-        );
+            CURLOPT_HTTPHEADER => ['Content-Type: application/json', 'X-API-Key: '.$this->apiKey, 'Accept: application/json', 'User-Agent: utopia-logger/'.Logger::LIBRARY_VERSION],
+        ];
 
         // apply those options
         \curl_setopt_array($ch, $optArray);
@@ -126,19 +125,19 @@ class HoneyBadger extends Adapter
         $result = \curl_exec($ch);
         $response = \curl_getinfo($ch, \CURLINFO_HTTP_CODE);
 
-
-        if (!$result && $response >= 400) {
-            throw new Exception("Log could not be pushed with status code " . $response . ": " . \curl_error($ch));
+        if (! $result && $response >= 400) {
+            throw new Exception('Log could not be pushed with status code '.$response.': '.\curl_error($ch));
         }
 
         \curl_close($ch);
 
         return $response;
     }
+
     /**
      * HoneyBadger constructor.
      *
-     * @param string $configKey
+     * @param  string  $configKey
      */
     public function __construct(string $configKey)
     {
@@ -152,7 +151,7 @@ class HoneyBadger extends Adapter
             Log::TYPE_DEBUG,
             Log::TYPE_VERBOSE,
             Log::TYPE_WARNING,
-            Log::TYPE_ERROR
+            Log::TYPE_ERROR,
         ];
     }
 
@@ -171,7 +170,7 @@ class HoneyBadger extends Adapter
             Log::TYPE_DEBUG,
             Log::TYPE_VERBOSE,
             Log::TYPE_WARNING,
-            Log::TYPE_ERROR
+            Log::TYPE_ERROR,
         ];
     }
 }

@@ -137,15 +137,15 @@ class LoggerTest extends TestCase
         $log->setNamespace('api');
         $log->setServer('digitalocean-us-001');
         $log->setType(Log::TYPE_ERROR);
-        $log->setVersion("0.11.5");
-        $log->setMessage("Document efgh5678 not found");
-        $log->setUser(new User("efgh5678", "abc@test.com", "John Doe"));
-        $log->addBreadcrumb(new Breadcrumb(Log::TYPE_DEBUG, "http", "DELETE /api/v1/database/abcd1234/efgh5678", \microtime(true) - 500));
-        $log->addBreadcrumb(new Breadcrumb(Log::TYPE_DEBUG, "auth", "Using API key", \microtime(true) - 400));
-        $log->addBreadcrumb(new Breadcrumb(Log::TYPE_INFO, "auth", "Authenticated with * Using API Key", \microtime(true) - 350));
-        $log->addBreadcrumb(new Breadcrumb(Log::TYPE_INFO, "database", "Found collection abcd1234", \microtime(true) - 300));
-        $log->addBreadcrumb(new Breadcrumb(Log::TYPE_DEBUG, "database", "Permission for collection abcd1234 met", \microtime(true) - 200));
-        $log->addBreadcrumb(new Breadcrumb(Log::TYPE_ERROR, "database", "Missing document when searching by ID!", \microtime(true)));
+        $log->setVersion('0.11.5');
+        $log->setMessage('Document efgh5678 not found');
+        $log->setUser(new User('efgh5678', 'abc@test.com', 'John Doe'));
+        $log->addBreadcrumb(new Breadcrumb(Log::TYPE_DEBUG, 'http', 'DELETE /api/v1/database/abcd1234/efgh5678', \microtime(true) - 500));
+        $log->addBreadcrumb(new Breadcrumb(Log::TYPE_DEBUG, 'auth', 'Using API key', \microtime(true) - 400));
+        $log->addBreadcrumb(new Breadcrumb(Log::TYPE_INFO, 'auth', 'Authenticated with * Using API Key', \microtime(true) - 350));
+        $log->addBreadcrumb(new Breadcrumb(Log::TYPE_INFO, 'database', 'Found collection abcd1234', \microtime(true) - 300));
+        $log->addBreadcrumb(new Breadcrumb(Log::TYPE_DEBUG, 'database', 'Permission for collection abcd1234 met', \microtime(true) - 200));
+        $log->addBreadcrumb(new Breadcrumb(Log::TYPE_ERROR, 'database', 'Missing document when searching by ID!', \microtime(true)));
         $log->addTag('sdk', 'Flutter');
         $log->addTag('sdkVersion', '0.0.1');
         $log->addTag('authMode', 'default');
@@ -155,7 +155,7 @@ class LoggerTest extends TestCase
         $log->addExtra('isExpected', true);
         $log->addExtra('file', '/User/example/server/src/server/server.js');
         $log->addExtra('line', '15');
-        $log->addExtra('stackTrace', [["number" => 15, "file" => "User/example/server/src/server/server.js", "method" => "runtime_error"]]);
+        $log->addExtra('stackTrace', [['number' => 15, 'file' => 'User/example/server/src/server/server.js', 'method' => 'runtime_error']]);
 
         // Test Sentry
         $adapter = new Sentry(\getenv('TEST_SENTRY_KEY').';'.\getenv('TEST_SENTRY_PROJECT_ID').';'.\getenv('TEST_SENTRY_HOST'));
