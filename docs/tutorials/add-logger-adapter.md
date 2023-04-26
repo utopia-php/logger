@@ -6,7 +6,7 @@ This document is part of the Utopia contributors' guide. Before you continue rea
 
 Logger adapters help developers to store their logs on an external provider's servers that monitors, notifies and manages logs for them. Using such an external provider creates a flow that let you spot a bug as soon as possible and provides tools for proper tracking.
 
-Utopia is and will always be tech-agnostic, which means, we aren creating a tools based on technologies you already use and love, instead of creating a new tool-set for you. With that in mind, we accept all contributions with adapters for any third party providers.
+Utopia is and will always be tech-agnostic, which means, we are creating a tools based on technologies you already use and love, instead of creating a new tool-set for you. With that in mind, we accept all contributions with adapters for any third party providers.
 
 ## 1. Prerequisites
 
@@ -24,7 +24,7 @@ This will redirect you from `github.com/utopia-php/logger` to `github.com/YOUR_U
 $ git clone [COPIED_URL]
 ```
 
-> To fork a repository, you will need a basic understanding of CLI and git-cli binaries installed. If you are a beginner, we recommend you to use `Github Desktop`. It is a really clean and simple visual Git client.
+> To clone a repository, you will need a basic understanding of CLI and git-cli binaries installed. If you are a beginner, we recommend you to use `Github Desktop`. It is a really clean and simple visual Git client.
 
 Finally, you will need to create a `feat-ZZZ-adapter` branch based on the `main` branch and switch to it. The `ZZZ` should represent the adapter name.
 
