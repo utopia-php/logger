@@ -90,10 +90,20 @@ Below is a list of supported adapters, and thier compatibly tested versions alon
 
 ## Tests
 
-To run all unit tests, use the following Docker command:
+If you need to install dependencies, run:
 
 ```bash
-docker run --rm -e TEST_RAYGUN_KEY=KKKK -e TEST_APPSIGNAL_KEY=XXXX -e TEST_SENTRY_DSN=XXXX -v $(pwd):$(pwd):rw -w $(pwd) php:8.0-cli-alpine sh -c "vendor/bin/phpunit --configuration phpunit.xml tests"
+docker run --rm --interactive --tty \
+  --volume $PWD:/app \
+  composer update --ignore-platform-reqs --optimize-autoloader --no-plugins --no-scripts --prefer-dist
+```
+
+To run all unit tests, prepare the `.env` file using `.env.example` as a template. Then, run:
+
+```bash
+docker run --rm --interactive --tty --env-file .env \
+  --volume $PWD:/app \
+  composer test
 ```
 
 > Make sure to replace `TEST_SENTRY_DSN` with actual keys from Sentry. 
@@ -105,7 +115,9 @@ docker run --rm -e TEST_RAYGUN_KEY=KKKK -e TEST_APPSIGNAL_KEY=XXXX -e TEST_SENTR
 To run static code analysis, use the following Psalm command:
 
 ```bash
-docker run --rm -v $(pwd):$(pwd):rw -w $(pwd) php:8.0-cli-alpine sh -c "vendor/bin/psalm --show-info=true"
+docker run --rm --interactive --tty \
+  --volume $PWD:/app \
+  composer check
 ```
 
 ## System Requirements

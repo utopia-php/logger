@@ -7,10 +7,22 @@
     "scripts": {
         "check": "./vendor/bin/phpstan analyse --level max src tests",
         "lint": "./vendor/bin/pint --test",
-        "format": "./vendor/bin/pint"
+        "format": "./vendor/bin/pint",
+        "test-unit": "./vendor/bin/phpunit --configuration phpunit.xml --testsuite unit --debug",
+        "test-e2e": "./vendor/bin/phpunit --configuration phpunit.xml --testsuite e2e --debug",
+        "test": [
+            "@test-unit",
+            "@test-e2e"
+        ]
     },
     "autoload": {
         "psr-4": {"Utopia\\Logger\\": "src/Logger"}
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Utopia\\Tests\\E2E\\":"tests/e2e",
+            "Utopia\\Tests\\Unit\\":"tests/unit"
+        }
     },
     "require": {
         "php": ">=8.0"
