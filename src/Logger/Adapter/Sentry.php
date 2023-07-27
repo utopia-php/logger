@@ -41,7 +41,6 @@ class Sentry extends Adapter
             throw new Exception("Invalid Sentry DSN format");
         }
 
-        // Reconstruct the URL without the scheme part to preserve the original scheme
         $urlWithoutScheme = $urlParts['host'] . $urlParts['path'];
 
         $this->sentryKey = $urlParts['user'];
