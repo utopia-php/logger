@@ -42,19 +42,23 @@ class Sentry extends Adapter
         }
 
         foreach (['scheme', 'host', 'path', 'user'] as $component) {
+            /** @phpstan-ignore-next-line */
             if (! isset($parsedDsn[$component]) || (isset($parsedDsn[$component]) && empty($parsedDsn[$component]))) {
                 throw new \Exception("The '$dsn' DSN must contain a scheme, a host, a user and a path component.");
             }
         }
 
+        /** @phpstan-ignore-next-line */
         if (! \in_array($parsedDsn['scheme'], ['http', 'https'], true)) {
             throw new \Exception("The scheme of the $dsn DSN must be either 'http' or 'https'");
         }
 
+        /** @phpstan-ignore-next-line */
         $segmentPaths = explode('/', $parsedDsn['path']);
         $projectId = array_pop($segmentPaths);
 
         $port = $parsedDsn['port'] ?? ($parsedDsn['scheme'] === 'http' ? 80 : 443);
+        /** @phpstan-ignore-next-line */
         $url = $parsedDsn['scheme'].'://'.$parsedDsn['host'];
 
         if (($parsedDsn['scheme'] === 'http' && $port !== 80) ||
@@ -64,8 +68,9 @@ class Sentry extends Adapter
         }
 
         $this->sentryHost = $url;
+        /** @phpstan-ignore-next-line */
         $this->sentryKey = $parsedDsn['user'];
-        $this->projectId = ltrim($projectId, '/');
+        $this->projectId = $projectId;
     }
 
     /**
