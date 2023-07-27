@@ -37,14 +37,14 @@ class Sentry extends Adapter
     {
         $urlParts = parse_url($dsn);
 
-        if (!isset($urlParts['user']) || !isset($urlParts['host']) || !isset($urlParts['path'])) {
-            throw new Exception("Invalid Sentry DSN format");
+        if (! isset($urlParts['user']) || ! isset($urlParts['host']) || ! isset($urlParts['path'])) {
+            throw new Exception('Invalid Sentry DSN format');
         }
 
-        $urlWithoutScheme = $urlParts['host'] . $urlParts['path'];
+        $urlWithoutScheme = $urlParts['host'].$urlParts['path'];
 
         $this->sentryKey = $urlParts['user'];
-        $this->sentryHost = $urlParts['scheme'] . '://' . $urlWithoutScheme;
+        $this->sentryHost = $urlParts['scheme'].'://'.$urlWithoutScheme;
         $this->projectId = ltrim($urlParts['path'], '/');
     }
 
