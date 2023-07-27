@@ -35,17 +35,37 @@ class Sentry extends Adapter
      */
     public function __construct(string $dsn)
     {
-        $urlParts = parse_url($dsn);
+        $parsedDsn = parse_url($dsn);
 
-        if (! isset($urlParts['user']) || ! isset($urlParts['host']) || ! isset($urlParts['path'])) {
-            throw new Exception('Invalid Sentry DSN format');
+        if ($parsedDsn === false) {
+            throw new \Exception("The '$dsn' DSN is invalid.");
         }
 
-        $urlWithoutScheme = $urlParts['host'].$urlParts['path'];
+        foreach (['scheme', 'host', 'path', 'user'] as $component) {
+            if (! isset($parsedDsn[$component]) || (isset($parsedDsn[$component]) && empty($parsedDsn[$component]))) {
+                throw new \Exception("The '$dsn' DSN must contain a scheme, a host, a user and a path component.");
+            }
+        }
 
-        $this->sentryKey = $urlParts['user'];
-        $this->sentryHost = $urlParts['scheme'].'://'.$urlWithoutScheme;
-        $this->projectId = ltrim($urlParts['path'], '/');
+        if (! \in_array($parsedDsn['scheme'], ['http', 'https'], true)) {
+            throw new \Exception("The scheme of the $dsn DSN must be either 'http' or 'https'");
+        }
+
+        $segmentPaths = explode('/', $parsedDsn['path']);
+        $projectId = array_pop($segmentPaths);
+
+        $port = $parsedDsn['port'] ?? ($parsedDsn['scheme'] === 'http' ? 80 : 443);
+        $url = $parsedDsn['scheme'].'://'.$parsedDsn['host'];
+
+        if (($parsedDsn['scheme'] === 'http' && $port !== 80) ||
+            ($parsedDsn['scheme'] === 'https' && $port !== 443)
+        ) {
+            $url .= ':'.$port;
+        }
+
+        $this->sentryHost = $url;
+        $this->sentryKey = $parsedDsn['user'];
+        $this->projectId = ltrim($projectId, '/');
     }
 
     /**
