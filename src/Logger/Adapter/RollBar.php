@@ -12,7 +12,6 @@ use Utopia\Logger\Logger;
 
 class RollBar extends Adapter
 {
-
     /**
      * @var string (required, can be found in Appsignal -> Project -> App Settings -> Push & deploy -> Push Key)
      */
@@ -25,13 +24,13 @@ class RollBar extends Adapter
      */
     public static function getName(): string
     {
-        return "rollBar";
+        return 'rollBar';
     }
 
     /**
      * Push log to external provider
      *
-     * @param Log $log
+     * @param  Log  $log
      * @return int
      */
     public function push(Log $log): int
@@ -51,13 +50,12 @@ class RollBar extends Adapter
         $tagsArray = [];
 
         foreach ($log->getTags() as $tagKey => $tagValue) {
-            \array_push($tagsArray, $tagKey . ': ' . $tagValue);
+            \array_push($tagsArray, $tagKey.': '.$tagValue);
         }
 
-        \array_push($tagsArray, 'type: ' . $log->getType());
-        \array_push($tagsArray, 'environment: ' . $log->getEnvironment());
-        \array_push($tagsArray, 'sdk: utopia-logger/' . Logger::LIBRARY_VERSION);
-
+        \array_push($tagsArray, 'type: '.$log->getType());
+        \array_push($tagsArray, 'environment: '.$log->getEnvironment());
+        \array_push($tagsArray, 'sdk: utopia-logger/'.Logger::LIBRARY_VERSION);
 
         if (! empty($log->getUser()) && ! empty($log->getUser()->getId())) {
             $tags['userId'] = $log->getUser()->getId();
@@ -75,17 +73,15 @@ class RollBar extends Adapter
                 'environment' => $log->getEnvironment(),
                 'body' => [
                     'message' => [
-                        'body' => $log->getMessage()
+                        'body' => $log->getMessage(),
                     ],
                     'timestamp' => \intval($log->getTimestamp()),
                 ],
                 'trace_chain' => $breadcrumbsArray,
                 'level' => $log->getType(),
-                'custom' => $tagsArray            
-            ]
+                'custom' => $tagsArray,
+            ],
         ];
-
-
 
         // init curl object
         $ch = \curl_init();
@@ -97,7 +93,7 @@ class RollBar extends Adapter
             CURLOPT_POST => true,
             CURLOPT_POSTFIELDS => \json_encode($requestBody),
             CURLOPT_HEADEROPT => \CURLHEADER_UNIFIED,
-            CURLOPT_HTTPHEADER => ['Content-Type: application/json', 'X-Rollbar-Access-Token: ' . $this->apiKey],
+            CURLOPT_HTTPHEADER => ['Content-Type: application/json', 'X-Rollbar-Access-Token: '.$this->apiKey],
         ];
 
         // apply those options
@@ -107,20 +103,19 @@ class RollBar extends Adapter
         $result = \curl_exec($ch);
         $response = \curl_getinfo($ch, \CURLINFO_HTTP_CODE);
 
-        if (!$result && $response >= 400) {
-            throw new Exception('Log could not be pushed with status code ' . $response . ': ' . \curl_error($ch));
+        if (! $result && $response >= 400) {
+            throw new Exception('Log could not be pushed with status code '.$response.': '.\curl_error($ch));
         }
 
         \curl_close($ch);
 
         return $response;
-
     }
 
     /**
      * RollBar constructor.
      *
-     * @param string $configKey
+     * @param  string  $configKey
      */
     public function __construct(string $configKey)
     {
