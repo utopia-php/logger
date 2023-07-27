@@ -156,7 +156,7 @@ class LoggerTest extends TestCase
         $log->addExtra('line', '15');
 
         // Test Sentry
-        $adapter = new Sentry(\getenv('TEST_SENTRY_KEY').';'.\getenv('TEST_SENTRY_PROJECT_ID').';'.\getenv('TEST_SENTRY_HOST'));
+        $adapter = new Sentry(\getenv('TEST_SENTRY_DSN'));
         $logger = new Logger($adapter);
         $response = $logger->addLog($log);
         $this->assertEquals(200, $response);

@@ -29,6 +29,27 @@ class Sentry extends Adapter
     protected string $sentryHost;
 
     /**
+     * Sentry constructor.
+     *
+     * @param  string  $dsn
+     */
+    public function __construct(string $dsn)
+    {
+        $urlParts = parse_url($dsn);
+
+        if (!isset($urlParts['user']) || !isset($urlParts['host']) || !isset($urlParts['path'])) {
+            throw new Exception("Invalid Sentry DSN format");
+        }
+
+        // Reconstruct the URL without the scheme part to preserve the original scheme
+        $urlWithoutScheme = $urlParts['host'] . $urlParts['path'];
+
+        $this->sentryKey = $urlParts['user'];
+        $this->sentryHost = $urlParts['scheme'] . '://' . $urlWithoutScheme;
+        $this->projectId = ltrim($urlParts['path'], '/');
+    }
+
+    /**
      * Return unique adapter name
      *
      * @return string
@@ -143,23 +164,6 @@ class Sentry extends Adapter
         \curl_close($ch);
 
         return $response;
-    }
-
-    /**
-     * Sentry constructor.
-     *
-     * @param  string  $configKey
-     */
-    public function __construct(string $configKey)
-    {
-        $configChunks = \explode(';', $configKey);
-        $this->sentryKey = $configChunks[0];
-        $this->projectId = $configChunks[1];
-        $this->sentryHost = 'https://sentry.io';
-
-        if (count($configChunks) > 2 && ! empty($configChunks[2])) {
-            $this->sentryHost = $configChunks[2];
-        }
     }
 
     public function getSupportedTypes(): array
