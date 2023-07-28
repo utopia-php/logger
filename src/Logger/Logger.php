@@ -13,6 +13,7 @@ class Logger
         'sentry',
         'appSignal',
         'logOwl',
+        'bugsnag',
     ];
 
     /**

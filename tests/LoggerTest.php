@@ -2,6 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 use Utopia\Logger\Adapter\AppSignal;
+use Utopia\Logger\Adapter\Bugsnag;
 use Utopia\Logger\Adapter\LogOwl;
 use Utopia\Logger\Adapter\Raygun;
 use Utopia\Logger\Adapter\Sentry;
@@ -178,6 +179,13 @@ class LoggerTest extends TestCase
         // Test LogOwl
         $logOwlKey = \getenv('TEST_LOGOWL_KEY');
         $adapter = new LogOwl($logOwlKey ? $logOwlKey : '');
+        $logger = new Logger($adapter);
+        $response = $logger->addLog($log);
+        $this->assertEquals(200, $response);
+
+        // Test Bugsnag
+        $bugsnagKey = \getenv('TEST_BUGSNAG_KEY');
+        $adapter = new Bugsnag($bugsnagKey ? $bugsnagKey : '');
         $logger = new Logger($adapter);
         $response = $logger->addLog($log);
         $this->assertEquals(200, $response);
