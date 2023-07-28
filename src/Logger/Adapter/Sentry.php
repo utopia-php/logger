@@ -41,35 +41,32 @@ class Sentry extends Adapter
             throw new \Exception("The '$dsn' DSN is invalid.");
         }
 
-        foreach (['scheme', 'host', 'path', 'user'] as $component) {
-            /** @phpstan-ignore-next-line */
-            if (! isset($parsedDsn[$component]) || (isset($parsedDsn[$component]) && empty($parsedDsn[$component]))) {
-                throw new \Exception("The '$dsn' DSN must contain a scheme, a host, a user and a path component.");
-            }
+        $host = $parsedDsn['host'] ?? '';
+        $path = $parsedDsn['path'] ?? '';
+        $user = $parsedDsn['user'] ?? '';
+        $scheme = $parsedDsn['scheme'] ?? '';
+
+        if (empty($scheme) || empty($host) || empty($path) || empty($user)) {
+            throw new \Exception("The '$dsn' DSN must contain a scheme, a host, a user and a path component.");
         }
 
-        /** @phpstan-ignore-next-line */
-        if (! \in_array($parsedDsn['scheme'], ['http', 'https'], true)) {
+        if (! \in_array($scheme, ['http', 'https'], true)) {
             throw new \Exception("The scheme of the $dsn DSN must be either 'http' or 'https'");
         }
 
-        /** @phpstan-ignore-next-line */
-        $segmentPaths = explode('/', $parsedDsn['path']);
+        $segmentPaths = explode('/', $path);
         $projectId = array_pop($segmentPaths);
 
-        $port = $parsedDsn['port'] ?? ($parsedDsn['scheme'] === 'http' ? 80 : 443);
-        /** @phpstan-ignore-next-line */
-        $url = $parsedDsn['scheme'].'://'.$parsedDsn['host'];
-
-        if (($parsedDsn['scheme'] === 'http' && $port !== 80) ||
-            ($parsedDsn['scheme'] === 'https' && $port !== 443)
+        $url = $scheme.'://'.$host;
+        $port = $parsedDsn['port'] ?? ($scheme === 'http' ? 80 : 443);
+        if (($scheme === 'http' && $port !== 80) ||
+            ($scheme === 'https' && $port !== 443)
         ) {
             $url .= ':'.$port;
         }
 
         $this->sentryHost = $url;
-        /** @phpstan-ignore-next-line */
-        $this->sentryKey = $parsedDsn['user'];
+        $this->sentryKey = $user;
         $this->projectId = $projectId;
     }
 
