@@ -29,6 +29,48 @@ class Sentry extends Adapter
     protected string $sentryHost;
 
     /**
+     * Sentry constructor.
+     *
+     * @param  string  $dsn
+     */
+    public function __construct(string $dsn)
+    {
+        $parsedDsn = parse_url($dsn);
+
+        if ($parsedDsn === false) {
+            throw new \Exception("The '$dsn' DSN is invalid.");
+        }
+
+        $host = $parsedDsn['host'] ?? '';
+        $path = $parsedDsn['path'] ?? '';
+        $user = $parsedDsn['user'] ?? '';
+        $scheme = $parsedDsn['scheme'] ?? '';
+
+        if (empty($scheme) || empty($host) || empty($path) || empty($user)) {
+            throw new \Exception("The '$dsn' DSN must contain a scheme, a host, a user and a path component.");
+        }
+
+        if (! \in_array($scheme, ['http', 'https'], true)) {
+            throw new \Exception("The scheme of the $dsn DSN must be either 'http' or 'https'");
+        }
+
+        $segmentPaths = explode('/', $path);
+        $projectId = array_pop($segmentPaths);
+
+        $url = $scheme.'://'.$host;
+        $port = $parsedDsn['port'] ?? ($scheme === 'http' ? 80 : 443);
+        if (($scheme === 'http' && $port !== 80) ||
+            ($scheme === 'https' && $port !== 443)
+        ) {
+            $url .= ':'.$port;
+        }
+
+        $this->sentryHost = $url;
+        $this->sentryKey = $user;
+        $this->projectId = $projectId;
+    }
+
+    /**
      * Return unique adapter name
      *
      * @return string
@@ -143,23 +185,6 @@ class Sentry extends Adapter
         \curl_close($ch);
 
         return $response;
-    }
-
-    /**
-     * Sentry constructor.
-     *
-     * @param  string  $configKey
-     */
-    public function __construct(string $configKey)
-    {
-        $configChunks = \explode(';', $configKey);
-        $this->sentryKey = $configChunks[0];
-        $this->projectId = $configChunks[1];
-        $this->sentryHost = 'https://sentry.io';
-
-        if (count($configChunks) > 2 && ! empty($configChunks[2])) {
-            $this->sentryHost = $configChunks[2];
-        }
     }
 
     public function getSupportedTypes(): array
