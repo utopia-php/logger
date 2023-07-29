@@ -4,6 +4,7 @@ use PHPUnit\Framework\TestCase;
 use Utopia\Logger\Adapter\AppSignal;
 use Utopia\Logger\Adapter\LogOwl;
 use Utopia\Logger\Adapter\Raygun;
+use Utopia\Logger\Adapter\RollBar;
 use Utopia\Logger\Adapter\Sentry;
 use Utopia\Logger\Log;
 use Utopia\Logger\Log\Breadcrumb;
@@ -178,6 +179,13 @@ class LoggerTest extends TestCase
         // Test LogOwl
         $logOwlKey = \getenv('TEST_LOGOWL_KEY');
         $adapter = new LogOwl($logOwlKey ? $logOwlKey : '');
+        $logger = new Logger($adapter);
+        $response = $logger->addLog($log);
+        $this->assertEquals(200, $response);
+
+        // Test RollBar
+        $rollBarKey = \getenv('TEST_ROLLBAR_KEY');
+        $adapter = new RollBar($rollBarKey ? $rollBarKey : '');
         $logger = new Logger($adapter);
         $response = $logger->addLog($log);
         $this->assertEquals(200, $response);
