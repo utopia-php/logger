@@ -1,6 +1,6 @@
 # Adding a new logger adapter 💾
 
-This document is part of the Utopia contributors' guide. Before you continue reading this document make sure you have read the [Code of Conduct](https://raw.githubusercontent.com/utopia-php/logger/main/CODE_OF_CONDUCT.md) and the [Contributing Guide](https://raw.githubusercontent.com/utopia-php/logger/main/CONTRIBUTING.md).
+This document is part of the Utopia contributors' guide. Before you continue reading this document make sure you have read the [Code of Conduct](../../CODE_OF_CONDUCT.md) and the [Contributing Guide](../../CONTRIBUTING.md).
 
 ## Getting started
 
@@ -139,7 +139,7 @@ In `src/Logger/Logger.php` update variable `const PROVIDERS` to include your pro
 
 ## 3. Test your adapter
 
-After you finished adding your new adapter, you should write a proper test for it. To do that, you enter `tests/LoggerTests.php` and take a look at `testAdapters()` method. In there, we already build a whole log object and all you need to do is to push the log using your provider. Take a look at how test for already existign adapter looks or use template below:
+After you finished adding your new adapter, you should write a proper test for it. To do that, you enter `tests/LoggerTests.php` and take a look at `testAdapters()` method. In there, we already build a whole log object and all you need to do is to push the log using your provider. Take a look at how test for already existing adapter looks or use the template below:
 
 ```php
 // Test [ADAPTER_NAME]

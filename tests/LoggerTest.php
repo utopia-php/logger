@@ -2,6 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 use Utopia\Logger\Adapter\AppSignal;
+use Utopia\Logger\Adapter\HoneyBadger;
 use Utopia\Logger\Adapter\LogOwl;
 use Utopia\Logger\Adapter\Raygun;
 use Utopia\Logger\Adapter\Sentry;
@@ -138,7 +139,7 @@ class LoggerTest extends TestCase
         $log->setType(Log::TYPE_ERROR);
         $log->setVersion('0.11.5');
         $log->setMessage('Document efgh5678 not found');
-        $log->setUser(new User('efgh5678'));
+        $log->setUser(new User('efgh5678', 'abc@test.com', 'John Doe'));
         $log->addBreadcrumb(new Breadcrumb(Log::TYPE_DEBUG, 'http', 'DELETE /api/v1/database/abcd1234/efgh5678', \microtime(true) - 500));
         $log->addBreadcrumb(new Breadcrumb(Log::TYPE_DEBUG, 'auth', 'Using API key', \microtime(true) - 400));
         $log->addBreadcrumb(new Breadcrumb(Log::TYPE_INFO, 'auth', 'Authenticated with * Using API Key', \microtime(true) - 350));
@@ -154,6 +155,7 @@ class LoggerTest extends TestCase
         $log->addExtra('isExpected', true);
         $log->addExtra('file', '/User/example/server/src/server/server.js');
         $log->addExtra('line', '15');
+        $log->addExtra('stackTrace', [['number' => 15, 'file' => 'User/example/server/src/server/server.js', 'method' => 'runtime_error']]);
 
         // Test Sentry
         $adapter = new Sentry(\getenv('TEST_SENTRY_DSN') ?: '');
@@ -181,5 +183,12 @@ class LoggerTest extends TestCase
         $logger = new Logger($adapter);
         $response = $logger->addLog($log);
         $this->assertEquals(200, $response);
+
+        // Test HoneyBadger
+        $honebadgerkey = \getenv('TEST_HONEYBADGER_KEY');
+        $adapter = new HoneyBadger($honebadgerkey ? $honebadgerkey : '');
+        $logger = new Logger($adapter);
+        $response = $logger->addLog($log);
+        $this->assertEquals(201, $response);
     }
 }
