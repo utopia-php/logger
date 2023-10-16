@@ -139,15 +139,34 @@ In `src/Logger/Logger.php` update variable `const PROVIDERS` to include your pro
 
 ## 3. Test your adapter
 
-After you finished adding your new adapter, you should write a proper test for it. To do that, you enter `tests/LoggerTests.php` and take a look at `testAdapters()` method. In there, we already build a whole log object and all you need to do is to push the log using your provider. Take a look at how test for already existign adapter looks or use template below:
+After you finished adding your new adapter, you should write a proper test for it. To do that, you enter `tests/e2e/Adapter` and create a new `XXXTest.php` wtih something like:
 
 ```php
-// Test [ADAPTER_NAME]
-$adapter = new [ADAPTER_NAME](); // TODO: Use `getenv()` method to provide private keys as env variables
-$logger = new Logger($adapter);
-$response = $logger->addLog($log);
-// TODO: Expect success response either by checking body or response status code using `assertEquals()`
+<?php
+
+namespace Utopia\Tests\E2E\Adapter;
+
+use Utopia\Logger\Adapter\[XXX];
+use Utopia\Tests\E2E\AdapterBase;
+
+class [XXX]Test extends AdapterBase
+{
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $param1 = \getenv('TEST_XXX_PARAM_1');
+        $param2 = \getenv('TEST_XXX_PARAM_2');
+        $this->adapter = new [XXX](
+            $param1 ? $param1 : '',
+            $param2 ? $param2 : '',
+        );
+        $this->expected = 202; // Expected status code for successful log creation
+    }
+}
+
 ```
+
+Take a look at any other adapter as an example.
 
 ## 4. Raise a pull request
 
