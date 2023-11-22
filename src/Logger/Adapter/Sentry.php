@@ -73,7 +73,7 @@ class Sentry extends Adapter
                 }
                 \array_push($stackFrames, [
                     'filename' => $trace['file'] ?? '',
-                    'lineno' => $trace['line'] ?? '',
+                    'lineno' => $trace['line'] ?? 0,
                     'function' => $trace['function'] ?? '',
                 ]);
             }
