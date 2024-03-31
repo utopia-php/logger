@@ -135,7 +135,8 @@ class Sentry extends Adapter
         $result = curl_exec($ch);
         $response = curl_getinfo($ch, \CURLINFO_HTTP_CODE);
 
-        if(!$result && $response >= 400) {
+        if($response >= 400) {
+            var_dump($result);
             throw new Exception("Log could not be pushed with status code " . $response . ": " . \curl_error($ch));
         }
 
