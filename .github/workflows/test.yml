@@ -23,6 +23,11 @@ jobs:
     
     - name: Compose install
       run: composer install --ignore-platform-reqs
-
+    
     - name: Run tests
-      run: composer test
+      run: |
+        export TEST_SENTRY_DSN=${{ secrets.TEST_SENTRY_DSN }}
+        export TEST_APPSIGNAL_KEY=${{ secrets.TEST_APPSIGNAL_KEY }}
+        export TEST_LOGOWL_KEY=${{ secrets.TEST_LOGOWL_KEY }}
+        export TEST_RAYGUN_KEY=${{ secrets.TEST_RAYGUN_KEY }}
+        composer test
