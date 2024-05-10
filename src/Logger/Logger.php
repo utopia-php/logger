@@ -103,8 +103,20 @@ class Logger
      * @param  float  $sample Total percentage of issues to use with 100% being 1
      * @return void
      */
-    public function sample(float $sample)
+    public function setSample(float $sample): self
     {
         $this->samplePercent = $sample * 100;
+
+        return $this;
+    }
+
+    /**
+     * Get the current sample value as a percentage
+     *
+     * @return float
+     */
+    public function getSample(): float
+    {
+        return $this->samplePercent;
     }
 }
