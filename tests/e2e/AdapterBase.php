@@ -68,7 +68,7 @@ abstract class AdapterBase extends TestCase
             throw new \Exception('Log or adapter not set');
         }
         $logger = new Logger($this->adapter);
-        $logger->setSample(0.001);
+        $logger->setSample(0.00);
 
         $results = [];
 
