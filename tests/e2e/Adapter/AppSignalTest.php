@@ -7,6 +7,7 @@ use Utopia\Tests\E2E\AdapterBase;
 
 class AppSignalTest extends AdapterBase
 {
+    protected int $expected = 204;
     protected function setUp(): void
     {
         parent::setUp();
