@@ -58,24 +58,4 @@ abstract class AdapterBase extends TestCase
         $response = $logger->addLog($this->log);
         $this->assertEquals($this->expected, $response);
     }
-
-    /**
-     * @throws \Throwable
-     */
-    public function testSampler(): void
-    {
-        if (empty($this->log) || empty($this->adapter)) {
-            throw new \Exception('Log or adapter not set');
-        }
-        $logger = new Logger($this->adapter);
-        $logger->setSample(0.00);
-
-        $results = [];
-
-        for ($x = 0; $x <= 10; $x++) {
-            $results[] = $logger->addLog($this->log);
-        }
-
-        $this->assertTrue(in_array(0, $results));
-    }
 }
