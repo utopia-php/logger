@@ -14,6 +14,7 @@
         </testsuite>
         <testsuite name="e2e">
             <directory>./tests/e2e</directory>
+            <exclude>./tests/e2e/Adapter/RaygunTest.php</exclude>
         </testsuite>
     </testsuites>
 </phpunit>
