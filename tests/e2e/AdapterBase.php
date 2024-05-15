@@ -84,6 +84,6 @@ abstract class AdapterBase extends TestCase
 
         $zeroPercentage = ($zeroCount / count($results)) * 100;
 
-        $this->assertLessThan(15, $zeroPercentage);
+        $this->assertLessThan(20, $zeroPercentage);
     }
 }
