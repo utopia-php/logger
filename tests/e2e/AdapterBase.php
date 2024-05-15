@@ -58,4 +58,35 @@ abstract class AdapterBase extends TestCase
         $response = $logger->addLog($this->log);
         $this->assertEquals($this->expected, $response);
     }
+
+    /**
+     * @throws \Throwable
+     */
+    public function testSampler(): void
+    {
+        if (empty($this->log) || empty($this->adapter)) {
+            throw new \Exception('Log or adapter not set');
+        }
+
+        $logger = new Logger($this->adapter);
+        $logger->setSample(0.1);
+
+        $results = [];
+        $zeroCount = 0;
+        
+        for ($x = 0; $x <= 100; $x++) {
+            $result = $logger->addLog($this->log);
+            $results[] = $result;
+            if ($result === 0) {
+                $zeroCount++;
+            }
+        }
+        
+        $totalCount = count($results);
+        $zeroPercentage = ($zeroCount / $totalCount) * 100;
+        
+        echo "Percentage of 0 returns: " . $zeroPercentage . "%";
+
+        $this->assertLessThan(10, $zeroPercentage);
+    }
 }
