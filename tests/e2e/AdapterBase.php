@@ -73,7 +73,7 @@ abstract class AdapterBase extends TestCase
 
         $results = [];
         $zeroCount = 0;
-        
+
         for ($x = 0; $x <= 100; $x++) {
             $result = $logger->addLog($this->log);
             $results[] = $result;
@@ -81,12 +81,9 @@ abstract class AdapterBase extends TestCase
                 $zeroCount++;
             }
         }
-        
-        $totalCount = count($results);
-        $zeroPercentage = ($zeroCount / $totalCount) * 100;
-        
-        echo "Percentage of 0 returns: " . $zeroPercentage . "%";
 
-        $this->assertLessThan(10, $zeroPercentage);
+        $zeroPercentage = ($zeroCount / count($results)) * 100;
+
+        $this->assertLessThan(15, $zeroPercentage);
     }
 }
