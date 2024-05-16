@@ -16,6 +16,11 @@ class Logger
     ];
 
     /**
+     * @var float|null
+     */
+    protected $samplePercent = null;
+
+    /**
      * @var Adapter
      */
     protected Adapter $adapter;
@@ -51,6 +56,12 @@ class Logger
             throw new Exception('Log is not ready to be pushed.');
         }
 
+        if (! is_null($this->samplePercent)) {
+            if (rand(0, 100) <= $this->samplePercent) {
+                return 0;
+            }
+        }
+
         if ($this->adapter->validate($log)) {
             // Push log
             return $this->adapter->push($log);
@@ -84,5 +95,28 @@ class Logger
         }
 
         return false;
+    }
+
+    /**
+     * Return only a sample of the logs from this logger
+     *
+     * @param  float  $sample Total percentage of issues to use with 100% being 1
+     * @return self
+     */
+    public function setSample(float $sample): self
+    {
+        $this->samplePercent = $sample * 100;
+
+        return $this;
+    }
+
+    /**
+     * Get the current sample value as a percentage
+     *
+     * @return float|null
+     */
+    public function getSample(): float|null
+    {
+        return $this->samplePercent;
     }
 }
