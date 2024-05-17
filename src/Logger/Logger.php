@@ -57,7 +57,8 @@ class Logger
         }
 
         if (! is_null($this->samplePercent)) {
-            if (rand(0, 100) <= $this->samplePercent) {
+            $rand = rand(1, 100);
+            if ($rand >= $this->samplePercent) {
                 return 0;
             }
         }
