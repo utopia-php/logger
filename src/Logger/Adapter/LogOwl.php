@@ -35,7 +35,7 @@ class LogOwl extends Adapter
         $this->ticket = $ticket;
         $this->logOwlHost = 'https://api.logowl.io/logging/';
 
-        if (!empty($host)) {
+        if (! empty($host)) {
             $this->logOwlHost = $host;
         }
     }
