@@ -1110,12 +1110,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpDocumentor/ReflectionDocBlock.git",
-                "reference": "88a07d262854c827db22f2eac8b072138e492f65"
+                "reference": "aa53f8d4374d1f5bd3fc598548d6272cb5d9bf39"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/88a07d262854c827db22f2eac8b072138e492f65",
-                "reference": "88a07d262854c827db22f2eac8b072138e492f65",
+                "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/aa53f8d4374d1f5bd3fc598548d6272cb5d9bf39",
+                "reference": "aa53f8d4374d1f5bd3fc598548d6272cb5d9bf39",
                 "shasum": ""
             },
             "require": {
@@ -1167,7 +1167,7 @@
                 "issues": "https://github.com/phpDocumentor/ReflectionDocBlock/issues",
                 "source": "https://github.com/phpDocumentor/ReflectionDocBlock/tree/5.x"
             },
-            "time": "2024-05-08T18:52:15+00:00"
+            "time": "2024-05-21T06:14:15+00:00"
         },
         {
             "name": "phpdocumentor/type-resolver",

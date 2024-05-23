@@ -33,9 +33,9 @@ class Sentry extends Adapter
      *
      * @param  string  $projectId
      * @param  string  $key
-     * @param  ?string  $host
+     * @param  string  $host
      */
-    public function __construct(string $projectId, string $key, ?string $host = 'https://sentry.io')
+    public function __construct(string $projectId, string $key, string $host = 'https://sentry.io')
     {
         $this->sentryHost = $host;
         $this->sentryKey = $key;
