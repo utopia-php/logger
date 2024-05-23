@@ -10,7 +10,7 @@ class SentryTest extends AdapterBase
     protected function setUp(): void
     {
         parent::setUp();
-        $dsn = \getenv('TEST_SENTRY_DSN') ?? '';
+        $dsn = \getenv('TEST_SENTRY_DSN') ?: '';
         $parsed = parse_url($dsn);
         $host = $parsed['host'] ?? '';
         $path = ltrim($parsed['path'] ?? '', '/');
