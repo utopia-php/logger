@@ -31,42 +31,14 @@ class Sentry extends Adapter
     /**
      * Sentry constructor.
      *
-     * @param  string  $dsn
+     * @param  string  $projectId
+     * @param  string  $key
+     * @param  string  $host
      */
-    public function __construct(string $dsn)
+    public function __construct(string $projectId, string $key, string $host = 'https://sentry.io')
     {
-        $parsedDsn = parse_url($dsn);
-
-        if ($parsedDsn === false) {
-            throw new \Exception("The '$dsn' DSN is invalid.");
-        }
-
-        $host = $parsedDsn['host'] ?? '';
-        $path = $parsedDsn['path'] ?? '';
-        $user = $parsedDsn['user'] ?? '';
-        $scheme = $parsedDsn['scheme'] ?? '';
-
-        if (empty($scheme) || empty($host) || empty($path) || empty($user)) {
-            throw new \Exception("The '$dsn' DSN must contain a scheme, a host, a user and a path component.");
-        }
-
-        if (! \in_array($scheme, ['http', 'https'], true)) {
-            throw new \Exception("The scheme of the $dsn DSN must be either 'http' or 'https'");
-        }
-
-        $segmentPaths = explode('/', $path);
-        $projectId = array_pop($segmentPaths);
-
-        $url = $scheme.'://'.$host;
-        $port = $parsedDsn['port'] ?? ($scheme === 'http' ? 80 : 443);
-        if (($scheme === 'http' && $port !== 80) ||
-            ($scheme === 'https' && $port !== 443)
-        ) {
-            $url .= ':'.$port;
-        }
-
-        $this->sentryHost = $url;
-        $this->sentryKey = $user;
+        $this->sentryHost = $host;
+        $this->sentryKey = $key;
         $this->projectId = $projectId;
     }
 

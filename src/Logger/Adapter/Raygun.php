@@ -18,6 +18,16 @@ class Raygun extends Adapter
     protected string $apiKey;
 
     /**
+     * Raygun constructor.
+     *
+     * @param  string  $key
+     */
+    public function __construct(string $key)
+    {
+        $this->apiKey = $key;
+    }
+
+    /**
      * Return unique adapter name
      *
      * @return string
@@ -110,16 +120,6 @@ class Raygun extends Adapter
         \curl_close($ch);
 
         return $response;
-    }
-
-    /**
-     * Raygun constructor.
-     *
-     * @param  string  $configKey
-     */
-    public function __construct(string $configKey)
-    {
-        $this->apiKey = $configKey;
     }
 
     public function getSupportedTypes(): array

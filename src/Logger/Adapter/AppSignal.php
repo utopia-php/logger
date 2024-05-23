@@ -18,6 +18,16 @@ class AppSignal extends Adapter
     protected string $apiKey;
 
     /**
+     * AppSignal constructor.
+     *
+     * @param  string  $key
+     */
+    public function __construct(string $key)
+    {
+        $this->apiKey = $key;
+    }
+
+    /**
      * Return unique adapter name
      *
      * @return string
@@ -125,16 +135,6 @@ class AppSignal extends Adapter
         \curl_close($ch);
 
         return $response;
-    }
-
-    /**
-     * AppSignal constructor.
-     *
-     * @param  string  $configKey
-     */
-    public function __construct(string $configKey)
-    {
-        $this->apiKey = $configKey;
     }
 
     public function getSupportedTypes(): array

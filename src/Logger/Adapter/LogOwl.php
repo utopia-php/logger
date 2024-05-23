@@ -25,6 +25,18 @@ class LogOwl extends Adapter
     protected string $logOwlHost;
 
     /**
+     * LogOwl constructor.
+     *
+     * @param  string  $ticket
+     * @param  string  $host
+     */
+    public function __construct(string $ticket, string $host = 'https://api.logowl.io/logging/')
+    {
+        $this->ticket = $ticket;
+        $this->logOwlHost = $host;
+    }
+
+    /**
      * Return unique adapter name
      *
      * @return string
@@ -138,22 +150,6 @@ class LogOwl extends Adapter
         \curl_close($ch);
 
         return $response;
-    }
-
-    /**
-     * LogOwl constructor.
-     *
-     * @param  string  $configKey
-     */
-    public function __construct(string $configKey)
-    {
-        $configChunks = \explode(';', $configKey);
-        $this->ticket = $configChunks[0];
-        $this->logOwlHost = 'https://api.logowl.io/logging/';
-
-        if (count($configChunks) > 1 && ! empty($configChunks[1])) {
-            $this->logOwlHost = $configChunks[1];
-        }
     }
 
     public function getSupportedTypes(): array
