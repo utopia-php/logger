@@ -11,13 +11,15 @@ class SentryTest extends AdapterBase
     {
         parent::setUp();
         $dsn = \getenv('TEST_SENTRY_DSN');
-        $parsed = parse_url($dsn);
+        $parsed = parse_url($dsn ?? '');
         $host = $parsed['host'] ?? '';
         $path = $parsed['path'] ?? '';
         $user = $parsed['user'] ?? '';
         $scheme = $parsed['scheme'] ?? '';
 
         $url = $scheme.'://'.$host;
+
+        var_dump($url, $user, $path);
         $this->adapter = new Sentry($path, $user, $url);
     }
 }
