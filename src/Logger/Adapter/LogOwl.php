@@ -28,16 +28,12 @@ class LogOwl extends Adapter
      * LogOwl constructor.
      *
      * @param  string  $ticket
-     * @param  string  $host
+     * @param  ?string  $host
      */
-    public function __construct(string $ticket, string $host)
+    public function __construct(string $ticket, ?string $host = 'https://api.logowl.io/logging/')
     {
         $this->ticket = $ticket;
-        $this->logOwlHost = 'https://api.logowl.io/logging/';
-
-        if (! empty($host)) {
-            $this->logOwlHost = $host;
-        }
+        $this->logOwlHost = $host;
     }
 
     /**

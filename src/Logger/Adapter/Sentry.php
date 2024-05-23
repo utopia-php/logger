@@ -26,16 +26,16 @@ class Sentry extends Adapter
      * @var string (optional, the host where Sentry is reachable, in case of self-hosted Sentry could
      *              look like 'https://sentry.mycompany.com'. defaults to 'https://sentry.io')
      */
-    protected string $sentryHost = 'https://sentry.io';
+    protected string $sentryHost;
 
     /**
      * Sentry constructor.
      *
      * @param  string  $projectId
      * @param  string  $key
-     * @param  string  $host
+     * @param  ?string  $host
      */
-    public function __construct(string $projectId, string $key, string $host)
+    public function __construct(string $projectId, string $key, ?string $host = 'https://sentry.io')
     {
         $this->sentryHost = $host;
         $this->sentryKey = $key;
