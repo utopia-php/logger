@@ -10,7 +10,14 @@ class SentryTest extends AdapterBase
     protected function setUp(): void
     {
         parent::setUp();
-        var_dump(\getenv('TEST_SENTRY_DSN') . '  123');
-        $this->adapter = new Sentry('projectId', 'key');
+        $dsn = \getenv('TEST_SENTRY_DSN');
+        $parsed = parse_url($dsn);
+        $host = $parsed['host'] ?? '';
+        $path = $parsed['path'] ?? '';
+        $user = $parsed['user'] ?? '';
+        $scheme = $parsed['scheme'] ?? '';
+        
+        $url = $scheme.'://'.$host;
+        $this->adapter = new Sentry($path, $user, $url);
     }
 }
