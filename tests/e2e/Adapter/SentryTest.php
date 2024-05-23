@@ -10,6 +10,7 @@ class SentryTest extends AdapterBase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->adapter = new Sentry(\getenv('TEST_SENTRY_DSN') ?: '');
+        var_dump(\getenv('TEST_SENTRY_DSN'));
+        $this->adapter = new Sentry('projectId', 'key');
     }
 }
