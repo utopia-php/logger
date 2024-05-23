@@ -16,7 +16,7 @@ class SentryTest extends AdapterBase
         $path = $parsed['path'] ?? '';
         $user = $parsed['user'] ?? '';
         $scheme = $parsed['scheme'] ?? '';
-        
+
         $url = $scheme.'://'.$host;
         $this->adapter = new Sentry($path, $user, $url);
     }
