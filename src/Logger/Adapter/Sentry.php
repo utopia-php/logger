@@ -35,8 +35,12 @@ class Sentry extends Adapter
      * @param  string  $key
      * @param  string  $host
      */
-    public function __construct(string $projectId, string $key, string $host = 'https://sentry.io')
+    public function __construct(string $projectId, string $key, string $host = '')
     {
+        if (empty($host)) {
+            $host = 'https://sentry.io';
+        }
+
         $this->sentryHost = $host;
         $this->sentryKey = $key;
         $this->projectId = $projectId;
@@ -149,9 +153,10 @@ class Sentry extends Adapter
         // execute request and get response
         $result = curl_exec($ch);
         $response = curl_getinfo($ch, \CURLINFO_HTTP_CODE);
+        $error = \curl_error($ch);
 
-        if (! $result && $response >= 400) {
-            throw new Exception('Log could not be pushed with status code '.$response.': '.\curl_error($ch));
+        if ($response >= 400 || $response === 0) {
+            throw new Exception("Log could not be pushed with status code {$response}: {$result} ({$error})");
         }
 
         \curl_close($ch);
