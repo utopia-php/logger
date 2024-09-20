@@ -30,8 +30,12 @@ class LogOwl extends Adapter
      * @param  string  $ticket
      * @param  string  $host
      */
-    public function __construct(string $ticket, string $host = 'https://api.logowl.io/logging/')
+    public function __construct(string $ticket, string $host = '')
     {
+        if (empty($host)) {
+            $host = 'https://api.logowl.io/logging/';
+        }
+
         $this->ticket = $ticket;
         $this->logOwlHost = $host;
     }
@@ -142,9 +146,10 @@ class LogOwl extends Adapter
         // execute request and get response
         $result = curl_exec($ch);
         $response = curl_getinfo($ch, \CURLINFO_HTTP_CODE);
+        $error = \curl_error($ch);
 
-        if (! $result && $response >= 400) {
-            throw new Exception('Log could not be pushed with status code '.$response.': '.\curl_error($ch));
+        if ($response >= 400 || $response === 0) {
+            throw new Exception("Log could not be pushed with status code {$response}: {$result} ({$error})");
         }
 
         \curl_close($ch);
