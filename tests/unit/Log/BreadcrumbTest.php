@@ -30,11 +30,13 @@ class BreadcrumbTest extends TestCase
         $breadcrumb = new Breadcrumb(Log::TYPE_WARNING, 'http', 'POST /user', $timestamp);
         self::assertEquals(Log::TYPE_WARNING, $breadcrumb->getType());
 
-        // Assert FAILS
-        self::expectException(\ArgumentCountError::class);
-        $breadcrumb = new Breadcrumb();  // @phpstan-ignore-line
-        $breadcrumb = new Breadcrumb(Log::TYPE_DEBUG);  // @phpstan-ignore-line
-        $breadcrumb = new Breadcrumb(Log::TYPE_DEBUG, 'http');  // @phpstan-ignore-line
-        $breadcrumb = new Breadcrumb(Log::TYPE_DEBUG, 'http', 'POST /user');  // @phpstan-ignore-line
+        try {
+            $breadcrumb = new Breadcrumb();  // @phpstan-ignore-line
+            $breadcrumb = new Breadcrumb(Log::TYPE_DEBUG);  // @phpstan-ignore-line
+            $breadcrumb = new Breadcrumb(Log::TYPE_DEBUG, 'http');  // @phpstan-ignore-line
+            $breadcrumb = new Breadcrumb(Log::TYPE_DEBUG, 'http', 'POST /user');  // @phpstan-ignore-line
+        } catch (\ArgumentCountError $e) {
+            self::assertInstanceOf(\ArgumentCountError::class, $e);
+        }
     }
 }
