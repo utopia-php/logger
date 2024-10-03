@@ -35,7 +35,7 @@ class BreadcrumbTest extends TestCase
             $breadcrumb = new Breadcrumb(Log::TYPE_DEBUG);  // @phpstan-ignore-line
             $breadcrumb = new Breadcrumb(Log::TYPE_DEBUG, 'http');  // @phpstan-ignore-line
             $breadcrumb = new Breadcrumb(Log::TYPE_DEBUG, 'http', 'POST /user');  // @phpstan-ignore-line
-        } catch (\ArgumentCountError $e) {
+        } catch (\Exception $e) {
             self::assertInstanceOf(\ArgumentCountError::class, $e);
         }
     }
