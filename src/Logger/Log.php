@@ -382,15 +382,22 @@ class Log
         $this->masked = $masked;
     }
 
+    /**
+     * @template T
+     *
+     * @param  array<string, T>  $data
+     * @return array<string, T|string>
+     */
     private function mask(array $data): array
     {
         $masked = [];
 
         foreach ($data as $key => $value) {
-            if (is_string($key) && in_array($key, $this->masked, true)) {
+            if (is_string($value) && in_array($key, $this->masked, true)) {
                 $masked[$key] = str_repeat('*', strlen($value));
             } elseif (is_array($value)) {
-                $masked[$key] = $this->mask($value);
+                $maskedValue = $this->mask($value); /** @var T $maskedValue */
+                $masked[$key] = $maskedValue;
             } else {
                 $masked[$key] = $value;
             }
