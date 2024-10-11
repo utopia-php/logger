@@ -86,11 +86,17 @@ class LogTest extends TestCase
         $log->setMasked(['password', 'name']);
 
         self::assertEquals(['password' => '******'], $log->getTags());
-        self::assertEquals(['name' => 'John Doe'], $log->getExtra());
+        self::assertEquals(['name' => '********'], $log->getExtra());
 
         // test nested array
-        $log->addExtra('user', ['password ' => 'abc']);
-        
+        $log->addExtra('user', ['password' => 'abc']);
+
         self::assertEquals(['password' => '***'], $log->getExtra()['user']);
+
+        // test remove mask
+        $log->setMasked([]);
+
+        self::assertEquals(['password' => '123456'], $log->getTags());
+        self::assertEquals(['name' => 'John Doe', 'user' => ['password' => 'abc']], $log->getExtra());
     }
 }

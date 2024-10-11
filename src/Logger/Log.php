@@ -304,7 +304,7 @@ class Log
      */
     public function getTags(): array
     {
-        return $this->mask(null, $this->tags);
+        return $this->mask($this->tags);
     }
 
     /**
@@ -326,7 +326,7 @@ class Log
      */
     public function getExtra(): array
     {
-        return $this->mask(null, $this->extra);
+        return $this->mask($this->extra);
     }
 
     /**
@@ -380,26 +380,22 @@ class Log
     public function setMasked(array $masked): void
     {
         $this->masked = $masked;
-        $this->mask(null, $this->extra);
-        $this->mask(null, $this->tags);
     }
 
-    private function mask(mixed $key, mixed $value): mixed
+    private function mask(array $data): array
     {
-        if (\is_array($value)) {
-            foreach ($value as $nestedKey => $nestedValue) {
-                $value[$nestedKey] = $this->mask($nestedKey, $nestedValue);
+        $masked = [];
+
+        foreach ($data as $key => $value) {
+            if (is_string($key) && in_array($key, $this->masked, true)) {
+                $masked[$key] = str_repeat('*', strlen($value));
+            } elseif (is_array($value)) {
+                $masked[$key] = $this->mask($value);
+            } else {
+                $masked[$key] = $value;
             }
-
-            return $value;
         }
 
-        $isMasked = \in_array($key, $this->masked, true);
-
-        if (\is_string($value)) {
-            return $isMasked ? \str_repeat('*', \strlen($value)) : $value;
-        }
-
-        return $value;
+        return $masked;
     }
 }
