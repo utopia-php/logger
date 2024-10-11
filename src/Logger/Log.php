@@ -83,6 +83,11 @@ class Log
     protected array $breadcrumbs = [];
 
     /**
+     * @var array<string> (optional)
+     */
+    protected array $masked = [];
+
+    /**
      * Log constructor.
      */
     public function __construct()
@@ -289,7 +294,7 @@ class Log
      */
     public function addTag(string $key, string $value): void
     {
-        $this->tags[$key] = $value;
+        $this->tags[$key] = $this->mask($key, $value);
     }
 
     /**
@@ -311,7 +316,7 @@ class Log
      */
     public function addExtra(string $key, mixed $value): void
     {
-        $this->extra[$key] = $value;
+        $this->extra[$key] = $this->mask($key, $value);
     }
 
     /**
@@ -364,5 +369,37 @@ class Log
     public function getBreadcrumbs(): array
     {
         return $this->breadcrumbs;
+    }
+
+    /**
+     * Set masked fields, which will be replaced by asterisks
+     *
+     * @param  array<string>  $masked
+     * @return void
+     */
+    public function setMasked(array $masked): void
+    {
+        $this->masked = $masked;
+        $this->mask(null, $this->extra);
+        $this->mask(null, $this->tags);
+    }
+
+    private function mask(mixed $key, mixed $value): mixed
+    {
+        if (\is_array($value)) {
+            foreach ($value as $nestedKey => $nestedValue) {
+                $value[$nestedKey] = $this->mask($nestedKey, $nestedValue);
+            }
+
+            return $value;
+        }
+
+        $isMasked = \in_array($key, $this->masked, true);
+
+        if (\is_string($value)) {
+            return $isMasked ? \str_repeat('*', \strlen($value)) : $value;
+        }
+
+        return $value;
     }
 }
