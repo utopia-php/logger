@@ -294,7 +294,7 @@ class Log
      */
     public function addTag(string $key, string $value): void
     {
-        $this->tags[$key] = $this->mask($key, $value);
+        $this->tags[$key] = $value;
     }
 
     /**
@@ -304,7 +304,7 @@ class Log
      */
     public function getTags(): array
     {
-        return $this->tags;
+        return $this->mask(null, $this->tags);
     }
 
     /**
@@ -316,7 +316,7 @@ class Log
      */
     public function addExtra(string $key, mixed $value): void
     {
-        $this->extra[$key] = $this->mask($key, $value);
+        $this->extra[$key] = $value;
     }
 
     /**
@@ -326,7 +326,7 @@ class Log
      */
     public function getExtra(): array
     {
-        return $this->extra;
+        return $this->mask(null, $this->extra);
     }
 
     /**
