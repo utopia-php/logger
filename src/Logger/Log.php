@@ -83,6 +83,11 @@ class Log
     protected array $breadcrumbs = [];
 
     /**
+     * @var array<string> (optional)
+     */
+    protected array $masked = [];
+
+    /**
      * Log constructor.
      */
     public function __construct()
@@ -299,7 +304,7 @@ class Log
      */
     public function getTags(): array
     {
-        return $this->tags;
+        return $this->mask($this->tags);
     }
 
     /**
@@ -321,7 +326,7 @@ class Log
      */
     public function getExtra(): array
     {
-        return $this->extra;
+        return $this->mask($this->extra);
     }
 
     /**
@@ -364,5 +369,40 @@ class Log
     public function getBreadcrumbs(): array
     {
         return $this->breadcrumbs;
+    }
+
+    /**
+     * Set masked fields, which will be replaced by asterisks
+     *
+     * @param  array<string>  $masked
+     * @return void
+     */
+    public function setMasked(array $masked): void
+    {
+        $this->masked = $masked;
+    }
+
+    /**
+     * @template T
+     *
+     * @param  array<string, T>  $data
+     * @return array<string, T|string>
+     */
+    private function mask(array $data): array
+    {
+        $masked = [];
+
+        foreach ($data as $key => $value) {
+            if (is_string($value) && in_array($key, $this->masked, true)) {
+                $masked[$key] = str_repeat('*', strlen($value));
+            } elseif (is_array($value)) {
+                $maskedValue = $this->mask($value); /** @var T $maskedValue */
+                $masked[$key] = $maskedValue;
+            } else {
+                $masked[$key] = $value;
+            }
+        }
+
+        return $masked;
     }
 }

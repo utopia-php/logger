@@ -72,4 +72,31 @@ class LogTest extends TestCase
         self::assertEquals('DELETE /api/v1/database/abcd1234/efgh5678', $log->getBreadcrumbs()[0]->getMessage());
         self::assertEquals($timestamp, $log->getBreadcrumbs()[0]->getTimestamp());
     }
+
+    public function testLogMasked(): void
+    {
+        $log = new Log();
+
+        $log->addTag('password', '123456');
+        $log->addExtra('name', 'John Doe');
+
+        self::assertEquals(['password' => '123456'], $log->getTags());
+        self::assertEquals(['name' => 'John Doe'], $log->getExtra());
+
+        $log->setMasked(['password', 'name']);
+
+        self::assertEquals(['password' => '******'], $log->getTags());
+        self::assertEquals(['name' => '********'], $log->getExtra());
+
+        // test nested array
+        $log->addExtra('user', ['password' => 'abc']);
+
+        self::assertEquals(['password' => '***'], $log->getExtra()['user']);
+
+        // test remove mask
+        $log->setMasked([]);
+
+        self::assertEquals(['password' => '123456'], $log->getTags());
+        self::assertEquals(['name' => 'John Doe', 'user' => ['password' => 'abc']], $log->getExtra());
+    }
 }
