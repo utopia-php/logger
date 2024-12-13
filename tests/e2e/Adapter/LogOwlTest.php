@@ -12,6 +12,6 @@ class LogOwlTest extends AdapterBase
         parent::setUp();
         $logOwlKey = \getenv('TEST_LOGOWL_KEY');
         $this->adapter = new LogOwl($logOwlKey ? $logOwlKey : '');
-        $this->invalidAdapter = new LogOwl('');
+        $this->invalidAdapter = new LogOwl('abc');
     }
 }
