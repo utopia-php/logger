@@ -107,17 +107,20 @@ class Raygun extends Adapter
         \curl_setopt_array($ch, $optArray);
 
         // execute request and get response
-        $result = \curl_exec($ch);
-        $response = \curl_getinfo($ch, \CURLINFO_HTTP_CODE);
-        $error = \curl_error($ch);
-
-        if ($response >= 400 || $response === 0) {
-            error_log("Log could not be pushed with status code {$response}: {$result} ({$error})");
-        }
-
+        $response = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, \CURLINFO_HTTP_CODE);
+        $curlError = \curl_error($ch);
         \curl_close($ch);
 
-        return $response;
+        if ($curlError !== CURLE_OK) {
+            error_log("Raygun push failed with curl error ({$curlError}): {$response}");
+            return 500;
+        }
+    
+        if ($httpCode >= 400 || $httpCode === 0) {
+            error_log("Raygun push failed with status code {$httpCode}: {$curlError} ({$response})");
+            return $httpCode ?: 500;
+        }
     }
 
     public function getSupportedTypes(): array

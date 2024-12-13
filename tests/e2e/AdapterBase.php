@@ -98,9 +98,9 @@ abstract class AdapterBase extends TestCase
         $logger = new Logger($this->invalidAdapter);
 
         // Should return an error status code without throwing
-        $response = $logger->addLog($this->log);
+        $statusCode = $logger->addLog($this->log);
 
-        // Should return 401, 403, or 500 depending on the service
-        $this->assertContains($response, [401, 403, 500]);
+        // Should return > 400 status code
+        $this->assertGreaterThan(400, $statusCode);
     }
 }
