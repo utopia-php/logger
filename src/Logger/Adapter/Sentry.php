@@ -156,13 +156,17 @@ class Sentry extends Adapter
 
         if ($curlError !== CURLE_OK) {
             error_log("Sentry push failed with curl error ({$curlError}): {$response}");
+
             return 500;
         }
-    
+
         if ($httpCode >= 400 || $httpCode === 0) {
             error_log("Sentry push failed with status code {$httpCode}: {$curlError} ({$response})");
+
             return $httpCode ?: 500;
         }
+
+        return $httpCode;
     }
 
     public function getSupportedTypes(): array
