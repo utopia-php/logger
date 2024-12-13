@@ -91,6 +91,10 @@ abstract class AdapterBase extends TestCase
 
     public function testAdapterFailure(): void
     {
+        if (empty($this->log) || empty($this->invalidAdapter)) {
+            throw new \Exception('Log or adapter not set');
+        }
+
         $logger = new Logger($this->invalidAdapter);
 
         // Should return an error status code without throwing
