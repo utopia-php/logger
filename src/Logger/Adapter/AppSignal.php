@@ -2,7 +2,6 @@
 
 namespace Utopia\Logger\Adapter;
 
-use Exception;
 use Utopia\Logger\Adapter;
 use Utopia\Logger\Log;
 use Utopia\Logger\Logger;
