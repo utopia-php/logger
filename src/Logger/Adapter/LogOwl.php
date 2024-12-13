@@ -141,7 +141,6 @@ class LogOwl extends Adapter
         \curl_setopt_array($ch, $optArray);
 
         // execute request and get response
-        // execute request and get response
         $response = curl_exec($ch);
         $httpCode = curl_getinfo($ch, \CURLINFO_HTTP_CODE);
         $curlError = \curl_errno($ch);
