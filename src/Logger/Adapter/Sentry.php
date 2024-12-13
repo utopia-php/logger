@@ -151,19 +151,17 @@ class Sentry extends Adapter
         // execute request and get response
         $response = curl_exec($ch);
         $httpCode = curl_getinfo($ch, \CURLINFO_HTTP_CODE);
-        $curlError = \curl_error($ch);
+        $curlError = \curl_errno($ch);
         \curl_close($ch);
 
-        if ($curlError !== CURLE_OK) {
+        if ($curlError !== CURLE_OK || $httpCode === 0) {
             error_log("Sentry push failed with curl error ({$curlError}): {$response}");
 
             return 500;
         }
 
-        if ($httpCode >= 400 || $httpCode === 0) {
+        if ($httpCode >= 400) {
             error_log("Sentry push failed with status code {$httpCode}: {$curlError} ({$response})");
-
-            return $httpCode ?: 500;
         }
 
         return $httpCode;
