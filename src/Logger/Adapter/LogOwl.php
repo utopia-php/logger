@@ -75,8 +75,6 @@ class LogOwl extends Adapter
      *
      * @param  Log  $log
      * @return int
-     *
-     * @throws Exception
      */
     public function push(Log $log): int
     {
@@ -149,7 +147,7 @@ class LogOwl extends Adapter
         $error = \curl_error($ch);
 
         if ($response >= 400 || $response === 0) {
-            throw new Exception("Log could not be pushed with status code {$response}: {$result} ({$error})");
+            error_log("Log could not be pushed with status code {$response}: {$result} ({$error})");
         }
 
         \curl_close($ch);

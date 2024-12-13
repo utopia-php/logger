@@ -19,5 +19,6 @@ class SentryTest extends AdapterBase
         $url = $scheme.'://'.$host;
 
         $this->adapter = new Sentry($path, $user, $url);
+        $this->invalidAdapter = new Sentry('', '', '');
     }
 }

@@ -12,6 +12,7 @@ class RaygunTest extends AdapterBase
         parent::setUp();
         $raygunKey = \getenv('TEST_RAYGUN_KEY');
         $this->adapter = new Raygun($raygunKey ? $raygunKey : '');
+        $this->invalidAdapter = new Raygun('');
         $this->expected = 202;
     }
 }

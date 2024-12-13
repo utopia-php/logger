@@ -14,6 +14,7 @@ abstract class AdapterBase extends TestCase
     protected ?Log $log = null;
 
     protected ?Adapter $adapter = null;
+    protected ?Adapter $invalidAdapter = null;
 
     protected int $expected = 200;
 
@@ -85,5 +86,16 @@ abstract class AdapterBase extends TestCase
         $zeroPercentage = ($zeroCount / count($results)) * 100;
 
         $this->assertGreaterThan(85, $zeroPercentage);
+    }
+
+    public function testAdapterFailure(): void
+    {
+        $logger = new Logger($this->invalidAdapter);
+        
+        // Should return an error status code without throwing
+        $response = $logger->addLog($this->log);
+        
+        // Should return 401, 403, or 500 depending on the service
+        $this->assertContains($response, [401, 403, 500]);
     }
 }
