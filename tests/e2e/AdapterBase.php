@@ -15,6 +15,8 @@ abstract class AdapterBase extends TestCase
 
     protected ?Adapter $adapter = null;
 
+    protected ?Adapter $invalidAdapter = null;
+
     protected int $expected = 200;
 
     protected function setUp(): void
@@ -85,5 +87,20 @@ abstract class AdapterBase extends TestCase
         $zeroPercentage = ($zeroCount / count($results)) * 100;
 
         $this->assertGreaterThan(85, $zeroPercentage);
+    }
+
+    public function testAdapterFailure(): void
+    {
+        if (empty($this->log) || empty($this->invalidAdapter)) {
+            throw new \Exception('Log or adapter not set');
+        }
+
+        $logger = new Logger($this->invalidAdapter);
+
+        // Should return an error status code without throwing
+        $statusCode = $logger->addLog($this->log);
+
+        // Should return > 400 status code
+        $this->assertGreaterThan(400, $statusCode);
     }
 }

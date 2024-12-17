@@ -14,5 +14,6 @@ class AppSignalTest extends AdapterBase
         parent::setUp();
         $appSignalKey = \getenv('TEST_APPSIGNAL_KEY');
         $this->adapter = new AppSignal($appSignalKey ? $appSignalKey : '');
+        $this->invalidAdapter = new AppSignal('');
     }
 }
