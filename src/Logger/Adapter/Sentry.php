@@ -12,6 +12,10 @@ use Utopia\Logger\Logger;
 
 class Sentry extends Adapter
 {
+    private const DEFAULT_TIMEOUT = 5;
+
+    private const DEFAULT_CONNECT_TIMEOUT = 1;
+
     /**
      * @var string (required, this part of Sentry DSN: 'https://{{THIS_PART}}@blabla.ingest.sentry.io/blabla')
      */
@@ -29,13 +33,25 @@ class Sentry extends Adapter
     protected string $sentryHost;
 
     /**
+     * Timeout (seconds) for the complete request.
+     */
+    protected int $timeout;
+
+    /**
+     * Timeout (seconds) for establishing the connection.
+     */
+    protected int $connectTimeout;
+
+    /**
      * Sentry constructor.
      *
      * @param  string  $projectId
      * @param  string  $key
      * @param  string  $host
+     * @param  int  $timeout
+     * @param  int  $connectTimeout
      */
-    public function __construct(string $projectId, string $key, string $host = '')
+    public function __construct(string $projectId, string $key, string $host = '', int $timeout = self::DEFAULT_TIMEOUT, int $connectTimeout = self::DEFAULT_CONNECT_TIMEOUT)
     {
         if (empty($host)) {
             $host = 'https://sentry.io';
@@ -44,6 +60,8 @@ class Sentry extends Adapter
         $this->sentryHost = $host;
         $this->sentryKey = $key;
         $this->projectId = $projectId;
+        $this->timeout = $timeout > 0 ? $timeout : self::DEFAULT_TIMEOUT;
+        $this->connectTimeout = $connectTimeout > 0 ? $connectTimeout : self::DEFAULT_CONNECT_TIMEOUT;
     }
 
     /**
@@ -141,6 +159,8 @@ class Sentry extends Adapter
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_POST => true,
             CURLOPT_POSTFIELDS => \json_encode($requestBody),
+            CURLOPT_TIMEOUT => $this->timeout,
+            CURLOPT_CONNECTTIMEOUT => $this->connectTimeout,
             CURLOPT_HEADEROPT => \CURLHEADER_UNIFIED,
             CURLOPT_HTTPHEADER => ['Content-Type: application/json', 'X-Sentry-Auth: Sentry sentry_version=7, sentry_key='.$this->sentryKey.', sentry_client=utopia-logger/'.Logger::LIBRARY_VERSION],
         ];

@@ -12,6 +12,10 @@ use Utopia\Logger\Logger;
 
 class LogOwl extends Adapter
 {
+    private const DEFAULT_TIMEOUT = 5;
+
+    private const DEFAULT_CONNECT_TIMEOUT = 1;
+
     /**
      * @var string (required, can be found in LogOwl -> All Services -> Project -> Ticket -> Service Ticket)
      */
@@ -24,12 +28,24 @@ class LogOwl extends Adapter
     protected string $logOwlHost;
 
     /**
+     * Timeout (seconds) for the complete request.
+     */
+    protected int $timeout;
+
+    /**
+     * Timeout (seconds) for establishing the connection.
+     */
+    protected int $connectTimeout;
+
+    /**
      * LogOwl constructor.
      *
      * @param  string  $ticket
      * @param  string  $host
+     * @param  int  $timeout
+     * @param  int  $connectTimeout
      */
-    public function __construct(string $ticket, string $host = '')
+    public function __construct(string $ticket, string $host = '', int $timeout = self::DEFAULT_TIMEOUT, int $connectTimeout = self::DEFAULT_CONNECT_TIMEOUT)
     {
         if (empty($host)) {
             $host = 'https://api.logowl.io/logging/';
@@ -37,6 +53,8 @@ class LogOwl extends Adapter
 
         $this->ticket = $ticket;
         $this->logOwlHost = $host;
+        $this->timeout = $timeout > 0 ? $timeout : self::DEFAULT_TIMEOUT;
+        $this->connectTimeout = $connectTimeout > 0 ? $connectTimeout : self::DEFAULT_CONNECT_TIMEOUT;
     }
 
     /**

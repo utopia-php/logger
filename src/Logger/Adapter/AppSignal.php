@@ -11,19 +11,37 @@ use Utopia\Logger\Logger;
 
 class AppSignal extends Adapter
 {
+    private const DEFAULT_TIMEOUT = 5;
+
+    private const DEFAULT_CONNECT_TIMEOUT = 1;
+
     /**
      * @var string (required, can be found in Appsignal -> Project -> App Settings -> Push & deploy -> Push Key)
      */
     protected string $apiKey;
 
     /**
+     * Timeout (seconds) for the complete request.
+     */
+    protected int $timeout;
+
+    /**
+     * Timeout (seconds) for establishing the connection.
+     */
+    protected int $connectTimeout;
+
+    /**
      * AppSignal constructor.
      *
      * @param  string  $key
+     * @param  int  $timeout
+     * @param  int  $connectTimeout
      */
-    public function __construct(string $key)
+    public function __construct(string $key, int $timeout = self::DEFAULT_TIMEOUT, int $connectTimeout = self::DEFAULT_CONNECT_TIMEOUT)
     {
         $this->apiKey = $key;
+        $this->timeout = $timeout > 0 ? $timeout : self::DEFAULT_TIMEOUT;
+        $this->connectTimeout = $connectTimeout > 0 ? $connectTimeout : self::DEFAULT_CONNECT_TIMEOUT;
     }
 
     /**
@@ -114,6 +132,8 @@ class AppSignal extends Adapter
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_POST => true,
             CURLOPT_POSTFIELDS => \json_encode($requestBody),
+            CURLOPT_TIMEOUT => $this->timeout,
+            CURLOPT_CONNECTTIMEOUT => $this->connectTimeout,
             CURLOPT_HEADEROPT => \CURLHEADER_UNIFIED,
             CURLOPT_HTTPHEADER => ['Content-Type: application/json'],
         ];
