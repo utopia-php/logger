@@ -62,7 +62,7 @@ class LogTest extends TestCase
         $user = new User($userId);
         $log->setUser($user);
         self::assertSame($user, $log->getUser());
-        self::assertSame($userId, $log->getUser()?->getId());
+        self::assertSame($userId, $log->getUser()->getId());
 
         $breadcrumb = new Breadcrumb(Log::TYPE_DEBUG, 'http', 'DELETE /api/v1/database/abcd1234/efgh5678', $timestamp);
         $log->addBreadcrumb($breadcrumb);
