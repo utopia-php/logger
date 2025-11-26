@@ -58,7 +58,7 @@ abstract class AdapterBase extends TestCase
         }
         $logger = new Logger($this->adapter);
         $response = $logger->addLog($this->log);
-        $this->assertEquals($this->expected, $response);
+        $this->assertSame($this->expected, $response);
     }
 
     /**

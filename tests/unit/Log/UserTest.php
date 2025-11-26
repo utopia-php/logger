@@ -11,17 +11,17 @@ class UserTest extends TestCase
     {
         $user = new User();
 
-        self::assertEquals(null, $user->getEmail());
-        self::assertEquals(null, $user->getUsername());
-        self::assertEquals(null, $user->getId());
+        self::assertSame(null, $user->getEmail());
+        self::assertSame(null, $user->getUsername());
+        self::assertSame(null, $user->getId());
 
         $user = new User('618e291cd8949');
-        self::assertEquals('618e291cd8949', $user->getId());
+        self::assertSame('618e291cd8949', $user->getId());
 
         $user = new User(null, 'matej@appwrite.io');
-        self::assertEquals('matej@appwrite.io', $user->getEmail());
+        self::assertSame('matej@appwrite.io', $user->getEmail());
 
         $user = new User(null, null, 'Meldiron');
-        self::assertEquals('Meldiron', $user->getUsername());
+        self::assertSame('Meldiron', $user->getUsername());
     }
 }

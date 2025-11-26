@@ -16,19 +16,19 @@ class BreadcrumbTest extends TestCase
         $timestamp = \microtime(true);
         $breadcrumb = new Breadcrumb(Log::TYPE_DEBUG, 'http', 'POST /user', $timestamp);
 
-        self::assertEquals(Log::TYPE_DEBUG, $breadcrumb->getType());
-        self::assertEquals('http', $breadcrumb->getCategory());
-        self::assertEquals('POST /user', $breadcrumb->getMessage());
-        self::assertEquals($timestamp, $breadcrumb->getTimestamp());
+        self::assertSame(Log::TYPE_DEBUG, $breadcrumb->getType());
+        self::assertSame('http', $breadcrumb->getCategory());
+        self::assertSame('POST /user', $breadcrumb->getMessage());
+        self::assertSame($timestamp, $breadcrumb->getTimestamp());
 
         $breadcrumb = new Breadcrumb(Log::TYPE_INFO, 'http', 'POST /user', $timestamp);
-        self::assertEquals(Log::TYPE_INFO, $breadcrumb->getType());
+        self::assertSame(Log::TYPE_INFO, $breadcrumb->getType());
         $breadcrumb = new Breadcrumb(Log::TYPE_VERBOSE, 'http', 'POST /user', $timestamp);
-        self::assertEquals(Log::TYPE_VERBOSE, $breadcrumb->getType());
+        self::assertSame(Log::TYPE_VERBOSE, $breadcrumb->getType());
         $breadcrumb = new Breadcrumb(Log::TYPE_ERROR, 'http', 'POST /user', $timestamp);
-        self::assertEquals(Log::TYPE_ERROR, $breadcrumb->getType());
+        self::assertSame(Log::TYPE_ERROR, $breadcrumb->getType());
         $breadcrumb = new Breadcrumb(Log::TYPE_WARNING, 'http', 'POST /user', $timestamp);
-        self::assertEquals(Log::TYPE_WARNING, $breadcrumb->getType());
+        self::assertSame(Log::TYPE_WARNING, $breadcrumb->getType());
 
         // Assert FAILS
         self::expectException(\ArgumentCountError::class);
