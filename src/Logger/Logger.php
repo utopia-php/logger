@@ -3,6 +3,8 @@
 namespace Utopia\Logger;
 
 use Exception;
+use Utopia\Console;
+use Utopia\Logger\Exception\Push;
 
 class Logger
 {
@@ -64,8 +66,23 @@ class Logger
         }
 
         if ($this->adapter->validate($log)) {
-            // Push log
-            return $this->adapter->push($log);
+            try {
+                return $this->adapter->push($log);
+            } catch (Push $e) {
+                Console::error($e->getMessage());
+                Console::error('Log not reported: message="'.\addslashes($log->getMessage()).'", type='.$log->getType().', action='.$log->getAction().', environment='.$log->getEnvironment().', version='.$log->getVersion().', namespace='.($log->getNamespace() ?? 'null').', server='.($log->getServer() ?? 'null'));
+                $tags = $log->getTags();
+                if ($tags !== []) {
+                    Console::error('tags: '.\json_encode($tags));
+                }
+                $extra = $log->getExtra();
+                if ($extra !== []) {
+                    $extraJson = \json_encode($extra);
+                    Console::error('extra: '.(\strlen($extraJson) > 2000 ? \substr($extraJson, 0, 2000).'...' : $extraJson));
+                }
+
+                return $e->getStatusCode();
+            }
         }
 
         return 500;
