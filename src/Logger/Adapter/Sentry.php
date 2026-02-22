@@ -4,6 +4,7 @@ namespace Utopia\Logger\Adapter;
 
 use Exception;
 use Utopia\Logger\Adapter;
+use Utopia\Logger\Exception\Push;
 use Utopia\Logger\Log;
 use Utopia\Logger\Logger;
 
@@ -175,13 +176,11 @@ class Sentry extends Adapter
         \curl_close($ch);
 
         if ($curlError !== CURLE_OK || $httpCode === 0) {
-            error_log("Sentry push failed with curl error ({$curlError}): {$response}");
-
-            return 500;
+            throw new Push("Sentry push failed with curl error ({$curlError}): {$response}", 500);
         }
 
         if ($httpCode >= 400) {
-            error_log("Sentry push failed with status code {$httpCode}: {$curlError} ({$response})");
+            throw new Push("Sentry push failed with status code {$httpCode}: {$curlError} ({$response})", $httpCode);
         }
 
         return $httpCode;

@@ -3,6 +3,7 @@
 namespace Utopia\Logger;
 
 use Exception;
+use Utopia\Logger\Exception\Push;
 
 abstract class Adapter
 {
@@ -20,6 +21,7 @@ abstract class Adapter
      * @return int
      *
      * @throws Exception
+     * @throws Push When the remote provider rejects or cannot receive the log (e.g. 4xx/5xx or curl failure)
      */
     abstract public function push(Log $log): int;
 
