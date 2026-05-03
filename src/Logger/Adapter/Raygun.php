@@ -18,7 +18,7 @@ class Raygun extends Adapter
     private const DEFAULT_CONNECT_TIMEOUT = 1;
 
     /**
-     * @var string (required, can be found in Appsignal -> Project -> App Settings -> Push & deploy -> Push Key)
+     * @var string (required, can be found in your Raygun application settings)
      */
     protected string $apiKey;
 
