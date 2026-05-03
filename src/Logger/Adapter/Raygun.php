@@ -130,7 +130,6 @@ class Raygun extends Adapter
         $response = curl_exec($ch);
         $httpCode = curl_getinfo($ch, \CURLINFO_HTTP_CODE);
         $curlError = \curl_errno($ch);
-        \curl_close($ch);
 
         if ($curlError !== CURLE_OK || $httpCode === 0) {
             error_log("Raygun push failed with curl error ({$curlError}): {$response}");
