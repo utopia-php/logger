@@ -3,6 +3,8 @@
 namespace Utopia\Logger\Adapter;
 
 use Exception;
+use Utopia\Fetch\Client;
+use Utopia\Fetch\Exception as FetchException;
 use Utopia\Logger\Adapter;
 use Utopia\Logger\Log;
 use Utopia\Logger\Logger;
@@ -150,38 +152,28 @@ class Sentry extends Adapter
             ],
         ];
 
-        // init curl object
-        $ch = \curl_init();
+        $client = (new Client())
+            ->setTimeout($this->timeout * 1000)
+            ->setConnectTimeout($this->connectTimeout * 1000)
+            ->addHeader('Content-Type', Client::CONTENT_TYPE_APPLICATION_JSON)
+            ->addHeader('X-Sentry-Auth', 'Sentry sentry_version=7, sentry_key='.$this->sentryKey.', sentry_client=utopia-logger/'.Logger::LIBRARY_VERSION);
 
-        // define options
-        $optArray = [
-            CURLOPT_URL => $this->sentryHost.'/api/'.$this->projectId.'/store/',
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_POST => true,
-            CURLOPT_POSTFIELDS => \json_encode($requestBody),
-            CURLOPT_TIMEOUT => $this->timeout,
-            CURLOPT_CONNECTTIMEOUT => $this->connectTimeout,
-            CURLOPT_HEADEROPT => \CURLHEADER_UNIFIED,
-            CURLOPT_HTTPHEADER => ['Content-Type: application/json', 'X-Sentry-Auth: Sentry sentry_version=7, sentry_key='.$this->sentryKey.', sentry_client=utopia-logger/'.Logger::LIBRARY_VERSION],
-        ];
-
-        // apply those options
-        \curl_setopt_array($ch, $optArray);
-
-        // execute request and get response
-        $response = curl_exec($ch);
-        $httpCode = curl_getinfo($ch, \CURLINFO_HTTP_CODE);
-        $curlError = \curl_errno($ch);
-        \curl_close($ch);
-
-        if ($curlError !== CURLE_OK || $httpCode === 0) {
-            error_log("Sentry push failed with curl error ({$curlError}): {$response}");
+        try {
+            $response = $client->fetch(
+                url: $this->sentryHost.'/api/'.$this->projectId.'/store/',
+                method: Client::METHOD_POST,
+                body: $requestBody,
+            );
+        } catch (FetchException $e) {
+            error_log('Sentry push failed with fetch error: '.$e->getMessage());
 
             return 500;
         }
 
+        $httpCode = $response->getStatusCode();
+
         if ($httpCode >= 400) {
-            error_log("Sentry push failed with status code {$httpCode}: {$curlError} ({$response})");
+            error_log("Sentry push failed with status code {$httpCode}: {$response->text()}");
         }
 
         return $httpCode;
