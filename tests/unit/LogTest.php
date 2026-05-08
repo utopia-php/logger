@@ -18,59 +18,59 @@ class LogTest extends TestCase
 
         $timestamp = \microtime(true);
         $log->setTimestamp($timestamp);
-        self::assertEquals($timestamp, $log->getTimestamp());
+        self::assertSame($timestamp, $log->getTimestamp());
 
         $log->setType(Log::TYPE_ERROR);
-        self::assertEquals(Log::TYPE_ERROR, $log->getType());
+        self::assertSame(Log::TYPE_ERROR, $log->getType());
         $log->setType(Log::TYPE_DEBUG);
-        self::assertEquals(Log::TYPE_DEBUG, $log->getType());
+        self::assertSame(Log::TYPE_DEBUG, $log->getType());
         $log->setType(Log::TYPE_WARNING);
-        self::assertEquals(Log::TYPE_WARNING, $log->getType());
+        self::assertSame(Log::TYPE_WARNING, $log->getType());
         $log->setType(Log::TYPE_VERBOSE);
-        self::assertEquals(Log::TYPE_VERBOSE, $log->getType());
+        self::assertSame(Log::TYPE_VERBOSE, $log->getType());
         $log->setType(Log::TYPE_INFO);
-        self::assertEquals(Log::TYPE_INFO, $log->getType());
+        self::assertSame(Log::TYPE_INFO, $log->getType());
 
         $log->setMessage("Cannot read 'user' of undefined");
-        self::assertEquals("Cannot read 'user' of undefined", $log->getMessage());
+        self::assertSame("Cannot read 'user' of undefined", $log->getMessage());
 
         $log->setVersion('0.11.0');
-        self::assertEquals('0.11.0', $log->getVersion());
+        self::assertSame('0.11.0', $log->getVersion());
 
         $log->setEnvironment(Log::ENVIRONMENT_PRODUCTION);
-        self::assertEquals(Log::ENVIRONMENT_PRODUCTION, $log->getEnvironment());
+        self::assertSame(Log::ENVIRONMENT_PRODUCTION, $log->getEnvironment());
         $log->setEnvironment(Log::ENVIRONMENT_STAGING);
-        self::assertEquals(Log::ENVIRONMENT_STAGING, $log->getEnvironment());
+        self::assertSame(Log::ENVIRONMENT_STAGING, $log->getEnvironment());
 
         $log->setNamespace('getAuthUser');
-        self::assertEquals('getAuthUser', $log->getNamespace());
+        self::assertSame('getAuthUser', $log->getNamespace());
 
         $log->setAction('authGuard');
-        self::assertEquals('authGuard', $log->getAction());
+        self::assertSame('authGuard', $log->getAction());
 
         $log->setServer('aws-001');
-        self::assertEquals('aws-001', $log->getServer());
+        self::assertSame('aws-001', $log->getServer());
 
         $log->addExtra('isLoggedIn', false);
-        self::assertEquals(['isLoggedIn' => false], $log->getExtra());
+        self::assertSame(['isLoggedIn' => false], $log->getExtra());
 
         $log->addTag('authMethod', 'session');
         $log->addTag('authProvider', 'basic');
-        self::assertEquals(['authMethod' => 'session', 'authProvider' => 'basic'], $log->getTags());
+        self::assertSame(['authMethod' => 'session', 'authProvider' => 'basic'], $log->getTags());
 
         $userId = 'myid123';
         $user = new User($userId);
         $log->setUser($user);
-        self::assertEquals($user, $log->getUser());
-        self::assertEquals($userId, $log->getUser()?->getId());
+        self::assertSame($user, $log->getUser());
+        self::assertSame($userId, $log->getUser()->getId());
 
         $breadcrumb = new Breadcrumb(Log::TYPE_DEBUG, 'http', 'DELETE /api/v1/database/abcd1234/efgh5678', $timestamp);
         $log->addBreadcrumb($breadcrumb);
-        self::assertEquals([$breadcrumb], $log->getBreadcrumbs());
-        self::assertEquals(Log::TYPE_DEBUG, $log->getBreadcrumbs()[0]->getType());
-        self::assertEquals('http', $log->getBreadcrumbs()[0]->getCategory());
-        self::assertEquals('DELETE /api/v1/database/abcd1234/efgh5678', $log->getBreadcrumbs()[0]->getMessage());
-        self::assertEquals($timestamp, $log->getBreadcrumbs()[0]->getTimestamp());
+        self::assertSame([$breadcrumb], $log->getBreadcrumbs());
+        self::assertSame(Log::TYPE_DEBUG, $log->getBreadcrumbs()[0]->getType());
+        self::assertSame('http', $log->getBreadcrumbs()[0]->getCategory());
+        self::assertSame('DELETE /api/v1/database/abcd1234/efgh5678', $log->getBreadcrumbs()[0]->getMessage());
+        self::assertSame($timestamp, $log->getBreadcrumbs()[0]->getTimestamp());
     }
 
     public function testLogMasked(): void
@@ -80,23 +80,23 @@ class LogTest extends TestCase
         $log->addTag('password', '123456');
         $log->addExtra('name', 'John Doe');
 
-        self::assertEquals(['password' => '123456'], $log->getTags());
-        self::assertEquals(['name' => 'John Doe'], $log->getExtra());
+        self::assertSame(['password' => '123456'], $log->getTags());
+        self::assertSame(['name' => 'John Doe'], $log->getExtra());
 
         $log->setMasked(['password', 'name']);
 
-        self::assertEquals(['password' => '******'], $log->getTags());
-        self::assertEquals(['name' => '********'], $log->getExtra());
+        self::assertSame(['password' => '******'], $log->getTags());
+        self::assertSame(['name' => '********'], $log->getExtra());
 
         // test nested array
         $log->addExtra('user', ['password' => 'abc']);
 
-        self::assertEquals(['password' => '***'], $log->getExtra()['user']);
+        self::assertSame(['password' => '***'], $log->getExtra()['user']);
 
         // test remove mask
         $log->setMasked([]);
 
-        self::assertEquals(['password' => '123456'], $log->getTags());
-        self::assertEquals(['name' => 'John Doe', 'user' => ['password' => 'abc']], $log->getExtra());
+        self::assertSame(['password' => '123456'], $log->getTags());
+        self::assertSame(['name' => 'John Doe', 'user' => ['password' => 'abc']], $log->getExtra());
     }
 }
