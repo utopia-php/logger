@@ -135,7 +135,8 @@ class Sentry extends Adapter
             'exception' => [
                 'values' => [
                     [
-                        'type' => $log->getMessage(),
+                        'type' => $log->getTags()['verboseType'] ?? 'Exception',
+                        'value' => $log->getMessage(),
                         'stacktrace' => [
                             'frames' => $stackFrames,
                         ],
