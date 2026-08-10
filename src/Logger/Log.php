@@ -30,27 +30,27 @@ class Log
     /**
      * @var string (required, for example 'Log::TYPE_INFO')
      */
-    protected string $type;
+    protected string $type = '';
 
     /**
      * @var string (required)
      */
-    protected string $message;
+    protected string $message = '';
 
     /**
      * @var string (required)
      */
-    protected string $version;
+    protected string $version = '';
 
     /**
      * @var string (required)
      */
-    protected string $environment;
+    protected string $environment = '';
 
     /**
      * @var string (required)
      */
-    protected string $action;
+    protected string $action = '';
 
     /**
      * @var array<string, string> (optional)
